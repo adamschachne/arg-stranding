@@ -6,6 +6,7 @@
     "@babel/core": "7.0.0-beta.46",
     "@babel/runtime": "7.0.0-beta.46",
     "autoprefixer": "8.5.0",
+    "axios": "^0.18.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "8.2.3",
     "babel-jest": "22.4.3",
@@ -15,6 +16,7 @@
     "bfj": "5.2.0",
     "case-sensitive-paths-webpack-plugin": "2.1.2",
     "chalk": "2.4.1",
+    "cheerio": "^1.0.0-rc.2",
     "css-loader": "0.28.11",
     "dotenv": "5.0.1",
     "dotenv-expand": "4.2.0",
@@ -25,8 +27,10 @@
     "eslint-plugin-import": "2.11.0",
     "eslint-plugin-jsx-a11y": "6.0.3",
     "eslint-plugin-react": "7.8.2",
+    "fastpriorityqueue": "^0.5.0",
     "file-loader": "1.1.11",
     "fs-extra": "5.0.0",
+    "google-spreadsheet": "^2.0.5",
     "graphql": "0.13.2",
     "graphql-tag": "2.9.2",
     "html-webpack-plugin": "3.2.0",
@@ -58,11 +62,15 @@
   },
   "scripts": {
     "dev": "node scripts/start.js",
-    "heroku-postbuild": "npm run build",
+    "dev:server": "nodemon --watch server server/server.js",
+    "heroku-postbuild": "node scripts/build.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
     "start": "node server/server.js"
   },
+  "cacheDirectories": [
+    "node_modules"
+  ],
   "browserslist": {
     "development": [
       "last 2 chrome versions",
@@ -75,6 +83,7 @@
       "ie 11"
     ]
   },
+  "proxy": "http://localhost:5000",
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,mjs}"
@@ -114,5 +123,8 @@
       "node",
       "mjs"
     ]
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.2"
   }
 }
