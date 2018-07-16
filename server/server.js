@@ -27,11 +27,11 @@ const store = {
 function doneUpdating(data) {
   if (store.watchers.length > 0) {
     while (store.watchers.length != 0) {
+      console.log("resolving");
       store.watchers.pop()(data);
     }
   }
   store.updating = false;
-  console.log("set store updating to false");
 }
 
 function fetchSheetData() {
@@ -70,7 +70,9 @@ function fetchSheetData() {
             step(null, rows.map(row => {
               return {
                 url: row.url,
-                command: row.command
+                command: row.command,
+                leadsto: row.leadsto,
+                fannames: row.fannames
               }
             })
             .filter(row => row.url != null && row.command != null)
@@ -79,8 +81,9 @@ function fetchSheetData() {
       }
     ], (err, result) => {
       if (err) {
+        console.log("sheet up to date: " + store.lastUpdated + " sending existing content.");
         reject(err);
-        doneUpdating(store.data);
+        doneUpdating(store.data); // maybe send a reject instead of resolving with null
       } else {
         processUrls(result[2], data => {
           if (data == null) {
@@ -108,7 +111,7 @@ app.get('/data', function (req, res) {
   res.set('Content-Type', 'application/json');
   fetchSheetData()
     .then(data => {
-      store.data = data;
+      store.data = data;      
       res.send(JSON.stringify(store.data));
     })
     .catch(err => {
@@ -126,6 +129,7 @@ app.get('*', function (request, response) {
 fetchSheetData()
   .then(data => {
     store.data = data;
+    console.log("loaded google sheet: ", store.sheet.url);
     app.listen(PORT, function () {
       console.error(`Server listening on port ${PORT}`);
     });

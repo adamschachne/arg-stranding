@@ -62,7 +62,7 @@
   },
   "scripts": {
     "dev": "node scripts/start.js",
-    "dev:server": "nodemon --watch server server/server.js",
+    "dev:server": "nodemon -r dotenv/config --watch server server/server.js",
     "heroku-postbuild": "node scripts/build.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
