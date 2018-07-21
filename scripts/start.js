@@ -22,7 +22,7 @@ const clearConsole = require('react-dev-utils/clearConsole');
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const {
   choosePort,
-  createCompiler,
+  // createCompiler,
   prepareProxy,
   prepareUrls,
 } = require('react-dev-utils/WebpackDevServerUtils');
@@ -77,13 +77,15 @@ checkBrowsers(paths.appPath)
     const appName = require(paths.appPackageJson).name;
     const urls = prepareUrls(protocol, HOST, port);
     // Create a webpack compiler that is configured with custom messages.
-    const compiler = createCompiler(
-      webpack,
-      config,
-      appName,
-      urls,
-      paths.useYarn
-    );
+    // const compiler = createCompiler(
+    //   webpack,
+    //   config,
+    //   appName,
+    //   urls,
+    //   paths.useYarn
+    // );
+    const compiler = webpack(config);
+
     // Load proxy config
     const proxySetting = require(paths.appPackageJson).proxy;
     const proxyConfig = prepareProxy(proxySetting, paths.appPublic);
@@ -92,17 +94,17 @@ checkBrowsers(paths.appPath)
       proxyConfig,
       urls.lanUrlForConfig
     );
-
+    
     const devServer = new WebpackDevServer(compiler, serverConfig);
     // Launch WebpackDevServer.
     devServer.listen(port, HOST, err => {
       if (err) {
         return console.log(err);
       }
-      if (isInteractive) {
-        clearConsole();
-      }
-      console.log(chalk.cyan('Starting the development server...\n'));
+      // if (isInteractive) {
+      //   clearConsole();
+      // }
+      // console.log(chalk.cyan('Starting the development server...\n'));
       openBrowser(urls.localUrlForBrowser);
     });
 

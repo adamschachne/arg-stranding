@@ -13,6 +13,7 @@ const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent')
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
 const ManifestPlugin = require('webpack-manifest-plugin');
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
@@ -167,10 +168,9 @@ module.exports = {
             options: {
               formatter: eslintFormatter,
               eslintPath: require.resolve('eslint'),
-              baseConfig: {
-                extends: [require.resolve('eslint-config-react-app')],
-              },
-              
+              // baseConfig: {
+              //   extends: [require.resolve('eslint-config-react-app')],
+              // },
             },
             loader: require.resolve('eslint-loader'),
           },
@@ -214,18 +214,7 @@ module.exports = {
                 options: {
                   
                   presets: [require.resolve('babel-preset-react-app')],
-                  plugins: [
-                    [
-                      require.resolve('babel-plugin-named-asset-import'),
-                      {
-                        loaderMap: {
-                          svg: {
-                            ReactComponent: 'svgr/webpack![path]',
-                          },
-                        },
-                      },
-                    ],
-                  ],
+                  plugins: ['react-hot-loader/babel'],
                   // This is a feature of `babel-loader` for webpack (not Babel itself).
                   // It enables caching results in ./node_modules/.cache/babel-loader/
                   // directory for faster rebuilds.
@@ -336,6 +325,9 @@ module.exports = {
     ],
   },
   plugins: [
+    // recognizes certain classes of webpack errors and cleans, aggregates 
+    // and prioritizes them to provide a better Developer Experience.
+    new FriendlyErrorsWebpackPlugin(),    
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,

@@ -15,6 +15,7 @@ const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -207,9 +208,9 @@ module.exports = {
               eslintPath: require.resolve('eslint'),
               // TODO: consider separate config for production,
               // e.g. to enable no-console and no-debugger only in production.
-              baseConfig: {
-                extends: [require.resolve('eslint-config-react-app')],
-              },
+              // baseConfig: {
+              //   extends: [require.resolve('eslint-config-react-app')],
+              // },
               
             },
             loader: require.resolve('eslint-loader'),
@@ -248,18 +249,7 @@ module.exports = {
                 options: {
                   
                   presets: [require.resolve('babel-preset-react-app')],
-                  plugins: [
-                    [
-                      require.resolve('babel-plugin-named-asset-import'),
-                      {
-                        loaderMap: {
-                          svg: {
-                            ReactComponent: 'svgr/webpack![path]',
-                          },
-                        },
-                      },
-                    ],
-                  ],
+                  plugins: ['react-hot-loader/babel'],
                   compact: true,
                   highlightCode: true,
                 },
@@ -369,6 +359,7 @@ module.exports = {
     ],
   },
   plugins: [
+    new FriendlyErrorsWebpackPlugin(),
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,
