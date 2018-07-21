@@ -109,6 +109,7 @@ app.use(express.static(paths.appBuild));
 app.get('/data', function (req, res) {
   // res.set('Content-Type', 'application/json');
   // res.send(JSON.stringify(store.data));
+  // res.setHeader('Cache-Control', 'public, max-age=31557600'); // one year
   res.set('Content-Type', 'application/json');
   fetchSheetData()
     .then(data => {
