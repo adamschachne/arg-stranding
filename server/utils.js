@@ -32,8 +32,8 @@ module.exports = function processUrls(urls, callback) {
   console.log("getting postimg information...");
   urls.forEach(async urlItem => {
     try {
-      urlItem.command = urlItem.command.split(',');
-      urlItem.leadsto = urlItem.leadsto.split(',');
+      urlItem.command = urlItem.command.split(',').map(cmd => cmd.trim());
+      urlItem.leadsTo = urlItem.leadsto.split(',').map(lead => lead.trim());
       urlItem.id1 = urlItem.url.split("/image/")[1].replace("/", "");    
       const response = await axios.get(urlItem.url);
       const $ = cheerio.load(response.data);

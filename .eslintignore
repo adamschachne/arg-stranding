@@ -2,3 +2,4 @@ src/serviceWorker.js
 config/*
 scripts/*
 server/*
+quick/*

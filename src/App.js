@@ -36,16 +36,15 @@ var events = {
 
 class App extends Component {
 
-  // constructor(props) {
-  //   super(props);
-  //   const width = window.innerWidth;
-  //   const height = window.innerHeight;
-  //   const larger = width > height ? width : height;
-  //   this.state = {
-  //     width: larger,
-  //     height: larger
-  //   };
-  // }
+  constructor(props) {
+    super(props);
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    this.state = {
+      width,
+      height
+    };
+  }
 
   // updateDimensions = () => {
   //   console.log(window.innerWidth, window.innerHeight);
@@ -77,7 +76,7 @@ class App extends Component {
 
   render() {
     return (
-      <div style={{ height: '100vh', width: '100vw' }}>
+      <div style={{ height: this.state.height, width: this.state.width }}>
         <Graph
           graph={graph}
           options={options}
