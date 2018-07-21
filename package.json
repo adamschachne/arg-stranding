@@ -22,7 +22,7 @@
     "dotenv-expand": "4.2.0",
     "eslint": "4.19.1",
     "eslint-config-react-app": "3.0.0-next.3e165448",
-    "eslint-loader": "2.0.0",
+    "eslint-loader": "^2.1.0",
     "eslint-plugin-flowtype": "2.46.3",
     "eslint-plugin-import": "2.11.0",
     "eslint-plugin-jsx-a11y": "6.0.3",
@@ -47,6 +47,7 @@
     "react": "^16.4.1",
     "react-dev-utils": "6.0.0-next.3e165448",
     "react-dom": "^16.4.1",
+    "react-graph-vis": "^1.0.2",
     "resolve": "1.6.0",
     "sass-loader": "7.0.1",
     "style-loader": "0.21.0",
@@ -55,8 +56,8 @@
     "thread-loader": "1.1.5",
     "uglifyjs-webpack-plugin": "1.2.5",
     "url-loader": "1.0.1",
-    "webpack": "^4.16.0",
-    "webpack-dev-server": "3.1.4",
+    "webpack": "^4.16.1",
+    "webpack-dev-server": "^3.1.4",
     "webpack-manifest-plugin": "2.0.3",
     "whatwg-fetch": "2.0.4"
   },
@@ -66,6 +67,7 @@
     "heroku-postbuild": "node scripts/build.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
+    "start:prod": "node -r dotenv/config server/server.js",
     "start": "node server/server.js"
   },
   "cacheDirectories": [
@@ -83,7 +85,7 @@
       "ie 11"
     ]
   },
-  "proxy": "http://localhost:5000",
+  "proxy": "http://localhost:5000/",
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,mjs}"

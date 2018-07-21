@@ -67,16 +67,17 @@ function fetchSheetData() {
           if (err)
             step(err);
           else
-            step(null, rows.map(row => {
-              return {
-                url: row.url,
-                command: row.command,
-                leadsto: row.leadsto,
-                fannames: row.fannames
-              }
-            })
-            .filter(row => row.url != null && row.command != null)
-          );
+            step(null,
+              rows.map(row => {
+                return {
+                  url: row.url,
+                  command: row.command,
+                  leadsto: row.leadsto,
+                  fannames: row.fannames
+                }
+              })
+                .filter(row => row.url != null && row.command != null)
+            );
         });
       }
     ], (err, result) => {
@@ -87,12 +88,12 @@ function fetchSheetData() {
       } else {
         processUrls(result[2], data => {
           if (data == null) {
-            reject();          
+            reject();
           } else {
             resolve(data);
             // resolve any additional requests that came in during the update
             doneUpdating(data);
-          }          
+          }
         });
       }
     });
@@ -111,7 +112,7 @@ app.get('/data', function (req, res) {
   res.set('Content-Type', 'application/json');
   fetchSheetData()
     .then(data => {
-      store.data = data;      
+      store.data = data;
       res.send(JSON.stringify(store.data));
     })
     .catch(err => {
@@ -122,8 +123,7 @@ app.get('/data', function (req, res) {
 
 // All remaining requests return the React app, so it can handle routing.
 app.get('*', function (request, response) {
-  response.redirect('/data');
-  // response.sendFile(path.resolve(paths.appBuild, 'index.html'));
+  response.sendFile(path.resolve(paths.appBuild, 'index.html'));
 });
 
 fetchSheetData()
