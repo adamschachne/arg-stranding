@@ -103,7 +103,7 @@ function fetchSheetData() {
 const app = express();
 
 // Priority serve any static files.
-// app.use(express.static(paths.appBuild));
+app.use(express.static(paths.appBuild));
 
 // Answer API requests.
 app.get('/data', function (req, res) {

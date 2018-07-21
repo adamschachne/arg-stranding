@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
-// import Graph from "react-graph-vis";
 
 class App extends Component {
   render() {
     return (
-      <div>
+      <div style={{height: '100vh', width: '100vh'}}>
         hello
       </div>
     );

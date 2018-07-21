@@ -65,11 +65,11 @@
   },
   "scripts": {
     "dev": "node scripts/start.js",
-    "dev:server": "nodemon -r dotenv/config --watch server server/server.js",
+    "server": "nodemon -r dotenv/config --watch server server/server.js",
     "heroku-postbuild": "node scripts/build.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "start:prod": "node -r dotenv/config server/server.js",
+    "prod": "node -r dotenv/config server/server.js",
     "start": "node server/server.js",
     "lint": "eslint src"
   },
@@ -88,7 +88,6 @@
       "ie 11"
     ]
   },
-  "proxy": "http://localhost:5000/",
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,mjs}"

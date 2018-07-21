@@ -80,7 +80,19 @@ module.exports = function(proxy, allowedHost) {
       disableDotRule: true,
     },
     public: allowedHost,
-    proxy,
+    proxy: {
+      "/data": {
+        target: 'http://localhost:5000',
+        // bypass: function(req, res, proxyOptions) {
+        //   // console.log(proxyOptions);
+        //   console.log(req.url);
+        //   // if (req.headers.accept.indexOf('html') !== -1) {
+        //   //   console.log('Skipping proxy for browser request.');
+        //   //   return '/index.html';
+        //   // }
+        // }
+      }
+    },
     before(app) {
       // This lets us open files from the runtime error overlay.
       app.use(errorOverlayMiddleware());
