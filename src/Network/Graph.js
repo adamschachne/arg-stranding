@@ -25,6 +25,7 @@ class Graph extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
+    console.log("should graph update");
     let nodesChange = !isEqual(this.props.graph.nodes, nextProps.graph.nodes);
     let edgesChange = !isEqual(this.props.graph.edges, nextProps.graph.edges);
     let optionsChange = !isEqual(this.props.options, nextProps.options);
@@ -83,6 +84,7 @@ class Graph extends Component {
   }
 
   updateGraph() {
+    console.log("update graph");
     let container = document.getElementById(this.state.identifier);
     let defaultOptions = {
       physics: {
