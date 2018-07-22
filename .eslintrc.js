@@ -18,6 +18,16 @@ module.exports = {
       jsx: true,
     },
   },
+  settings: {
+    "import/resolver": {
+      "node": {
+        "extensions": [
+          ".js",
+          ".jsx"
+        ]
+      }
+    }
+  },
   rules: {
     'class-methods-use-this': 0,
     'import/imports-first': 0,

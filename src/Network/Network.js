@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from "prop-types";
 import Graph from "./Graph";
-import { createOptions, events } from './config';
+import { createOptions, createEvents } from './config';
 
 class NetworkContainer extends PureComponent {
 
@@ -13,10 +13,12 @@ class NetworkContainer extends PureComponent {
         edges: []
       }
     }
+    this.network = null;
   }
 
   updateNetwork = (network) => {
     console.log(network);
+    this.network = network;
     network.once("stabilized", function () {
       network.fit({
         animation: true
@@ -35,11 +37,7 @@ class NetworkContainer extends PureComponent {
         let nodes = [];
         let edges = [];
         items.forEach((item, index) => {
-          nodes.push({
-            color: {
-              highlight: "#55befc"
-            },
-            size: 25,
+          nodes.push({            
             id: item.command[0],
             label: item.command[0],
             shape: "circularImage",
@@ -61,13 +59,25 @@ class NetworkContainer extends PureComponent {
       })
   }
 
-  render() {
-    const { width, height } = this.props;
+  componentDidUpdate() {
+    const focusNode = this.props.focus;
+    if (focusNode !== "") {
+      this.network.focus(focusNode, {
+        scale: 1,
+        locked: false,
+        animation: true
+      });
+    }
+  }
+
+  render() {      
+    const options = createOptions(this.props.width, this.props.height);
+    const events = createEvents({unfocusNode: this.props.unfocus});
     return (
       <Graph
-        getNetwork={(network) => this.updateNetwork(network)}
+        getNetwork={network => this.updateNetwork(network)}
         graph={this.state.graph}
-        options={createOptions(width, height)}
+        options={options}
         events={events}
       />
     );
@@ -75,6 +85,8 @@ class NetworkContainer extends PureComponent {
 }
 
 NetworkContainer.propTypes = {
+  unfocus: PropTypes.func,
+  focus: PropTypes.string,
   width: PropTypes.number,
   height: PropTypes.number
 };

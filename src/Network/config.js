@@ -31,7 +31,7 @@ export const createOptions = (width, height) => ({
   },
   nodes: {
     borderWidth: 5,
-    size: 1000,
+    size: 25,
     color: {
       border: '#222222',
       background: '#666666'
@@ -73,21 +73,32 @@ export const createOptions = (width, height) => ({
   }
 });
 
-export const events = {
-  selectNode: function (event) {
-    console.log(event);
-  },
-  select: function (event) {
-    // console.log(this);
-    // var { nodes, edges } = event;
-  },
-  release: function (event) {
-    // console.log(event);
-  },
-  stabilized: function () {
+export function createEvents({ unfocusNode }) {
+  // console.log(this);
+  return {
+    selectNode: function (event) {
+      // console.log(event);
+    },
+    select: function (event) {
+      // console.log(this);
+      // var { nodes, edges } = event;
+    },
+    release: function (event) {
+      // console.log(event);
+    },
+    stabilized: function () {
 
-  }
-  // afterDrawing: function() {
-  //   console.log("done drawing", arguments);
-  // }
+    },
+    deselectNode: function (deselect) {
+      unfocusNode();
+      // console.log("deselect: ", deselect);
+    },
+    dragStart: function (event) {
+      console.log("dragstart");
+      unfocusNode();
+    }
+    // afterDrawing: function() {
+    //   console.log("done drawing", arguments);
+    // }
+  };
 }

@@ -49,7 +49,7 @@ class Graph extends Component {
         differenceWith(nextProps.graph.edges, this.props.graph.edges, isEqual),
         edgesAdded
       );
-      this.patchEdges({ edgesRemoved, edgesAdded , edgesChanged });
+      this.patchEdges({ edgesRemoved, edgesAdded, edgesChanged });
     }
 
     if (optionsChange) {
@@ -107,14 +107,24 @@ class Graph extends Component {
     // merge user provied options with our default ones
     let options = defaultsDeep(defaultOptions, this.props.options);
 
-    this.Network = new vis.Network(
-      container,
-      Object.assign({}, this.props.graph, {
-        edges: this.edges,
-        nodes: this.nodes
-      }),
-      options
-    );
+    let data = Object.assign({}, this.props.graph, {
+      edges: this.edges,
+      nodes: this.nodes
+    });    
+
+    if (!this.Network) {
+      console.log("creating new network");
+      this.Network = new vis.Network(
+        container,
+        data,
+        options
+      );
+    } else {
+      // TODO REMOVE EXISTING EVENT HANDLERS
+      console.log("updating existing network");
+      this.Network.setData(data);
+      this.Network.setOptions(options);
+    }
 
     if (this.props.getNetwork) {
       this.props.getNetwork(this.Network);
@@ -127,8 +137,8 @@ class Graph extends Component {
     if (this.props.getEdges) {
       this.props.getEdges(this.edges);
     }
-      
-    // Add user provied events to network
+
+    // TODO REMOVE EXISTING EVENT HANDLERS
     let events = this.props.events || {};
     for (let eventName of Object.keys(events)) {
       this.Network.on(eventName, events[eventName]);
@@ -160,7 +170,7 @@ Graph.propTypes = {
   style: PropTypes.object,
   getNetwork: PropTypes.func,
   getNodes: PropTypes.func,
-  getEdges: PropTypes.func,  
+  getEdges: PropTypes.func,
 };
 
 export default Graph;
