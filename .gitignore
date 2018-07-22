@@ -25,3 +25,5 @@ creds
 
 #environment vars
 .env
+
+.vs

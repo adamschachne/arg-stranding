@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import Graph from "react-graph-vis";
 import Graph from "./Graph";
 // import './App.css';
 
@@ -10,16 +9,21 @@ const createOptions = (width, height) => ({
     useDefaultGroups: true
   },
   // autoResize: true,
+  // configure: {
+  //   enabled: true,
+  //   filter: 'physics, layout',
+  //   showButton: true
+  // },
   physics: {
     enabled: true,
     solver: 'forceAtlas2Based',
     forceAtlas2Based: {
-      gravitationalConstant: -50,
+      gravitationalConstant: -120,
       centralGravity: 0.01,
-      springConstant: .08,
+      springConstant: 0.08,
       springLength: 100,
       damping: 0.4,
-      avoidOverlap: 1
+      avoidOverlap: 0
     },
     stabilization: {
       enabled: true,
@@ -30,35 +34,53 @@ const createOptions = (width, height) => ({
     },
   },
   nodes: {
-    borderWidth: 2,
+    borderWidth: 5,
     size: 1000,
     color: {
       border: '#222222',
       background: '#666666'
     },
+    shapeProperties: {
+      interpolation: false    // 'true' for intensive zooming
+    },
     font: { color: '#eeeeee' }
   },
   layout: {
-    randomSeed: 2, // constant seed
+    randomSeed: 1, // constant seed
     improvedLayout: true
   },
   edges: {
+    arrowStrikethrough: true,
+    chosen: {
+      edge: function (values, id, selected, hovering) {
+        console.log(arguments);
+        // values.property = chosenValue;
+      }
+    },
+    physics: true,
     smooth: false,
     color: {
-      color: "white"
+      color: "white",
+      highlight: "#55befc",
     },
-    length: 150,
+    length: 100,
     width: 2,
+    selectionWidth: function (width) {
+      return width + 1;
+    },
     arrows: {
       to: {
         enabled: true,
-        scaleFactor: 0.5
+        scaleFactor: 0.4
       }
     }
   }
 });
 
 var events = {
+  selectNode: function (event) {
+    console.log(event);
+  },
   select: function (event) {
     // console.log(this);
     // var { nodes, edges } = event;
@@ -95,8 +117,29 @@ class App extends Component {
     this.resizeEnd = null;
   }
 
+  updateNetwork = (network) => {
+    // network.once("afterDrawing", function () {
+    //   console.log("done drawing");
+    //   network.moveTo({
+    //     position: { x: 0, y: 0 },
+    //     scale: 0.18,
+    //     offset: { x: 0, y: 0 },
+    //     animation: true
+    //   });
+    // });
+    // this.Network = network;
+    console.log(network);
+    network.once("stabilized", function () {
+      network.fit({
+        animation: true
+      });
+      console.log(arguments);
+      console.log("stabilized")
+    });
+  }
+  
   resize = () => {
-    // console.log("resize");
+    console.log("resize");
     this.setState({
       dimensions: {
         width: window.innerWidth,
@@ -120,7 +163,16 @@ class App extends Component {
         let nodes = [];
         let edges = [];
         items.forEach((item, index) => {
-          nodes.push({ id: item.command[0], label: `Node ${index}`, shape: "circle" });
+          nodes.push({
+            color: {
+              highlight: "#55befc"
+            },
+            size: 25,
+            id: item.command[0],
+            label: item.command[0],
+            shape: "circularImage",
+            image: item.static
+          });
           item.leadsto.forEach(lead => {
             edges.push({ from: item.command[0], to: lead });
           });
@@ -129,9 +181,6 @@ class App extends Component {
           nodes,
           edges
         };
-
-        // eslint-disable-next-line
-        console.log(graph)
         this.setState({ graph });
       })
       .catch(err => {
@@ -150,7 +199,7 @@ class App extends Component {
       <div style={{ width, height }}>
         <Graph
           // eslint-disable-next-line
-          getNetwork={(network) => console.log(network)}
+          getNetwork={(network) => this.updateNetwork(network)}
           graph={this.state.graph}
           options={createOptions(width, height)}
           events={events}

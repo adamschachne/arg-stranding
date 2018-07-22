@@ -6,6 +6,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color:#36393f;
-  overflow: hidden; /* TODO */
+  background-color: #36393f;
+  /* overflow: hidden; TODO */
 }

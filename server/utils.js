@@ -44,7 +44,7 @@ module.exports = function processUrls(urls, callback) {
       urlItem.filename = parts[1];
       urlItem.width = parseInt($('#main-image').attr('width'));
       urlItem.height = parseInt($('#main-image').attr('height'));
-
+      urlItem.static = staticImgSrc;
       const imgResponse = await axios.get(staticImgSrc);
       const lastModified = imgResponse.headers["last-modified"];
       urlItem.lastModified = new Date(lastModified).toISOString();

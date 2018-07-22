@@ -127,6 +127,8 @@ module.exports = {
             // Pending further investigation:
             // https://github.com/mishoo/UglifyJS2/issues/2011
             comparisons: false,
+            drop_console: true,
+            drop_debugger: true,
           },
           mangle: {
             safari10: true,
@@ -176,7 +178,7 @@ module.exports = {
     // for React Native Web.
     extensions: ['.web.js', '.mjs', '.js', '.json', '.web.jsx', '.jsx'],
     alias: {
-      
+
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
@@ -211,7 +213,7 @@ module.exports = {
               // baseConfig: {
               //   extends: [require.resolve('eslint-config-react-app')],
               // },
-              
+
             },
             loader: require.resolve('eslint-loader'),
           },
@@ -247,7 +249,7 @@ module.exports = {
               {
                 loader: require.resolve('babel-loader'),
                 options: {
-                  
+
                   presets: [require.resolve('babel-preset-react-app')],
                   plugins: ['react-hot-loader/babel'],
                   compact: true,
