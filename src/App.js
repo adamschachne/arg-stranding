@@ -6,7 +6,7 @@ import Graph from "./Graph";
 const createOptions = (width, height) => ({
   width: width + "px",
   height: height + "px",
-  groups:{
+  groups: {
     useDefaultGroups: true
   },
   // autoResize: true,
@@ -37,7 +37,7 @@ const createOptions = (width, height) => ({
       background: '#666666'
     },
     font: { color: '#eeeeee' }
-  },  
+  },
   layout: {
     randomSeed: 2, // constant seed
     improvedLayout: true
@@ -60,14 +60,14 @@ const createOptions = (width, height) => ({
 
 var events = {
   select: function (event) {
-    console.log(this);
+    // console.log(this);
     // var { nodes, edges } = event;
   },
   release: function (event) {
     // console.log(event);
   },
   stabilized: function () {
-    
+
   }
   // afterDrawing: function() {
   //   console.log("done drawing", arguments);
@@ -149,6 +149,7 @@ class App extends Component {
     return (
       <div style={{ width, height }}>
         <Graph
+          // eslint-disable-next-line
           getNetwork={(network) => console.log(network)}
           graph={this.state.graph}
           options={createOptions(width, height)}

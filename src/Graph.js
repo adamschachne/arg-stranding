@@ -9,10 +9,10 @@ import PropTypes from "prop-types";
 class Graph extends Component {
   constructor(props) {
     super(props);
-    const { identifier } = props;
+    // const { identifier } = props;
     this.updateGraph = this.updateGraph.bind(this);
     this.state = {
-      identifier: identifier !== undefined ? identifier : uuid.v4()
+      identifier: uuid.v4()
     };
   }
 
@@ -70,7 +70,7 @@ class Graph extends Component {
     this.updateGraph();
   }
 
-  patchEdges({ edgesRemoved, edgesAdded }) {
+  patchEdges({ edgesRemoved, edgesAdded, edgesChanged }) {
     this.edges.remove(edgesRemoved);
     this.edges.add(edgesAdded);
     this.edges.update(edgesChanged);
@@ -152,6 +152,8 @@ Graph.defaultProps = {
   style: { width: "100%", height: "100%" }
 };
 Graph.propTypes = {
+  options: PropTypes.object,
+  events: PropTypes.object,
   graph: PropTypes.object,
   style: PropTypes.object,
   getNetwork: PropTypes.func,
