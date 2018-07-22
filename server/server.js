@@ -75,8 +75,7 @@ function fetchSheetData() {
                   leadsto: row.leadsto,
                   fannames: row.fannames
                 }
-              })
-                .filter(row => row.url != null && row.command != null)
+              }).filter(row => row.url != null && row.command != null)
             );
         });
       }

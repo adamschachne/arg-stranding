@@ -33,7 +33,7 @@ module.exports = function processUrls(urls, callback) {
   urls.forEach(async urlItem => {
     try {
       urlItem.command = urlItem.command.split(',').map(cmd => cmd.trim());
-      urlItem.leadsTo = urlItem.leadsto.split(',').map(lead => lead.trim());
+      urlItem.leadsto = urlItem.leadsto.split(',').filter(lead => lead !== "").map(lead => lead.trim());
       urlItem.id1 = urlItem.url.split("/image/")[1].replace("/", "");    
       const response = await axios.get(urlItem.url);
       const $ = cheerio.load(response.data);

@@ -138,7 +138,7 @@ module.exports = {
     // for React Native Web.
     extensions: ['.web.js', '.mjs', '.js', '.json', '.web.jsx', '.jsx'],
     alias: {
-      
+
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
@@ -212,7 +212,7 @@ module.exports = {
               {
                 loader: require.resolve('babel-loader'),
                 options: {
-                  
+
                   presets: [require.resolve('babel-preset-react-app')],
                   plugins: ['react-hot-loader/babel'],
                   // This is a feature of `babel-loader` for webpack (not Babel itself).
@@ -327,7 +327,25 @@ module.exports = {
   plugins: [
     // recognizes certain classes of webpack errors and cleans, aggregates 
     // and prioritizes them to provide a better Developer Experience.
-    new FriendlyErrorsWebpackPlugin(),    
+    new FriendlyErrorsWebpackPlugin({
+      compilationSuccessInfo: {
+        messages: ['You application is running here http://localhost:3000'],
+        // notes: ['Some additionnal notes to be displayed unpon successful compilation']
+      },
+      additionalTransformers: [
+        webpackError => {
+          const lines = webpackError.message.split("\n");
+          const newMessage = lines
+            .filter(msg => msg.indexOf("Module Warning (from ./node_modules/thread-loader") === -1)
+            .filter(msg => msg.indexOf("Module Error (from ./node_modules/thread-loader") === -1)
+            .filter(msg => msg.indexOf("    at ") !== 0)
+            .join('\n');
+          webpackError.message = newMessage;
+          webpackError.origin = "";
+          return webpackError;
+        }
+      ],
+    }),
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,
