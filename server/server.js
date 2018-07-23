@@ -42,9 +42,8 @@ function fetchSheetData() {
       return;
     }
     store.updating = true;
-
     async.series([
-      step => doc.useServiceAccountAuth(creds, step),
+      /* step 0 */
       step => {
         doc.getInfo(function (err, info) {
           // console.log('Loaded doc: ' + info.title + ' by ' + info.author.email + " last updated: " + info.updated);
@@ -58,6 +57,7 @@ function fetchSheetData() {
           // console.log('sheet 1: ' + sheet.title + ' ' + sheet.rowCount + 'x' + sheet.colCount);          
         });
       },
+      /* step 1 */
       step => {
         store.sheet.getRows({
           offset: 1,
@@ -85,7 +85,8 @@ function fetchSheetData() {
         reject(err);
         doneUpdating(store.data); // maybe send a reject instead of resolving with null
       } else {
-        processUrls(result[2], data => {
+        // result[1] is result of step 1
+        processUrls(result[1], data => {
           if (data == null) {
             reject();
           } else {
@@ -99,6 +100,11 @@ function fetchSheetData() {
   });
 }
 
+function authenticate(cb) {
+  console.log("authenticating google sheet...");
+  doc.useServiceAccountAuth(creds, cb);
+}
+
 const app = express();
 
 // Priority serve any static files.
@@ -106,10 +112,9 @@ app.use(express.static(paths.appBuild));
 
 // Answer API requests.
 app.get('/data', function (req, res) {
-  // res.set('Content-Type', 'application/json');
-  // res.send(JSON.stringify(store.data));
-  // res.setHeader('Cache-Control', 'public, max-age=31557600'); // one year
+  // console.log("RECEIVED REQUEST");
   res.set('Content-Type', 'application/json');
+  // res.setHeader('Cache-Control', 'public, max-age=31557600'); // one year
   fetchSheetData()
     .then(data => {
       store.data = data;
@@ -126,7 +131,8 @@ app.get('*', function (request, response) {
   response.sendFile(path.resolve(paths.appBuild, 'index.html'));
 });
 
-fetchSheetData()
+authenticate(function () {
+  fetchSheetData()
   .then(data => {
     store.data = data;
     console.log("loaded google sheet: ", store.sheet.url);
@@ -135,5 +141,9 @@ fetchSheetData()
     });
   })
   .catch(err => {
-    console.error(err);
+    console.debug(err);
+    app.listen(PORT, function () {
+      console.error(`Server listening on port ${PORT}`);
+    });
   });
+});

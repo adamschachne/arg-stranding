@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { hot } from 'react-hot-loader';
 import Network from './Network/Network';
 import Button from './button';
 
@@ -59,7 +58,7 @@ class App extends Component {
     return (
       <div style={{ width, height }}>
         <Network unfocus={this.unfocusNode} focus={this.state.focus} width={width} height={height} />
-        <div style={{ position: 'absolute', zIndex: '9999', bottom: "5px", left: "5px" }}>
+        {/* <div style={{ position: 'absolute', zIndex: '9999', bottom: "5px", left: "5px" }}>
           <p style={{textAlign: 'center'}}>Focus Test</p>
           <div>
             <Button
@@ -78,12 +77,12 @@ class App extends Component {
               node="?tearsinrain"
             />
             <Button
-              click={() => this.focusNode("?threehundredandsixtytwo")}
-              disabled={this.state.focus === "?threehundredandsixtytwo"}
-              node="?threehundredandsixtytwo"
+              click={() => this.focusNode("?thatgamecompany")}
+              disabled={this.state.focus === "?thatgamecompany"}
+              node="?thatgamecompany"
             />
           </div>
-        </div>
+        </div> */}
       </div>
     );
   }

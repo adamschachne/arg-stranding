@@ -4,7 +4,7 @@ export const createOptions = (width, height) => ({
   groups: {
     useDefaultGroups: true
   },
-  // autoResize: true,
+  autoResize: false,
   // configure: {
   //   enabled: true,
   //   filter: 'physics, layout',
@@ -47,13 +47,12 @@ export const createOptions = (width, height) => ({
   },
   edges: {
     arrowStrikethrough: true,
-    chosen: {
-      edge: function (values, id, selected, hovering) {
-        console.log(arguments);
-        // values.property = chosenValue;
-      }
-    },
-    physics: true,
+    // chosen: {
+    //   edge: function (values, id, selected, hovering) {
+    //     // console.log(arguments);
+    //     // values.property = chosenValue;
+    //   }
+    // },
     smooth: false,
     color: {
       color: "white",

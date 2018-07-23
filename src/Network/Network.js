@@ -19,11 +19,18 @@ class NetworkContainer extends PureComponent {
   updateNetwork = (network) => {
     console.log(network);
     this.network = network;
+    network.moveTo({
+      animation: true,
+      position: { x: 0, y: 0 },
+      scale: 0.30,
+      offset: { x: 0, y: 0 },
+      animation: true
+    });
     network.once("stabilized", function () {
-      network.fit({
-        animation: true
-      });
-      console.log(arguments);
+      // network.fit({
+      //   animation: true
+      // });
+      // console.log(arguments);
       console.log("stabilized")
     });
   }
@@ -37,9 +44,9 @@ class NetworkContainer extends PureComponent {
         let nodes = [];
         let edges = [];
         items.forEach((item, index) => {
-          nodes.push({            
+          nodes.push({
             id: item.command[0],
-            label: item.command[0],
+            label: item.command.length === 1 ? item.command[0] : item.command.join("\n"),
             shape: "circularImage",
             image: item.static
           });
@@ -61,7 +68,7 @@ class NetworkContainer extends PureComponent {
 
   componentDidUpdate() {
     const focusNode = this.props.focus;
-    if (focusNode !== "") {
+    if (focusNode !== "" && this.network) {
       this.network.focus(focusNode, {
         scale: 1,
         locked: false,
@@ -70,12 +77,13 @@ class NetworkContainer extends PureComponent {
     }
   }
 
-  render() {      
+  render() {
+    console.log("Network called render", this.state);
     const options = createOptions(this.props.width, this.props.height);
-    const events = createEvents({unfocusNode: this.props.unfocus});
+    const events = createEvents({ unfocusNode: this.props.unfocus });
     return (
       <Graph
-        getNetwork={network => this.updateNetwork(network)}
+        getNetwork={this.updateNetwork}
         graph={this.state.graph}
         options={options}
         events={events}

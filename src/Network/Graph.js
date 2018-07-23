@@ -9,23 +9,35 @@ import PropTypes from "prop-types";
 class Graph extends Component {
   constructor(props) {
     super(props);
-    // const { identifier } = props;
-    this.updateGraph = this.updateGraph.bind(this);
     this.state = {
       identifier: uuid.v4()
     };
   }
 
   componentDidMount() {
+    console.log("mounted", this.props);
+    // reference to the network edges and nodes
     this.edges = new vis.DataSet();
-    this.edges.add(this.props.graph.edges);
     this.nodes = new vis.DataSet();
-    this.nodes.add(this.props.graph.nodes);
-    this.updateGraph();
+
+    let container = document.getElementById(this.state.identifier);
+
+    this.Network = new vis.Network(
+      container,
+      Object.assign({}, this.props.graph, {
+        edges: this.edges,
+        nodes: this.nodes
+      }),
+      this.props.options
+    );
+
+    if (this.props.getNetwork) {
+      this.props.getNetwork(this.Network);
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    console.log("should graph update");
+    console.log("shouldComponentUpdate", nextProps);
     let nodesChange = !isEqual(this.props.graph.nodes, nextProps.graph.nodes);
     let edgesChange = !isEqual(this.props.graph.edges, nextProps.graph.edges);
     let optionsChange = !isEqual(this.props.options, nextProps.options);
@@ -67,10 +79,6 @@ class Graph extends Component {
     return false;
   }
 
-  componentDidUpdate() {
-    this.updateGraph();
-  }
-
   patchEdges({ edgesRemoved, edgesAdded, edgesChanged }) {
     this.edges.remove(edgesRemoved);
     this.edges.add(edgesAdded);
@@ -83,90 +91,31 @@ class Graph extends Component {
     this.nodes.update(nodesChanged);
   }
 
-  updateGraph() {
-    console.log("update graph");
-    let container = document.getElementById(this.state.identifier);
-    let defaultOptions = {
-      physics: {
-        stabilization: false
-      },
-      autoResize: false,
-      edges: {
-        smooth: false,
-        color: "#000000",
-        width: 0.5,
-        arrows: {
-          to: {
-            enabled: true,
-            scaleFactor: 0.5
-          }
-        }
-      }
-    };
-
-    // merge user provied options with our default ones
-    let options = defaultsDeep(defaultOptions, this.props.options);
-
-    let data = Object.assign({}, this.props.graph, {
-      edges: this.edges,
-      nodes: this.nodes
-    });    
-
-    if (!this.Network) {
-      console.log("creating new network");
-      this.Network = new vis.Network(
-        container,
-        data,
-        options
-      );
-    } else {
-      // TODO REMOVE EXISTING EVENT HANDLERS
-      console.log("updating existing network");
-      this.Network.setData(data);
-      this.Network.setOptions(options);
-    }
-
-    if (this.props.getNetwork) {
-      this.props.getNetwork(this.Network);
-    }
-
-    if (this.props.getNodes) {
-      this.props.getNodes(this.nodes);
-    }
-
-    if (this.props.getEdges) {
-      this.props.getEdges(this.edges);
-    }
-
-    // TODO REMOVE EXISTING EVENT HANDLERS
-    let events = this.props.events || {};
-    for (let eventName of Object.keys(events)) {
-      this.Network.on(eventName, events[eventName]);
-    }
-  }
-
   render() {
     const { identifier } = this.state;
     const { style } = this.props;
-    return React.createElement(
-      "div",
-      {
-        id: identifier,
-        style
-      },
-      identifier
+    return (
+      <div id={identifier} style={style}>
+        {identifier}
+      </div>
     );
   }
 }
 
 Graph.defaultProps = {
-  graph: {},
+  graph: {
+    nodes: [],
+    edges: []
+  },
   style: { width: "100%", height: "100%" }
 };
 Graph.propTypes = {
   options: PropTypes.object,
   events: PropTypes.object,
-  graph: PropTypes.object,
+  graph: PropTypes.shape({
+    nodes: PropTypes.array,
+    edges: PropTypes.array
+  }),
   style: PropTypes.object,
   getNetwork: PropTypes.func,
   getNodes: PropTypes.func,
