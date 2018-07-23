@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from "prop-types";
 import Graph from "./Graph";
 import { createOptions, createEvents } from './config';
+import { connect } from 'tls';
 
 class NetworkContainer extends PureComponent {
 
@@ -11,7 +12,8 @@ class NetworkContainer extends PureComponent {
       graph: {
         nodes: [],
         edges: []
-      }
+      },
+      commandToID: {}
     }
     this.network = null;
   }
@@ -41,24 +43,42 @@ class NetworkContainer extends PureComponent {
         return value.json();
       })
       .then(items => {
+        let commandToID = {};
         let nodes = [];
         let edges = [];
+
+        // iterate through each image once to generate mappings
         items.forEach((item, index) => {
+          // each command in that image
+          item.command.forEach(cmd => {
+            // map the command name to the ID (index)
+            commandToID[cmd] = index;
+          });
+        });
+
+        // iterate again to generate nodes and edges
+        items.forEach((item, ID) => {
+          // nodes
           nodes.push({
-            id: item.command[0],
+            id: ID,
             label: item.command.length === 1 ? item.command[0] : item.command.join("\n"),
             shape: "circularImage",
             image: item.static
           });
-          item.leadsto.forEach(lead => {
-            edges.push({ from: item.command[0], to: lead });
+          // outgoing edges for this node
+          item.leadsto.forEach(toNode => {
+            const connectedID = commandToID[toNode];
+            if (connectedID) {
+              edges.push({ from: ID, to: connectedID });
+            }
           });
-        });
+        })
+
         const graph = {
           nodes,
           edges
         };
-        this.setState({ graph });
+        this.setState({ graph, commandToID });
       })
       .catch(err => {
         // eslint-disable-next-line
