@@ -50,7 +50,7 @@ class App extends Component {
   }
 
   unfocusNode = () => {
-    this.setState({ focus: "" });
+    this.setState({ focus: null });
   }
 
   render() {

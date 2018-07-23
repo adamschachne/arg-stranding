@@ -82,13 +82,13 @@ class NetworkContainer extends PureComponent {
       })
       .catch(err => {
         // eslint-disable-next-line
-        console.log(err);
+        console.error(err);
       })
   }
 
   componentDidUpdate() {
     const focusNode = this.props.focus;
-    if (focusNode !== "" && this.network) {
+    if (focusNode !== null && this.network) {
       this.network.focus(focusNode, {
         scale: 1,
         locked: false,
