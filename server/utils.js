@@ -42,8 +42,11 @@ module.exports = function processUrls(urls, callback) {
       const parts = staticImgSrc.substring(pathIndex).split("/");
       urlItem.id2 = parts[0];
       urlItem.filename = parts[1];
-      urlItem.width = parseInt($('#main-image').attr('width'));
-      urlItem.height = parseInt($('#main-image').attr('height'));
+      
+      const dimensions = $("#download").attr("title").split(" - ")[0].split(" x ");
+      urlItem.width = parseInt(dimensions[0]);
+      urlItem.height = parseInt(dimensions[1]);   
+
       urlItem.static = staticImgSrc;
       const imgResponse = await axios.get(staticImgSrc);
       const lastModified = imgResponse.headers["last-modified"];
