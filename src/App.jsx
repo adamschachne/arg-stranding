@@ -57,7 +57,7 @@ class App extends Component {
     const { width, height } = this.state.dimensions;
     return (
       <div style={{ width, height }}>
-        <Network unfocus={this.unfocusNode} focus={this.state.focus} width={width} height={height} />
+        <Network setfocus={this.focusNode} unfocus={this.unfocusNode} focus={this.state.focus} width={width} height={height} />
         {/* <div style={{ position: 'absolute', zIndex: '9999', bottom: "5px", left: "5px" }}>
           <p style={{textAlign: 'center'}}>Focus Test</p>
           <div>

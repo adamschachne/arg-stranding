@@ -88,7 +88,7 @@ class NetworkContainer extends PureComponent {
 
   componentDidUpdate() {
     const focusNode = this.props.focus;
-    if (focusNode !== null && this.network) {
+    if (focusNode && this.network) {
       this.network.focus(focusNode, {
         scale: 1,
         locked: false,
@@ -113,6 +113,7 @@ class NetworkContainer extends PureComponent {
 }
 
 NetworkContainer.propTypes = {
+  setfocus: PropTypes.func,
   unfocus: PropTypes.func,
   focus: PropTypes.string,
   width: PropTypes.number,

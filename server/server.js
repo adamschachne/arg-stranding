@@ -7,7 +7,11 @@ const GoogleSpreadsheet = require('google-spreadsheet');
 const async = require('async');
 const processUrls = require('./utils');
 
-const doc = new GoogleSpreadsheet('1v2R7KnoheXKbceBzJyj9c5n5m2BM1ELNXg8A7xEY0gg');
+
+const doc = process.env.NODE_ENV === "production" ?
+  new GoogleSpreadsheet('1v2R7KnoheXKbceBzJyj9c5n5m2BM1ELNXg8A7xEY0gg')
+  :
+  new GoogleSpreadsheet('1KaFqCNbLuMRa2prpDzyBITS8Txk9AxZX7nPZzp3WHLE');
 const PORT = process.env.PORT || 5000;
 
 // const creds = require('../creds/ds-image-urls.json');
@@ -36,12 +40,12 @@ function doneUpdating(data) {
 
 function fetchSheetData() {
   return new Promise((resolve, reject) => {
-    if (store.updating == true) {
-      console.log("pushing resolve to watchers");
-      store.watchers.push(resolve);
-      return;
-    }
-    store.updating = true;
+    // if (store.updating == true) {
+    //   console.log("pushing resolve to watchers");
+    //   store.watchers.push(resolve);
+    //   return;
+    // }
+    // store.updating = true;
     async.series([
       /* step 0 */
       step => {
@@ -133,17 +137,17 @@ app.get('*', function (request, response) {
 
 authenticate(function () {
   fetchSheetData()
-  .then(data => {
-    store.data = data;
-    console.log("loaded google sheet: ", store.sheet.url);
-    app.listen(PORT, function () {
-      console.error(`Server listening on port ${PORT}`);
+    .then(data => {
+      store.data = data;
+      console.log("loaded google sheet: ", store.sheet.url);
+      app.listen(PORT, function () {
+        console.error(`Server listening on port ${PORT}`);
+      });
+    })
+    .catch(err => {
+      console.debug(err);
+      app.listen(PORT, function () {
+        console.error(`Server listening on port ${PORT}`);
+      });
     });
-  })
-  .catch(err => {
-    console.debug(err);
-    app.listen(PORT, function () {
-      console.error(`Server listening on port ${PORT}`);
-    });
-  });
 });

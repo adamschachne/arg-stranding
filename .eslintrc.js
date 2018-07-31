@@ -48,7 +48,7 @@ module.exports = {
     'max-len': 0,
     'newline-per-chained-call': 0,
     'no-confusing-arrow': 0,
-    'no-console': 1,
+    'no-console': process.env.NODE_ENV === "production" ? 1 : 0,
     'no-use-before-define': 0,
     'react/jsx-closing-tag-location': 0,
     'react/forbid-prop-types': 0,

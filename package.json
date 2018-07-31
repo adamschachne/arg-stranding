@@ -75,7 +75,7 @@
     "build": "cross-env GENERATE_SOURCEMAP=false node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
     "prod": "node -r dotenv/config server/server.js",
-    "start": "node server/server.js",
+    "start": "cross-env NODE_ENV=production node server/server.js",
     "lint": "eslint src"
   },
   "cacheDirectories": [
