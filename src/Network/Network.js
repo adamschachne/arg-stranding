@@ -1,8 +1,9 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import Graph from "./Graph";
-import { createOptions, createEvents } from './config';
-import { connect } from 'tls';
+import { createOptions } from "./config";
+import localForage from "localforage";
+import { PulseLoader } from "react-spinners";
 
 class NetworkContainer extends PureComponent {
 
@@ -13,7 +14,33 @@ class NetworkContainer extends PureComponent {
         nodes: [],
         edges: []
       },
-      commandToID: {}
+      commandToID: {},
+      loading: true
+    }
+    this.dragging = false;
+    this.options = createOptions(this.props.width, this.props.height);
+    // this.events = createEvents({ unfocusNode: this.props.unfocus });
+    this.events = {
+      dragStart: () => {
+        console.log("dragging");
+        this.dragging = true;
+        this.props.unfocus();
+      },
+      deselectNode: () => {
+        this.props.unfocus();
+      },
+      dragEnd: () => {
+        console.log("done dragging");
+        this.dragging = false;
+      },
+      stabilized: () => {
+        if (this.dragging === true) {
+          return;
+        }
+        localForage.setItem("positions", this.network.getPositions());
+        // save positions
+        console.log("setting positions")
+      }
     }
     this.network = null;
   }
@@ -21,72 +48,107 @@ class NetworkContainer extends PureComponent {
   updateNetwork = (network) => {
     console.log(network);
     this.network = network;
-    network.moveTo({
-      animation: true,
-      position: { x: 0, y: 0 },
-      scale: 0.30,
-      offset: { x: 0, y: 0 },
-      animation: true
+    network.once("stabilized", () => {
+      this.setState({
+        graph: {
+          nodes: this.state.graph.nodes.map(node => {
+            const newNode = {
+              ...node
+            };
+            newNode.hidden = false;
+            return newNode;
+          }),
+          edges: this.state.graph.edges
+        },
+        loading: false
+      });
+      this.network.moveTo({
+        animation: false,
+        position: { x: 0, y: 0 },
+        scale: 0.30,
+        offset: { x: 0, y: 0 }
+      });
+      console.log(performance.now())
+      console.log("stabilized");
     });
-    network.once("stabilized", function () {
-      // network.fit({
-      //   animation: true
-      // });
-      // console.log(arguments);
-      console.log("stabilized")
+  }
+
+  buildGraph = ({ items, updated }) => {
+    let commandToID = {};
+    let nodes = [];
+    let edges = [];
+
+    localForage.setItem("updated", updated);
+
+    // iterate through each image once to generate mappings
+    items.forEach((item, index) => {
+      // each command in that image
+      item.command.forEach(cmd => {
+        // map the command name to the ID (index)
+        commandToID[cmd] = index;
+      });
     });
+
+    // iterate again to generate nodes and edges
+    items.forEach((item, ID) => {
+      // nodes
+      nodes.push({
+        id: ID,
+        label: item.command.length === 1 ? item.command[0] : item.command.join("\n"),
+        shape: "circularImage",
+        image: item.static,
+        hidden: true,
+        x: item.x,
+        y: item.y
+      });
+      // outgoing edges for this node
+      item.leadsto.forEach(toNode => {
+        const connectedID = commandToID[toNode];
+        if (connectedID) {
+          edges.push({ from: ID, to: connectedID });
+        }
+      });
+    })
+
+    const graph = {
+      nodes,
+      edges
+    };
+
+    this.setState({ graph, commandToID });
   }
 
   componentDidMount() {
-    fetch('/data')
-      .then(value => {
-        return value.json();
-      })
-      .then(items => {
-        let commandToID = {};
-        let nodes = [];
-        let edges = [];
-
-        // iterate through each image once to generate mappings
-        items.forEach((item, index) => {
-          // each command in that image
-          item.command.forEach(cmd => {
-            // map the command name to the ID (index)
-            commandToID[cmd] = index;
+    fetch('/data').then(value => {
+      return value.json();
+    }).then(data => {
+      // data.graph, data.updated
+      localForage.getItem("updated").then(lastUpdated => {
+        if (lastUpdated && lastUpdated === data.updated) {
+          // get data from localforage and use those positions
+          localForage.getItem("positions").then(positions => {
+            console.log("USING EXISTING POSITIONS: ", positions);
+            data.items.forEach((item, ID) => {
+              Object.assign(item, positions[ID]);
+            })
+            this.buildGraph(data);
           });
-        });
-
-        // iterate again to generate nodes and edges
-        items.forEach((item, ID) => {
-          // nodes
-          nodes.push({
-            id: ID,
-            label: item.command.length === 1 ? item.command[0] : item.command.join("\n"),
-            shape: "circularImage",
-            image: item.static
-          });
-          // outgoing edges for this node
-          item.leadsto.forEach(toNode => {
-            const connectedID = commandToID[toNode];
-            if (connectedID) {
-              edges.push({ from: ID, to: connectedID });
-            }
-          });
-        })
-
-        const graph = {
-          nodes,
-          edges
-        };
-        this.setState({ graph, commandToID });
-      })
-      .catch(err => {
-        // eslint-disable-next-line
+        } else {
+          this.buildGraph(data);
+        }
+      }).catch(err => {
         console.error(err);
+        this.buildGraph(data);
       })
+    });
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
+    if (prevProps.width !== this.props.width || prevProps.height !== this.props.height) {
+      this.options.width = this.props.width + "px";
+      this.options.height = this.props.height + "px";
+      this.network.setOptions(this.options);
+    }
     const focusNode = this.props.focus;
     if (focusNode && this.network) {
       this.network.focus(focusNode, {
@@ -98,16 +160,27 @@ class NetworkContainer extends PureComponent {
   }
 
   render() {
-    console.log("Network called render", this.state);
-    const options = createOptions(this.props.width, this.props.height);
-    const events = createEvents({ unfocusNode: this.props.unfocus });
+    // console.log("Network called render", this.state);
     return (
-      <Graph
-        getNetwork={this.updateNetwork}
-        graph={this.state.graph}
-        options={options}
-        events={events}
-      />
+      <div
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      >
+
+        <div
+          style={{ position: "absolute" }}
+        >
+          <PulseLoader
+            color={'#FFFFFF'}
+            loading={this.state.loading}
+          />
+        </div>
+        <Graph
+          getNetwork={this.updateNetwork}
+          graph={this.state.graph}
+          options={this.options}
+          events={this.events}
+        />
+      </div>
     );
   }
 }

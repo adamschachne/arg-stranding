@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Network from './Network/Network';
-import Button from './button';
+// import Button from './button';
 
 const RESIZE_DELAY = 100; // 100ms
 
@@ -17,7 +17,8 @@ class App extends Component {
         width,
         height
       },
-      focus: ""
+      focus: "",
+      loading: true
     };
   }
 
@@ -53,11 +54,22 @@ class App extends Component {
     this.setState({ focus: null });
   }
 
+  doneLoading = () => {
+    this.setState({ loading: false });
+  }
+
   render() {
     const { width, height } = this.state.dimensions;
     return (
       <div style={{ width, height }}>
-        <Network setfocus={this.focusNode} unfocus={this.unfocusNode} focus={this.state.focus} width={width} height={height} />
+        <Network
+          doneLoading={this.doneLoading}
+          setfocus={this.focusNode}
+          unfocus={this.unfocusNode}
+          focus={this.state.focus}
+          width={width}
+          height={height}
+        />
         {/* <div style={{ position: 'absolute', zIndex: '9999', bottom: "5px", left: "5px" }}>
           <p style={{textAlign: 'center'}}>Focus Test</p>
           <div>

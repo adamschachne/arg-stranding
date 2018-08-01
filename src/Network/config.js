@@ -72,32 +72,32 @@ export const createOptions = (width, height) => ({
   }
 });
 
-export function createEvents({ unfocusNode }) {
-  // console.log(this);
-  return {
-    selectNode: function (event) {
-      // console.log(event);
-    },
-    select: function (event) {
-      // console.log(this);
-      // var { nodes, edges } = event;
-    },
-    release: function (event) {
-      // console.log(event);
-    },
-    stabilized: function () {
+export const createEvents = ({ unfocusNode, onDrag, onDragEnd }) => ({
+  selectNode: function (event) {
+    // console.log(event);
+  },
+  select: function (event) {
+    // console.log(this);
+    // var { nodes, edges } = event;
+  },
+  release: function (event) {
+    // console.log(event);
+  },
+  stabilized: function () {
 
-    },
-    deselectNode: function (deselect) {
-      unfocusNode();
-      // console.log("deselect: ", deselect);
-    },
-    dragStart: function (event) {
-      console.log("dragstart");
-      unfocusNode();
-    }
-    // afterDrawing: function() {
-    //   console.log("done drawing", arguments);
-    // }
-  };
-}
+  },
+  deselectNode: function (deselect) {
+    unfocusNode();
+    // console.log("deselect: ", deselect);
+  },
+  dragStart: function (event) {
+    console.log("dragstart");
+    unfocusNode();
+  },
+  dragEnd: function (event) {
+
+  }
+  // afterDrawing: function() {
+  //   console.log("done drawing", arguments);
+  // }
+});

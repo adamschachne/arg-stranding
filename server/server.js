@@ -122,12 +122,18 @@ app.get('/data', function (req, res) {
   fetchSheetData()
     .then(data => {
       store.data = data;
-      res.send(JSON.stringify(store.data));
+      res.send(JSON.stringify({
+        graph: store.data,
+        updated: store.lastUpdated
+      }));
     })
     .catch(err => {
       // send existing data
-      res.send(JSON.stringify(store.data));
-    })
+      res.send(JSON.stringify({
+        items: store.data,
+        updated: store.lastUpdated
+      }));
+    });
 });
 
 // All remaining requests return the React app, so it can handle routing.

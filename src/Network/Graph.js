@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import defaultsDeep from "lodash/fp/defaultsDeep";
 import isEqual from "lodash/isEqual";
 import differenceWith from "lodash/differenceWith";
 import vis from "vis";
@@ -30,6 +29,11 @@ class Graph extends Component {
       }),
       this.props.options
     );
+
+    let events = this.props.events || {};
+    for (let eventName of Object.keys(events)) {
+      this.Network.on(eventName, events[eventName]);
+    }
 
     if (this.props.getNetwork) {
       this.props.getNetwork(this.Network);
