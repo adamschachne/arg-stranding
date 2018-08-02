@@ -123,7 +123,7 @@ app.get('/data', function (req, res) {
     .then(data => {
       store.data = data;
       res.send(JSON.stringify({
-        graph: store.data,
+        items: store.data,
         updated: store.lastUpdated
       }));
     })

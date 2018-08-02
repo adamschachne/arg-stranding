@@ -30,11 +30,11 @@ export const initOptions = (width, height) => ({
     },
   },
   nodes: {
-    borderWidth: 5,
+    borderWidth: 2,
     size: 25,
     color: {
-      border: '#222222',
-      background: '#666666'
+      border: "black",
+      highlight: "#55befc",
     },
     shapeProperties: {
       interpolation: false    // 'true' for intensive zooming
@@ -59,7 +59,7 @@ export const initOptions = (width, height) => ({
       highlight: "#55befc",
     },
     length: 100,
-    width: 2,
+    width: 1,
     selectionWidth: function (width) {
       return width + 1;
     },

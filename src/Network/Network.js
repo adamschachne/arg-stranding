@@ -40,6 +40,9 @@ class NetworkContainer extends PureComponent {
         // save positions
         console.log("setting positions")
       },
+      doubleClick: click => {
+        console.log(click);
+      }
       // stabilizationProgress: ({ iterations, total }) => {
       //   console.log("stabilization progress", iterations, total);
       // },
@@ -62,7 +65,7 @@ class NetworkContainer extends PureComponent {
         position: { x: 0, y: 0 },
         scale: 0.30,
         offset: { x: 0, y: 0 }
-      });     
+      });
 
       // replace reference to options instead of mutate it 
       // so that Graph can compare references and update
@@ -108,15 +111,22 @@ class NetworkContainer extends PureComponent {
 
     // iterate again to generate nodes and edges
     items.forEach((item, ID) => {
-      // nodes
+      const UNKNOWN_COMMAND = item.command[0].charAt(0) !== "?";
+      // nodes            
       nodes.push({
         id: ID,
         label: item.command.length === 1 ? item.command[0] : item.command.join("\n"),
-        shape: "circularImage",
-        image: item.static,
+        shape: UNKNOWN_COMMAND ? "image" : "circularImage",
+        image: item.static,        
+        borderWidth: 3,
+        size: UNKNOWN_COMMAND ? 20 : 25,
         hidden: true,
         x: item.x,
-        y: item.y
+        y: item.y,
+        shapeProperties: {
+          useBorderWithImage: true,
+          interpolation: false
+        }
       });
       // outgoing edges for this node
       item.leadsto.forEach(toNode => {
@@ -140,7 +150,10 @@ class NetworkContainer extends PureComponent {
       return value.json();
     }).then(data => {
       // data.graph, data.updated
+      console.log(data);
+      console.log(new Date(data.updated).getTime());
       localForage.getItem("updated").then(lastUpdated => {
+        console.log("stored update: ", new Date(lastUpdated).getTime())
         if (lastUpdated && lastUpdated === data.updated) {
           // get data from localforage and use those positions
           localForage.getItem("positions").then(positions => {
@@ -151,7 +164,8 @@ class NetworkContainer extends PureComponent {
             this.buildGraph(data);
           });
         } else {
-          this.buildGraph(data);
+          console.log("Sheet updated. Building new graph");
+          this.buildGraph(data);                    
         }
       }).catch(err => {
         console.error(err);
