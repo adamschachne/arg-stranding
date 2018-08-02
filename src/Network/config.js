@@ -1,4 +1,4 @@
-export const createOptions = (width, height) => ({
+export const initOptions = (width, height) => ({
   width: width + "px",
   height: height + "px",
   groups: {
@@ -11,7 +11,7 @@ export const createOptions = (width, height) => ({
   //   showButton: true
   // },
   physics: {
-    enabled: true,
+    enabled: false,
     solver: 'forceAtlas2Based',
     forceAtlas2Based: {
       gravitationalConstant: -120,

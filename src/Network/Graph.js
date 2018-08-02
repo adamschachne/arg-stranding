@@ -47,6 +47,8 @@ class Graph extends Component {
     let optionsChange = !isEqual(this.props.options, nextProps.options);
     let eventsChange = !isEqual(this.props.events, nextProps.events);
 
+    console.log(nextProps.options, this.props.options);
+
     if (nodesChange) {
       const idIsEqual = (n1, n2) => n1.id === n2.id;
       const nodesRemoved = differenceWith(this.props.graph.nodes, nextProps.graph.nodes, idIsEqual);
@@ -79,6 +81,8 @@ class Graph extends Component {
       events = nextProps.events || {};
       for (let eventName of Object.keys(events)) this.Network.on(eventName, events[eventName]);
     }
+
+    this.Network.stabilize();
 
     return false;
   }

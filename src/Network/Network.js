@@ -1,10 +1,9 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import Graph from "./Graph";
-import { createOptions } from "./config";
+import { initOptions } from "./config";
 import localForage from "localforage";
-import { PulseLoader } from "react-spinners";
-
+import Loader from './Loader';
 class NetworkContainer extends PureComponent {
 
   constructor(props) {
@@ -18,7 +17,7 @@ class NetworkContainer extends PureComponent {
       loading: true
     }
     this.dragging = false;
-    this.options = createOptions(this.props.width, this.props.height);
+    this.options = initOptions(this.props.width, this.props.height);
     // this.events = createEvents({ unfocusNode: this.props.unfocus });
     this.events = {
       dragStart: () => {
@@ -40,15 +39,40 @@ class NetworkContainer extends PureComponent {
         localForage.setItem("positions", this.network.getPositions());
         // save positions
         console.log("setting positions")
-      }
+      },
+      // stabilizationProgress: ({ iterations, total }) => {
+      //   console.log("stabilization progress", iterations, total);
+      // },
+      // stabilizationIterationsDone: function() {
+      //   console.log("stabilization Iterations done", arguments);
+      // }
     }
     this.network = null;
   }
-
   updateNetwork = (network) => {
     console.log(network);
     this.network = network;
     network.once("stabilized", () => {
+
+      console.log("stabilized");
+      console.log(performance.now());
+
+      this.network.moveTo({
+        animation: false,
+        position: { x: 0, y: 0 },
+        scale: 0.30,
+        offset: { x: 0, y: 0 }
+      });     
+
+      // replace reference to options instead of mutate it 
+      // so that Graph can compare references and update
+      this.options = {
+        ...this.options,
+        physics: {
+          ...this.options.physics,
+          enabled: true
+        }
+      };
       this.setState({
         graph: {
           nodes: this.state.graph.nodes.map(node => {
@@ -62,18 +86,11 @@ class NetworkContainer extends PureComponent {
         },
         loading: false
       });
-      this.network.moveTo({
-        animation: false,
-        position: { x: 0, y: 0 },
-        scale: 0.30,
-        offset: { x: 0, y: 0 }
-      });
-      console.log(performance.now())
-      console.log("stabilized");
     });
   }
 
   buildGraph = ({ items, updated }) => {
+    console.log("building graph");
     let commandToID = {};
     let nodes = [];
     let edges = [];
@@ -166,14 +183,8 @@ class NetworkContainer extends PureComponent {
         style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
       >
 
-        <div
-          style={{ position: "absolute" }}
-        >
-          <PulseLoader
-            color={'#FFFFFF'}
-            loading={this.state.loading}
-          />
-        </div>
+        <Loader loading={this.state.loading} />
+
         <Graph
           getNetwork={this.updateNetwork}
           graph={this.state.graph}
