@@ -3,7 +3,9 @@ import PropTypes from "prop-types";
 import Graph from "./Graph";
 import { initOptions } from "./config";
 import localForage from "localforage";
+import copy from 'copy-to-clipboard';
 import Loader from './Loader';
+
 class NetworkContainer extends PureComponent {
 
   constructor(props) {
@@ -40,8 +42,14 @@ class NetworkContainer extends PureComponent {
         // save positions
         console.log("setting positions")
       },
-      doubleClick: click => {
-        console.log(click);
+      doubleClick: doubleClick => {
+        console.log(doubleClick);
+        if (doubleClick.nodes.length > 0) {
+          const label = this.state.graph.nodes[doubleClick.nodes[0]].label;          
+          const command = label.split("\n")[0];
+          console.log("copied: ", command);
+          copy(command);
+        }
       }
       // stabilizationProgress: ({ iterations, total }) => {
       //   console.log("stabilization progress", iterations, total);
