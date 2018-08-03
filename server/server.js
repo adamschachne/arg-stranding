@@ -121,8 +121,8 @@ const app = express();
 app.use(express.static(paths.appBuild));
 
 app.use(function (req, res, next) {
-  console.log(req.ip);
-  addIpAddress(req.ip);
+  let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  addIpAddress(ip);
   next();
 })
 
@@ -176,6 +176,7 @@ MongoClient.connect(mongo_url, { useNewUrlParser: true }, function (err, client)
 });
 
 function addIpAddress(ip, callback) {
+  console.log(ip);
   const doc = {
     ip,
     timestamp: Date.now()
