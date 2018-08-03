@@ -43,6 +43,7 @@
     "localforage": "^1.7.2",
     "lodash": "^4.17.10",
     "mini-css-extract-plugin": "^0.4.0",
+    "mongodb": "^3.1.1",
     "nodemon": "^1.18.3",
     "number-to-words": "^1.2.3",
     "object-assign": "4.1.1",
