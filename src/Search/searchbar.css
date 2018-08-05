@@ -1,0 +1,31 @@
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: white;
+  opacity: 0.5; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: white;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+  color: white;
+}
+
+.searchbar {
+  background: #3956fc00;
+  position: absolute;
+  color: white;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 35px;
+  /* border-bottom: 1px solid rgba(0,0,0,.14); */
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  z-index: 100;
+  padding: 0 15px;
+}

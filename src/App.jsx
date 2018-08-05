@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Network from './Network/Network';
+import SearchBar from './Search/SearchBar';
 // import Button from './button';
 
 const RESIZE_DELAY = 100; // 100ms
@@ -70,6 +71,7 @@ class App extends Component {
           width={width}
           height={height}
         />
+        <SearchBar />
         {/* <div style={{ position: 'absolute', zIndex: '9999', bottom: "5px", left: "5px" }}>
           <p style={{textAlign: 'center'}}>Focus Test</p>
           <div>

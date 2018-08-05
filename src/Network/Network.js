@@ -15,12 +15,11 @@ class NetworkContainer extends PureComponent {
         nodes: [],
         edges: []
       },
+      options: initOptions(this.props.width, this.props.height),
       commandToID: {},
       loading: true
     }
     this.dragging = false;
-    this.options = initOptions(this.props.width, this.props.height);
-    // this.events = createEvents({ unfocusNode: this.props.unfocus });
     this.events = {
       dragStart: () => {
         console.log("dragging");
@@ -60,6 +59,7 @@ class NetworkContainer extends PureComponent {
     }
     this.network = null;
   }
+
   updateNetwork = (network) => {
     console.log(network);
     this.network = network;
@@ -77,13 +77,6 @@ class NetworkContainer extends PureComponent {
 
       // replace reference to options instead of mutate it 
       // so that Graph can compare references and update
-      this.options = {
-        ...this.options,
-        physics: {
-          ...this.options.physics,
-          enabled: true
-        }
-      };
       this.setState({
         graph: {
           nodes: this.state.graph.nodes.map(node => {
@@ -94,6 +87,13 @@ class NetworkContainer extends PureComponent {
             return newNode;
           }),
           edges: this.state.graph.edges
+        },
+        options: {
+          ...this.state.options,
+          physics: {
+            ...this.state.options.physics,
+            enabled: true
+          }
         },
         loading: false
       });
@@ -183,11 +183,11 @@ class NetworkContainer extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.width !== this.props.width || prevProps.height !== this.props.height) {
-      this.options.width = this.props.width + "px";
-      this.options.height = this.props.height + "px";
-      this.network.setOptions(this.options);
-    }
+    // if (prevProps.width !== this.props.width || prevProps.height !== this.props.height) {
+    //   this.options.width = this.props.width + "px";
+    //   this.options.height = this.props.height + "px";
+    //   this.network.setOptions(this.options);      
+    // }
     const focusNode = this.props.focus;
     if (focusNode && this.network) {
       this.network.focus(focusNode, {
@@ -210,7 +210,11 @@ class NetworkContainer extends PureComponent {
         <Graph
           getNetwork={this.updateNetwork}
           graph={this.state.graph}
-          options={this.options}
+          options={{
+            ...this.state.options,
+            width: this.props.width + "px",
+            height: this.props.height + "px",
+          }}
           events={this.events}
         />
       </div>

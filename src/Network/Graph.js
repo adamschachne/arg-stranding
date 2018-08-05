@@ -72,6 +72,7 @@ class Graph extends Component {
 
     if (optionsChange) {
       this.Network.setOptions(nextProps.options);
+      console.log("options changed");
     }
 
     if (eventsChange) {
