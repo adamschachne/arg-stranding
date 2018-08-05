@@ -24,11 +24,13 @@ class NetworkContainer extends PureComponent {
       dragStart: () => {
         console.log("dragging");
         this.dragging = true;
-        this.props.unfocus();
+        // this.props.unfocus();
+        this.props.interactNetwork();
       },
-      deselectNode: () => {
-        this.props.unfocus();
-      },
+      // deselectNode: () => {
+      //   // this.props.unfocus();
+      //   this.props.interactNetwork();
+      // },
       dragEnd: () => {
         console.log("done dragging");
         this.dragging = false;
@@ -40,6 +42,9 @@ class NetworkContainer extends PureComponent {
         localForage.setItem("positions", this.network.getPositions());
         // save positions
         console.log("setting positions")
+      },
+      click: e => {
+        this.props.interactNetwork(e.nodes);
       },
       doubleClick: doubleClick => {
         console.log(doubleClick);
@@ -186,9 +191,10 @@ class NetworkContainer extends PureComponent {
     // if (prevProps.width !== this.props.width || prevProps.height !== this.props.height) {
     //   this.options.width = this.props.width + "px";
     //   this.options.height = this.props.height + "px";
-    //   this.network.setOptions(this.options);      
+    //   this.network.setOptions(this.options);
     // }
-    const focusNode = this.props.focus;
+    console.log("NETWORK UPDATE", this.props);
+    const focusNode = this.props.focusNode;
     if (focusNode && this.network) {
       this.network.focus(focusNode, {
         scale: 1,
@@ -223,11 +229,11 @@ class NetworkContainer extends PureComponent {
 }
 
 NetworkContainer.propTypes = {
-  setfocus: PropTypes.func,
-  unfocus: PropTypes.func,
-  focus: PropTypes.string,
+  interactNetwork: PropTypes.func.isRequired,
+  focusNode: PropTypes.number,
   width: PropTypes.number,
-  height: PropTypes.number
+  height: PropTypes.number,
+  renderSearch: PropTypes.func
 };
 
 export default NetworkContainer;

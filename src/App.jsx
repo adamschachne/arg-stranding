@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Network from './Network/Network';
-import SearchBar from './Search/SearchBar';
+import Search from './Search/SearchBar';
 // import Button from './button';
 
 const RESIZE_DELAY = 100; // 100ms
@@ -18,9 +18,12 @@ class App extends Component {
         width,
         height
       },
-      focus: "",
+      focus: null,
       loading: true
     };
+
+    this.searchRef = React.createRef();
+    this.searchIsFocused = false;
   }
 
   resize = () => {
@@ -38,12 +41,25 @@ class App extends Component {
     this.resizeEnd = setTimeout(this.resize, RESIZE_DELAY);
   }
 
+  onKeydown = event => {
+    if (!this.searchIsFocused) {
+      this.searchRef.current.focus();
+    } else if (event.keyCode === 27) { // Esc      
+      this.searchRef.current.blur();
+    } else if (event.keyCode === 9) { // Tab      
+      event.preventDefault();
+      this.searchRef.current.blur();
+    }
+  }
+
   componentDidMount() {
     window.addEventListener("resize", this.onResize);
+    window.addEventListener("keydown", this.onKeydown);
   }
 
   componentWillUnmount() {
     window.removeEventListener("resize", this.resize);
+    window.removeEventListener("keydown", this.onKeydown);
   }
 
   focusNode = (node) => {
@@ -52,6 +68,7 @@ class App extends Component {
   }
 
   unfocusNode = () => {
+    console.log("unfocus");
     this.setState({ focus: null });
   }
 
@@ -59,19 +76,40 @@ class App extends Component {
     this.setState({ loading: false });
   }
 
+  interactNetwork = (event) => {
+    if (event) {
+      if (event.length === 1 && this.state.focus !== event[0]) {
+        this.setState({ focus: event[0] });
+      } else if (this.state.focus !== null) {
+        this.setState({ focus: null });
+      }
+    }
+    this.searchRef.current && this.searchRef.current.blur();
+  }
+
   render() {
     const { width, height } = this.state.dimensions;
     return (
       <div style={{ width, height }}>
         <Network
+          interactNetwork={this.interactNetwork}
           doneLoading={this.doneLoading}
-          setfocus={this.focusNode}
-          unfocus={this.unfocusNode}
           focus={this.state.focus}
           width={width}
           height={height}
         />
-        <SearchBar />
+        <Search
+          focus={() => {
+            console.log("search in focus");
+            this.searchIsFocused = true;
+          }}
+          blur={() => {
+            console.log("search out of focus");
+            this.searchIsFocused = false;
+            this.searchRef.current.value = "";      
+          }}
+          innerRef={this.searchRef} 
+        />
         {/* <div style={{ position: 'absolute', zIndex: '9999', bottom: "5px", left: "5px" }}>
           <p style={{textAlign: 'center'}}>Focus Test</p>
           <div>

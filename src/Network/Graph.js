@@ -41,13 +41,15 @@ class Graph extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    console.log("shouldComponentUpdate", nextProps);
+    console.log("shouldComponentUpdate");
     let nodesChange = !isEqual(this.props.graph.nodes, nextProps.graph.nodes);
     let edgesChange = !isEqual(this.props.graph.edges, nextProps.graph.edges);
     let optionsChange = !isEqual(this.props.options, nextProps.options);
     let eventsChange = !isEqual(this.props.events, nextProps.events);
 
-    console.log(nextProps.options, this.props.options);
+    if (nodesChange || edgesChange || optionsChange || eventsChange) {
+      console.log("UPDATING GRAPH", nextProps, this.props);
+    }
 
     if (nodesChange) {
       const idIsEqual = (n1, n2) => n1.id === n2.id;

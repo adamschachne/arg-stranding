@@ -13,6 +13,7 @@
 }
 
 .searchbar {
+  max-width: 100vw;
   background: #3956fc00;
   position: absolute;
   color: white;

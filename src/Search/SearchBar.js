@@ -1,22 +1,49 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import './search.css';
 
-import './searchbar.css';
+const PLACEHOLDER = "start typing to search..."
 
-class SearchBar extends Component {
+class Search extends Component {
 
-  // constructor(props) {
-  //   super(props);
-  // }
+  constructor(props) {
+    super(props);
+    console.log(props.innerRef);
+
+    this.state = {
+      size: PLACEHOLDER.length,
+      value: ""
+    }
+  }
 
   render() {
     return (
       <input
         className="searchbar"
-        type="text"
-        placeholder="start typing to search..."
+        type="search"
+        autoComplete="off"
+        autoCapitalize="off"
+        spellCheck="false"
+        size={this.state.size}
+        placeholder={PLACEHOLDER}
+        ref={this.props.innerRef}
+        onFocus={this.props.focus}
+        onBlur={this.props.blur}
+        onChange={event => {
+          const value = event.target.value;
+          const size = PLACEHOLDER.length < value.length ? value.length : PLACEHOLDER.length;
+          this.setState({ size, value });
+          console.log(event.target.value)
+        }}
       />
     );
   }
 }
 
-export default SearchBar;
+Search.propTypes = {
+  focus: PropTypes.func.isRequired,
+  blur: PropTypes.func.isRequired,
+  innerRef: PropTypes.any.isRequired
+}
+
+export default Search;
