@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Network from './Network/Network';
-import Search from './Search/SearchBar';
+import Menu from './Menu/Menu'
+import Search from './Search/Search';
 // import Button from './button';
 
 const RESIZE_DELAY = 100; // 100ms
@@ -21,9 +22,6 @@ class App extends Component {
       focus: null,
       loading: true
     };
-
-    this.searchRef = React.createRef();
-    this.searchIsFocused = false;
   }
 
   resize = () => {
@@ -41,25 +39,12 @@ class App extends Component {
     this.resizeEnd = setTimeout(this.resize, RESIZE_DELAY);
   }
 
-  onKeydown = event => {
-    if (!this.searchIsFocused) {
-      this.searchRef.current.focus();
-    } else if (event.keyCode === 27) { // Esc      
-      this.searchRef.current.blur();
-    } else if (event.keyCode === 9) { // Tab      
-      event.preventDefault();
-      this.searchRef.current.blur();
-    }
-  }
-
   componentDidMount() {
     window.addEventListener("resize", this.onResize);
-    window.addEventListener("keydown", this.onKeydown);
   }
 
   componentWillUnmount() {
     window.removeEventListener("resize", this.resize);
-    window.removeEventListener("keydown", this.onKeydown);
   }
 
   focusNode = (node) => {
@@ -72,19 +57,16 @@ class App extends Component {
     this.setState({ focus: null });
   }
 
-  doneLoading = () => {
-    this.setState({ loading: false });
+  doneLoading = (nodes) => {
+    this.setState({ nodes, loading: false });
   }
 
-  interactNetwork = (event) => {
-    if (event) {
-      if (event.length === 1 && this.state.focus !== event[0]) {
-        this.setState({ focus: event[0] });
-      } else if (this.state.focus !== null) {
-        this.setState({ focus: null });
-      }
-    }
-    this.searchRef.current && this.searchRef.current.blur();
+  renderMenu = ({ searchRef, nodes, loading }) => {
+    return (
+      <Menu nodes={nodes} >
+        <Search innerRef={searchRef} />
+      </Menu>
+    );
   }
 
   render() {
@@ -92,50 +74,35 @@ class App extends Component {
     return (
       <div style={{ width, height }}>
         <Network
-          interactNetwork={this.interactNetwork}
-          doneLoading={this.doneLoading}
-          focus={this.state.focus}
           width={width}
           height={height}
-        />
-        <Search
-          focus={() => {
-            console.log("search in focus");
-            this.searchIsFocused = true;
-          }}
-          blur={() => {
-            console.log("search out of focus");
-            this.searchIsFocused = false;
-            this.searchRef.current.value = "";      
-          }}
-          innerRef={this.searchRef} 
+          render={this.renderMenu}
         />
         {/* <div style={{ position: 'absolute', zIndex: '9999', bottom: "5px", left: "5px" }}>
-          <p style={{textAlign: 'center'}}>Focus Test</p>
-          <div>
-            <Button
-              click={() => this.focusNode("?4an3p8ptn")}
-              disabled={this.state.focus === "?4an3p8ptn"}
-              node="?4an3p8ptn"
-            />
-            <Button
-              click={() => this.focusNode("?onethousandfivehundred")}
-              disabled={this.state.focus === "?onethousandfivehundred"}
-              node="?onethousandfivehundred"
-            />
-            <Button
-              click={() => this.focusNode("?tearsinrain")}
-              disabled={this.state.focus === "?tearsinrain"}
-              node="?tearsinrain"
-            />
-            <Button
-              click={() => this.focusNode("?thatgamecompany")}
-              disabled={this.state.focus === "?thatgamecompany"}
-              node="?thatgamecompany"
-            />
-          </div>
+        <p style={{ textAlign: 'center' }}>Focus Test</p>
+        <div>
+          <Button
+            click={() => this.focusNode("?4an3p8ptn")}
+            disabled={this.state.focus === "?4an3p8ptn"}
+            node="?4an3p8ptn"
+          />
+          <Button
+            click={() => this.focusNode("?onethousandfivehundred")}
+            disabled={this.state.focus === "?onethousandfivehundred"}
+            node="?onethousandfivehundred"
+          />
+          <Button
+            click={() => this.focusNode("?tearsinrain")}
+            disabled={this.state.focus === "?tearsinrain"}
+            node="?tearsinrain"
+          />
+          <Button
+            click={() => this.focusNode("?thatgamecompany")}
+            disabled={this.state.focus === "?thatgamecompany"}
+            node="?thatgamecompany"
+          />
         </div> */}
-      </div>
+      </div >
     );
   }
 }
