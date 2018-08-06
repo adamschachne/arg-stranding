@@ -12,15 +12,12 @@
   color: white;
 }
 
-.searchbar {
+.search {
   max-width: 100vw;
-  background: #3956fc00;
   position: absolute;
-  color: white;
   left: 0;
   right: 0;
   top: 0;
-  height: 35px;
   /* border-bottom: 1px solid rgba(0,0,0,.14); */
   border: none;
   display: flex;
@@ -28,5 +25,20 @@
   justify-content: space-between;
   overflow: hidden;
   z-index: 100;
+  padding: 0px;
+}
+
+.search input {
+  max-width: 100vw;
+  background: #3956fc00;
+  position: relative;
+  color: white;
+  height: 35px;
+  /* border-bottom: 1px solid rgba(0,0,0,.14); */
   padding: 0 15px;
+  border: none;
+}
+
+.search .search-items {
+  background: rgba(0,0,0,.5);
 }

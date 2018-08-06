@@ -13,6 +13,7 @@ class Menu extends Component {
   render() {
     return (
       <div className={"menu-bar"}>
+        {/* {this.props.render(this.props.nodes)} */}
         {this.props.children}
       </div>
     );
@@ -20,6 +21,8 @@ class Menu extends Component {
 }
 
 Menu.propTypes = {
+  // nodes: PropTypes.array.isRequired,
+  // render: PropTypes.func.isRequired,
   children: PropTypes.element
 }
 

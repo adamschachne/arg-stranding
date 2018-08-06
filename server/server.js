@@ -56,6 +56,7 @@ function fetchSheetData() {
       /* step 0 */
       step => {
         doc.getInfo(function (err, info) {
+          console.log(info.updated);
           // console.log('Loaded doc: ' + info.title + ' by ' + info.author.email + " last updated: " + info.updated);
           if (global.lastUpdated == info.updated) {
             step('already up to date');

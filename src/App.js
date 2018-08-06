@@ -47,24 +47,13 @@ class App extends Component {
     window.removeEventListener("resize", this.resize);
   }
 
-  focusNode = (node) => {
-    console.log("focusing ", node);
-    this.setState({ focus: node });
-  }
-
-  unfocusNode = () => {
-    console.log("unfocus");
-    this.setState({ focus: null });
-  }
-
-  doneLoading = (nodes) => {
-    this.setState({ nodes, loading: false });
-  }
-
-  renderMenu = ({ searchRef, nodes, loading }) => {
+  renderMenu = ({ nodes, loading, searchRef }) => {
     return (
-      <Menu nodes={nodes} >
-        <Search innerRef={searchRef} />
+      <Menu loading={loading}>
+        <Search
+          searchRef={searchRef}
+          nodes={nodes}
+        />
       </Menu>
     );
   }
@@ -76,7 +65,7 @@ class App extends Component {
         <Network
           width={width}
           height={height}
-          render={this.renderMenu}
+          renderMenu={this.renderMenu}
         />
         {/* <div style={{ position: 'absolute', zIndex: '9999', bottom: "5px", left: "5px" }}>
         <p style={{ textAlign: 'center' }}>Focus Test</p>

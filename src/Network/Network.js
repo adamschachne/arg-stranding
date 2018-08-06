@@ -59,7 +59,7 @@ class NetworkContainer extends PureComponent {
           copy(command);
         }
       }
-    }    
+    }
   }
 
   interactNetwork = (event) => {
@@ -70,7 +70,7 @@ class NetworkContainer extends PureComponent {
         this.setState({ focusNode: null });
       }
     }
-    this.searchRef.current && this.searchRef.current.blur();
+    this.searchRef.current.blur();
   }
 
   updateNetwork = (network) => {
@@ -164,7 +164,7 @@ class NetworkContainer extends PureComponent {
       >
         <Loader loading={this.state.loading} />
         {/* MENU */}
-        {this.props.render({
+        {this.props.renderMenu({
           searchRef: this.searchRef,
           nodes: this.state.graph.nodes,
           loading: this.state.loading
@@ -187,7 +187,7 @@ class NetworkContainer extends PureComponent {
 NetworkContainer.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
-  render: PropTypes.func.isRequired
+  renderMenu: PropTypes.func.isRequired
 };
 
 export default NetworkContainer;

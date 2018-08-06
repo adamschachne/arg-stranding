@@ -8,14 +8,29 @@ class Search extends Component {
 
   constructor(props) {
     super(props);
-    console.log(props.innerRef);
 
     this.state = {
       size: PLACEHOLDER.length,
       value: ""
     }
-
+    this.commands = [];
     this.searchIsFocused = false;
+  }
+
+  onWindowKeydown = event => {
+    // console.log(event);
+    if (event.keyCode < 112 || event.keyCode > 121) {
+      if (event.keyCode === 27) { // Esc      
+        this.props.searchRef.current.blur();
+      } else if (event.keyCode === 9) { // Tab      
+        event.preventDefault();
+        this.props.searchRef.current.blur();
+      } else if (event.keyCode !== 17 && event.keyCode !== 18) { // not Ctrl or Alt
+        if (!this.searchIsFocused) {
+          this.props.searchRef.current.focus();
+        }
+      }
+    }
   }
 
   componentDidMount() {
@@ -26,49 +41,67 @@ class Search extends Component {
     window.removeEventListener("keydown", this.onWindowKeydown);
   }
 
-  onWindowKeydown = event => {
-    // console.log(event);
-    if (event.keyCode === 27) { // Esc      
-      this.props.innerRef.current.blur();
-    } else if (event.keyCode === 9) { // Tab      
-      event.preventDefault();
-      this.props.innerRef.current.blur();
-    } else if (event.keyCode !== 17 && !this.searchIsFocused) {
-      this.props.innerRef.current.focus();
+  componentDidUpdate(prevProps) {
+    if (prevProps.nodes === this.props.nodes) {
+      return;
     }
+
+    const commands = [];
+    this.props.nodes.forEach(node => {
+      node.label.split("\n").forEach(command => {
+        commands.push(command);
+      });
+    });
+    this.commands = commands.sort();
+    // console.log(this.commands);
+
   }
 
   render() {
+    const { value } = this.state;
+    let filteredCommands = value !== "" && this.commands
+      .filter(cmd => cmd.indexOf(value) !== -1)
+      .map(label => <p key={label}>{label}</p>);
+
     return (
-      <input
-        className="searchbar"
-        type="search"
-        autoComplete="off"
-        autoCapitalize="off"
-        spellCheck="false"
-        size={this.state.size}
-        placeholder={PLACEHOLDER}
-        ref={this.props.innerRef}
-        onFocus={() => this.searchIsFocused = true}
-        onBlur={() => {
-          this.searchIsFocused = false;
-          this.props.innerRef.current.value = "";
-        }}
-        onChange={event => {
-          const value = event.target.value;
-          const size = PLACEHOLDER.length < value.length ? value.length : PLACEHOLDER.length;
-          this.setState({ size, value });
-          console.log(event.target.value)
-        }}
-      />
+      <div className="search">
+        <input
+          type="search"
+          autoComplete="off"
+          autoCapitalize="off"
+          spellCheck="false"
+          size={this.state.size}
+          placeholder={PLACEHOLDER}
+          ref={this.props.searchRef}
+          onFocus={() => {
+            console.log("focusing")
+            this.searchIsFocused = true
+          }}
+          onBlur={() => {
+            console.log("blurring")
+            this.searchIsFocused = false;
+            this.props.searchRef.current.value = "";
+            this.setState({ value: "" });
+          }}
+          onChange={event => {
+            const value = event.target.value;
+            const size = PLACEHOLDER.length < value.length ? value.length : PLACEHOLDER.length;
+            this.setState({ size, value });
+          }}
+        />
+        <div className="search-items">
+          {filteredCommands}
+        </div>
+      </div>
     );
   }
 }
 
 Search.propTypes = {
-  // focus: PropTypes.func.isRequired,
-  // blur: PropTypes.func.isRequired,
-  innerRef: PropTypes.any.isRequired
+  nodes: PropTypes.array,
+  searchRef: PropTypes.object.isRequired
+  // searchFocus: PropTypes.bool.isRequired,
+  // render: PropTypes.func.isRequired
 }
 
 export default Search;
