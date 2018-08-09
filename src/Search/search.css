@@ -1,7 +1,6 @@
 
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
   color: white;
-  opacity: 0.5; /* Firefox */
 }
 
 :-ms-input-placeholder { /* Internet Explorer 10-11 */
@@ -12,33 +11,53 @@
   color: white;
 }
 
-.search {
-  max-width: 100vw;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  /* border-bottom: 1px solid rgba(0,0,0,.14); */
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  overflow: hidden;
-  z-index: 100;
-  padding: 0px;
-}
-
-.search input {
-  max-width: 100vw;
-  background: #3956fc00;
-  position: relative;
-  color: white;
+.search-component {
+  position: fixed;
+  top: 0px;
+  width: 100vw;
+  background: #3956fc;
   height: 35px;
   /* border-bottom: 1px solid rgba(0,0,0,.14); */
   padding: 0 15px;
+  display: flex;
+}
+
+.search-component input {
+  max-width: 50%;
+  background: inherit;
+  position: relative;
+  color: white;
   border: none;
 }
 
-.search .search-items {
+.search-items {
+  position: absolute;
+  z-index: -9999;
+  top: 35px;
+  left: 0;
+  right: 0;
+  width: 100vw;
+  height: calc(100vh - 35px);
   background: rgba(0,0,0,.5);
+  /* bottom: 0;
+  background: rgba(0,0,0,.164);
+  justify-content: center;
+  overflow: hidden;
+  align-items: start; */
+}
+
+/* .search-item {
+  top: 35px;
+  width: 100vw;
+  position: absolute;
+  background: rgba(0, 0, 0, 0.164);
+} */
+
+.search-item {
+  cursor: pointer;
+  padding: 10px;
+}
+
+.search-item:hover {
+  padding: 20px
 }

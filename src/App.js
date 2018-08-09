@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Network from './Network/Network';
 import Menu from './Menu/Menu'
 import Search from './Search/Search';
-// import Button from './button';
 
 const RESIZE_DELAY = 100; // 100ms
 
@@ -67,31 +66,7 @@ class App extends Component {
           height={height}
           renderMenu={this.renderMenu}
         />
-        {/* <div style={{ position: 'absolute', zIndex: '9999', bottom: "5px", left: "5px" }}>
-        <p style={{ textAlign: 'center' }}>Focus Test</p>
-        <div>
-          <Button
-            click={() => this.focusNode("?4an3p8ptn")}
-            disabled={this.state.focus === "?4an3p8ptn"}
-            node="?4an3p8ptn"
-          />
-          <Button
-            click={() => this.focusNode("?onethousandfivehundred")}
-            disabled={this.state.focus === "?onethousandfivehundred"}
-            node="?onethousandfivehundred"
-          />
-          <Button
-            click={() => this.focusNode("?tearsinrain")}
-            disabled={this.state.focus === "?tearsinrain"}
-            node="?tearsinrain"
-          />
-          <Button
-            click={() => this.focusNode("?thatgamecompany")}
-            disabled={this.state.focus === "?thatgamecompany"}
-            node="?thatgamecompany"
-          />
-        </div> */}
-      </div >
+      </div>
     );
   }
 }

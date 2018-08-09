@@ -29,6 +29,7 @@ module.exports = {
     }
   },
   rules: {
+    'no-unused-vars': 1,
     'class-methods-use-this': 0,
     'import/imports-first': 0,
     'import/newline-after-import': 0,

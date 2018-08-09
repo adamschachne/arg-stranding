@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import SearchItem from './SearchItem';
 import './search.css';
 
 const PLACEHOLDER = "start typing to search..."
@@ -59,12 +60,17 @@ class Search extends Component {
 
   render() {
     const { value } = this.state;
-    let filteredCommands = value !== "" && this.commands
-      .filter(cmd => cmd.indexOf(value) !== -1)
-      .map(label => <p key={label}>{label}</p>);
+    // let filteredCommands = value !== "" && this.commands
+    //   .filter(cmd => cmd.indexOf(value) !== -1)
+    //   .map(label => <div className="search-item" key={label}>{label}</div>);
+    // let filteredCommands = [];
+    let filteredCommands = ['?awdawd', "?22d2d2"]
+      .map(label => (
+        <SearchItem key={label} selected={false}>{label}</SearchItem>
+      ));
 
     return (
-      <div className="search">
+      <div className="search-component">
         <input
           type="search"
           autoComplete="off"
@@ -80,8 +86,8 @@ class Search extends Component {
           onBlur={() => {
             console.log("blurring")
             this.searchIsFocused = false;
-            this.props.searchRef.current.value = "";
-            this.setState({ value: "" });
+            // this.props.searchRef.current.value = "";
+            // this.setState({ value: "" });
           }}
           onChange={event => {
             const value = event.target.value;
@@ -90,7 +96,7 @@ class Search extends Component {
           }}
         />
         <div className="search-items">
-          {filteredCommands}
+          {filteredCommands.length > 0 ? filteredCommands : "No Results"}
         </div>
       </div>
     );

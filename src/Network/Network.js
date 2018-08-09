@@ -162,7 +162,7 @@ class NetworkContainer extends PureComponent {
       <div
         style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
       >
-        <Loader loading={this.state.loading} />
+        {this.state.loading && <Loader loading={this.state.loading} />}
         {/* MENU */}
         {this.props.renderMenu({
           searchRef: this.searchRef,
