@@ -23,13 +23,20 @@ class NetworkContainer extends PureComponent {
     }
     this.searchRef = React.createRef();
     this.dragging = false;
+    /** @type {vis.Network} */
     this.network = null;
     this.events = {
-      dragStart: () => {
+      dragStart: (evt) => {
         console.log("dragging");
         this.dragging = true;
         // this.props.unfocus();
+        if (evt.nodes.length === 0) {
+          this.network.unselectAll();
+        }
         this.interactNetwork();
+      },
+      selectNode: (node) => {
+        console.log(node);
       },
       // deselectNode: () => {
       //   // this.props.unfocus();
@@ -47,8 +54,8 @@ class NetworkContainer extends PureComponent {
         // save positions
         console.log("setting positions")
       },
-      click: e => {
-        this.interactNetwork(e.nodes);
+      click: evt => {
+        this.interactNetwork(evt);
       },
       doubleClick: doubleClick => {
         console.log(doubleClick);
@@ -58,19 +65,30 @@ class NetworkContainer extends PureComponent {
           console.log("copied: ", command);
           copy(command);
         }
+      },
+      animationFinished: () => {
+        console.log("animation finished");
+        this.animationFinished();
       }
     }
   }
 
+  animationFinished = () => {
+
+  }
+
   interactNetwork = (event) => {
-    console.log("NETWORK CLICKED");
-    if (event) {
-      if (event.length === 1 && this.state.focus !== event[0]) {
-        this.setState({ focusNode: event[0] });
-      } else if (this.state.focusNode !== null) {
-        this.setState({ focusNode: null });
+    const nodes = event ? event.nodes : null;
+    console.log("NETWORK CLICKED", event);
+    if (nodes && nodes.length === 1) {
+      if (this.state.focus !== nodes[0]) {
+        this.setState({ focusNode: nodes[0] });
       }
+    } else { 
+      // !nodes or nodes length != 1      
+      this.setState({ focusNode: null });
     }
+
     this.searchRef.current.blur();
   }
 
@@ -124,11 +142,11 @@ class NetworkContainer extends PureComponent {
       console.log(data);
       console.log(new Date(data.updated).getTime());
       localForage.getItem("updated").then(lastUpdated => {
-        console.log("stored update: ", new Date(lastUpdated).getTime())
+        // console.log("last update: ", new Date(lastUpdated).getTime())
         if (lastUpdated && lastUpdated === data.updated) {
           // get data from localforage and use those positions
           localForage.getItem("positions").then(positions => {
-            console.log("USING EXISTING POSITIONS: ", positions);
+            console.log("USING EXISTING POSITIONS: ");
             data.items.forEach((item, ID) => {
               Object.assign(item, positions[ID]);
             })
@@ -145,10 +163,11 @@ class NetworkContainer extends PureComponent {
     });
   }
 
-  componentDidUpdate(prevProps) {
-    console.log("NETWORK UPDATE", this.props);
+  componentDidUpdate(prevProps, prevState) {
+    console.log("NETWORK UPDATE", this.state);
     const focusNode = this.state.focusNode;
-    if (focusNode && this.network) {
+    if (focusNode && prevState.focusNode !== focusNode && this.network) {
+      this.network.selectNodes([focusNode]);
       this.network.focus(focusNode, {
         scale: 1,
         locked: false,
@@ -169,7 +188,7 @@ class NetworkContainer extends PureComponent {
           searchRef: this.searchRef,
           nodes: this.state.graph.nodes,
           loading: this.state.loading,
-          focusNode: (cmd) => this.setState({ focusNode: this.state.commandToID[cmd]})
+          focusNode: (cmd) => this.setState({ focusNode: this.state.commandToID[cmd] })
         })}
         <Graph
           getNetwork={this.updateNetwork}

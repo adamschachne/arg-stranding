@@ -14,7 +14,7 @@ class Graph extends Component {
   }
 
   componentDidMount() {
-    console.log("mounted", this.props);
+    // console.log("mounted", this.props);
     // reference to the network edges and nodes
     this.edges = new vis.DataSet();
     this.nodes = new vis.DataSet();

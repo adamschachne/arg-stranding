@@ -16,6 +16,7 @@ class Search extends Component {
       searching: false
     }
     this.commands = [];
+    this.usingEdgeOrIE = (document.documentMode || /Edge/.test(navigator.userAgent));
     // this.searching = false;
   }
 
@@ -28,9 +29,7 @@ class Search extends Component {
         event.preventDefault();
         this.props.searchRef.current.blur();
       } else if (event.keyCode !== 17 && event.keyCode !== 18) { // not Ctrl or Alt
-        if (!this.state.searching) {
-          this.props.searchRef.current.focus();
-        }
+        this.props.searchRef.current.focus();
       }
     }
   }
@@ -65,7 +64,7 @@ class Search extends Component {
       this.props.searchRef.current.blur();
       this.props.searchRef.current.value = "";
       this.props.focusNode(target);
-      return { searching: false, value: "" };
+      return { searching: false, value: "", size: PLACEHOLDER.length };
     });
   }
 
@@ -82,14 +81,14 @@ class Search extends Component {
           autoCapitalize="off"
           spellCheck="false"
           size={this.state.size}
-          placeholder={PLACEHOLDER}
+          placeholder={this.props.loading ? "loading..." : PLACEHOLDER}
           ref={this.props.searchRef}
           onFocus={() => {
-            // console.log("focusing")
+            console.log("focusing")
             this.setState({ searching: true });
           }}
           onBlur={() => {
-            // console.log("blurring")
+            console.log("blurring")
           }}
           onChange={event => {
             const value = event.target.value;
@@ -97,7 +96,15 @@ class Search extends Component {
             this.setState({ size, value });
           }}
         />
-        {this.state.searching && <SearchItems
+        {this.usingEdgeOrIE && <div
+          className="search-message"
+          style={{
+            opacity: this.props.loading ? 1 : 0
+          }}>
+          There are some compatibility issues with Edge and IE
+        </div>}
+
+        {this.state.searching && value.length > 0 && <SearchItems
           filteredCommands={filteredCommands}
           click={this.closeSearch}
         />}
@@ -107,6 +114,7 @@ class Search extends Component {
 }
 
 Search.propTypes = {
+  loading: PropTypes.bool,
   nodes: PropTypes.array,
   searchRef: PropTypes.object.isRequired,
   focusNode: PropTypes.func

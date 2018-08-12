@@ -4,12 +4,11 @@
   left: 0;
   right: 0;
   top: 0;
-  /* border-bottom: 1px solid rgba(0,0,0,.14); */
   border: none;
   display: flex;
   align-items: center;
   justify-content: space-between;
   overflow: hidden;
-  z-index: 100;
+  z-index: 200;
   padding: 0px;
 }

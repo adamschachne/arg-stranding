@@ -50,6 +50,7 @@ class App extends Component {
     return (
       <Menu loading={loading}>
         <Search
+          loading={loading}
           searchRef={searchRef}
           nodes={nodes}
           focusNode={focusNode}
