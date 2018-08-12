@@ -63,6 +63,7 @@ class NetworkContainer extends PureComponent {
   }
 
   interactNetwork = (event) => {
+    console.log("NETWORK CLICKED");
     if (event) {
       if (event.length === 1 && this.state.focus !== event[0]) {
         this.setState({ focusNode: event[0] });
@@ -167,7 +168,8 @@ class NetworkContainer extends PureComponent {
         {this.props.renderMenu({
           searchRef: this.searchRef,
           nodes: this.state.graph.nodes,
-          loading: this.state.loading
+          loading: this.state.loading,
+          focusNode: (cmd) => this.setState({ focusNode: this.state.commandToID[cmd]})
         })}
         <Graph
           getNetwork={this.updateNetwork}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import SearchItem from './SearchItem';
+import SearchItems from './SearchItems';
 import './search.css';
 
 const PLACEHOLDER = "start typing to search..."
@@ -12,22 +12,23 @@ class Search extends Component {
 
     this.state = {
       size: PLACEHOLDER.length,
-      value: ""
+      value: "",
+      searching: false
     }
     this.commands = [];
-    this.searchIsFocused = false;
+    // this.searching = false;
   }
 
   onWindowKeydown = event => {
     // console.log(event);
     if (event.keyCode < 112 || event.keyCode > 121) {
       if (event.keyCode === 27) { // Esc      
-        this.props.searchRef.current.blur();
+        this.closeSearch();
       } else if (event.keyCode === 9) { // Tab      
         event.preventDefault();
         this.props.searchRef.current.blur();
       } else if (event.keyCode !== 17 && event.keyCode !== 18) { // not Ctrl or Alt
-        if (!this.searchIsFocused) {
+        if (!this.state.searching) {
           this.props.searchRef.current.focus();
         }
       }
@@ -58,16 +59,20 @@ class Search extends Component {
 
   }
 
+  closeSearch = (target) => {
+    // console.log(target);
+    this.setState((prevState) => {
+      this.props.searchRef.current.blur();
+      this.props.searchRef.current.value = "";
+      this.props.focusNode(target);
+      return { searching: false, value: "" };
+    });
+  }
+
   render() {
     const { value } = this.state;
-    // let filteredCommands = value !== "" && this.commands
-    //   .filter(cmd => cmd.indexOf(value) !== -1)
-    //   .map(label => <div className="search-item" key={label}>{label}</div>);
-    // let filteredCommands = [];
-    let filteredCommands = ['?awdawd', "?22d2d2"]
-      .map(label => (
-        <SearchItem key={label} selected={false}>{label}</SearchItem>
-      ));
+    const filteredCommands = value === "" ? [] : this.commands
+      .filter(cmd => cmd.indexOf(value) !== -1);
 
     return (
       <div className="search-component">
@@ -80,14 +85,11 @@ class Search extends Component {
           placeholder={PLACEHOLDER}
           ref={this.props.searchRef}
           onFocus={() => {
-            console.log("focusing")
-            this.searchIsFocused = true
+            // console.log("focusing")
+            this.setState({ searching: true });
           }}
           onBlur={() => {
-            console.log("blurring")
-            this.searchIsFocused = false;
-            // this.props.searchRef.current.value = "";
-            // this.setState({ value: "" });
+            // console.log("blurring")
           }}
           onChange={event => {
             const value = event.target.value;
@@ -95,9 +97,10 @@ class Search extends Component {
             this.setState({ size, value });
           }}
         />
-        <div className="search-items">
-          {filteredCommands.length > 0 ? filteredCommands : "No Results"}
-        </div>
+        {this.state.searching && <SearchItems
+          filteredCommands={filteredCommands}
+          click={this.closeSearch}
+        />}
       </div>
     );
   }
@@ -105,9 +108,8 @@ class Search extends Component {
 
 Search.propTypes = {
   nodes: PropTypes.array,
-  searchRef: PropTypes.object.isRequired
-  // searchFocus: PropTypes.bool.isRequired,
-  // render: PropTypes.func.isRequired
+  searchRef: PropTypes.object.isRequired,
+  focusNode: PropTypes.func
 }
 
 export default Search;

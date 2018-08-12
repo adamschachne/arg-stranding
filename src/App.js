@@ -46,12 +46,13 @@ class App extends Component {
     window.removeEventListener("resize", this.resize);
   }
 
-  renderMenu = ({ nodes, loading, searchRef }) => {
+  renderMenu = ({ nodes, loading, searchRef, focusNode }) => {
     return (
       <Menu loading={loading}>
         <Search
           searchRef={searchRef}
           nodes={nodes}
+          focusNode={focusNode}
         />
       </Menu>
     );
