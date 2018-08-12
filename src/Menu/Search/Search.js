@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import SearchItems from './SearchItems';
-import './search.css';
+// import InfoBox from '../Info/InfoBox';
+
+import './Search.css';
 
 const PLACEHOLDER = "start typing to search..."
 
@@ -75,6 +77,7 @@ class Search extends Component {
 
     return (
       <div className="search-component">
+        {/* <InfoBox /> */}
         <input
           type="search"
           autoComplete="off"

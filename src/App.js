@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Network from './Network/Network';
-import Menu from './Menu/Menu'
-import Search from './Search/Search';
+import Search from './Menu/Search/Search';
 
 const RESIZE_DELAY = 100; // 100ms
 
@@ -48,14 +47,12 @@ class App extends Component {
 
   renderMenu = ({ nodes, loading, searchRef, focusNode }) => {
     return (
-      <Menu loading={loading}>
-        <Search
-          loading={loading}
-          searchRef={searchRef}
-          nodes={nodes}
-          focusNode={focusNode}
-        />
-      </Menu>
+      <Search
+        loading={loading}
+        searchRef={searchRef}
+        nodes={nodes}
+        focusNode={focusNode}
+      />
     );
   }
 

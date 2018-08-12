@@ -1,9 +1,10 @@
 import React from 'react';
 import { BeatLoader } from "react-spinners";
 import PropTypes from 'prop-types';
+import './Loader.css';
 
 const Loader = ({ progress, loading }) => (
-  <div style={{ position: "absolute" }}>
+  <div className="loader">
     <BeatLoader
       color={'#FFFFFF'}
       size={30}

@@ -1,11 +1,11 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import Graph from "./Graph";
-import { initOptions } from "./config";
+import { initOptions } from "./utils/config";
+import buildGraph from './utils/buildGraph';
 import localForage from "localforage";
 import copy from 'copy-to-clipboard';
-import Loader from './Loader';
-import buildGraph from './buildGraph';
+import Loader from './Loader/Loader';
 
 class NetworkContainer extends PureComponent {
 
@@ -179,9 +179,7 @@ class NetworkContainer extends PureComponent {
   render() {
     // console.log("Network called render", this.state);
     return (
-      <div
-        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-      >
+      <div>
         {this.state.loading && <Loader loading={this.state.loading} />}
         {/* MENU */}
         {this.props.renderMenu({
