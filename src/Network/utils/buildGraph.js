@@ -1,10 +1,17 @@
 import localForage from "localforage";
+import { connect } from "net";
+
+const NON_IMAGE_COMMANDS = {
+  "UNKNOWN COMMAND": true,
+  "?welcomehome": true
+};
 
 export default ({ items, updated }) => {
   console.log("building graph");
   let commandToID = {};
   let nodes = [];
   let edges = [];
+  const hasIncomingEdge = {};
 
   localForage.setItem("updated", updated);
 
@@ -19,31 +26,37 @@ export default ({ items, updated }) => {
 
   // iterate again to generate nodes and edges
   items.forEach((item, ID) => {
-    const UNKNOWN_COMMAND = item.command[0].charAt(0) !== "?";
+    const nonImageCommand = NON_IMAGE_COMMANDS[item.command[0]];
     // nodes            
     nodes.push({
       id: ID,
       label: item.command.length === 1 ? item.command[0] : item.command.join("\n"),
-      shape: UNKNOWN_COMMAND ? "image" : "circularImage",
-      image: item.static,
-      borderWidth: 3,
-      size: UNKNOWN_COMMAND ? 20 : 25,
+      shape: nonImageCommand ? "image" : "circularImage",
+      image: item.static,      
+      size: nonImageCommand ? 20 : 25,
       hidden: true,
       x: item.x,
-      y: item.y,
-      shapeProperties: {
-        useBorderWithImage: true,
-        interpolation: false
-      }
+      y: item.y
     });
+
     // outgoing edges for this node
     item.leadsto.forEach(toNode => {
       const connectedID = commandToID[toNode];
       if (connectedID) {
+        hasIncomingEdge[connectedID] = true;
         edges.push({ from: ID, to: connectedID });
       }
     });
-  })
+  });
+
+  // loop through once more to color nodes without
+  // any incoming edges
+  Object.keys(hasIncomingEdge).forEach(nodeID => {
+    nodes[nodeID].color = {
+      border: "black",
+      highlight: "#55befc"
+    }
+  });
 
   const graph = {
     nodes,

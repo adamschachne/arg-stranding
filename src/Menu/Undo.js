@@ -1,8 +1,8 @@
 import React from 'react';
 import { FaUndo } from 'react-icons/fa';
 
-const InfoBox = () => (
+const Undo = () => (
   <h3> Lets go for a <FaUndo />? </h3>
 );
 
-export default InfoBox;
+export default Undo;

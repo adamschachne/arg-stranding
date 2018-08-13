@@ -30,14 +30,15 @@ export const initOptions = (width, height) => ({
     },
   },
   nodes: {
-    borderWidth: 2,
     size: 25,
+    borderWidth: 3,
     color: {
-      border: "black",
+      border: "#e6cf00",
       highlight: "#55befc",
     },
     shapeProperties: {
-      interpolation: false    // 'true' for intensive zooming
+      interpolation: false,    // 'true' for intensive zooming
+      useBorderWithImage: true
     },
     font: { color: '#eeeeee' }
   },
