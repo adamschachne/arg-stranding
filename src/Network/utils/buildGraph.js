@@ -3,7 +3,8 @@ import { connect } from "net";
 
 const NON_IMAGE_COMMANDS = {
   "UNKNOWN COMMAND": true,
-  "?welcomehome": true
+  "?welcomehome": true,
+  "?unitedspaceventures": true
 };
 
 export default ({ items, updated }) => {
