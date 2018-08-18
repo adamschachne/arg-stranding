@@ -22,7 +22,7 @@ const creds = {
   private_key: JSON.parse(process.env.PRIVATE_KEY)[0]
 };
 
-const global = {
+const _global = {
   sheet: null,
   lastUpdated: null,
   data: null,
@@ -35,34 +35,34 @@ const global = {
 };
 
 function doneUpdating(data) {
-  if (global.watchers.length > 0) {
-    while (global.watchers.length != 0) {
+  if (_global.watchers.length > 0) {
+    while (_global.watchers.length != 0) {
       console.log("resolving");
-      global.watchers.pop()(data);
+      _global.watchers.pop()(data);
     }
   }
-  global.updating = false;
+  _global.updating = false;
 }
 
 function fetchSheetData() {
   return new Promise((resolve, reject) => {
-    // if (global.updating == true) {
+    // if (_global.updating == true) {
     //   console.log("pushing resolve to watchers");
-    //   global.watchers.push(resolve);
+    //   _global.watchers.push(resolve);
     //   return;
     // }
-    // global.updating = true;
+    // _global.updating = true;
     async.series([
       /* step 0 */
       step => {
         doc.getInfo(function (err, info) {
           console.log(info.updated);
           // console.log('Loaded doc: ' + info.title + ' by ' + info.author.email + " last updated: " + info.updated);
-          if (global.lastUpdated == info.updated) {
+          if (_global.lastUpdated == info.updated) {
             step('already up to date');
           } else {
-            global.lastUpdated = info.updated;
-            global.sheet = info.worksheets[0];
+            _global.lastUpdated = info.updated;
+            _global.sheet = info.worksheets[0];
             step();
           }
           // console.log('sheet 1: ' + sheet.title + ' ' + sheet.rowCount + 'x' + sheet.colCount);          
@@ -70,7 +70,7 @@ function fetchSheetData() {
       },
       /* step 1 */
       step => {
-        global.sheet.getRows({
+        _global.sheet.getRows({
           offset: 1,
         }, function (err, rows) {
           console.log('Read ' + rows.length + ' rows');
@@ -92,9 +92,9 @@ function fetchSheetData() {
       }
     ], (err, result) => {
       if (err) {
-        console.log("sheet up to date: " + global.lastUpdated + " sending existing content.");
+        console.log("sheet up to date: " + _global.lastUpdated + " sending existing content.");
         reject(err);
-        doneUpdating(global.data); // maybe send a reject instead of resolving with null
+        doneUpdating(_global.data); // maybe send a reject instead of resolving with null
       } else {
         // result[1] is result of step 1
         processUrls(result[1], data => {
@@ -133,16 +133,16 @@ app.get('/data', function (req, res) {
   res.set('Content-Type', 'application/json');
   // res.setHeader('Cache-Control', 'public, max-age=31557600'); // one year
   fetchSheetData().then(data => {
-    global.data = data;
+    _global.data = data;
     res.send(JSON.stringify({
-      items: global.data,
-      updated: global.lastUpdated
+      items: _global.data,
+      updated: _global.lastUpdated
     }));
   }).catch(err => {
     // send existing data
     res.send(JSON.stringify({
-      items: global.data,
-      updated: global.lastUpdated
+      items: _global.data,
+      updated: _global.lastUpdated
     }));
   });
 });
@@ -158,12 +158,12 @@ MongoClient.connect(mongo_url, { useNewUrlParser: true }, function (err, client)
   }
 
   console.log("connected to mongo database");
-  global.client = client;
-  global.db = client.db();
+  _global.client = client;
+  _global.db = client.db();
 
   authenticate(function () {
     fetchSheetData().then(data => {
-      global.data = data;
+      _global.data = data;
       app.listen(PORT, function () {
         console.error(`Server listening on port ${PORT}`);
       });
@@ -183,7 +183,7 @@ function addIpAddress(ip, callback) {
     timestamp: Date.now()
   };
  
-  global.db.collection('ips').update(
+  _global.db.collection('ips').update(
     {
       ip: doc.ip // query for documents with this ip
     },
@@ -205,6 +205,6 @@ process.on('SIGINT', () => {
 
 function gracefulShutdown() {
   console.log('Closing mongodb connection');
-  global.client.close();
+  _global.client.close();
   process.exit();
 }
