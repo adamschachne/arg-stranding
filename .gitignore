@@ -27,3 +27,5 @@ creds
 .env
 
 .vs
+
+mongodb

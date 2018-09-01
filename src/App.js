@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Network from './Network/Network';
 import Search from './Menu/Search/Search';
+import { hot } from 'react-hot-loader';
 
 const RESIZE_DELAY = 100; // 100ms
 
@@ -70,4 +71,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default hot(module)(App);

@@ -36,13 +36,6 @@ class NetworkContainer extends PureComponent {
         }
         this.interactNetwork();
       },
-      selectNode: (node) => {
-        console.log(node);
-      },
-      // deselectNode: () => {
-      //   // this.props.unfocus();
-      //   this.interactNetwork();
-      // },
       dragEnd: () => {
         console.log("done dragging");
         this.dragging = false;
@@ -53,7 +46,7 @@ class NetworkContainer extends PureComponent {
         }
         localForage.setItem("positions", this.network.getPositions());
         // save positions
-        console.log("setting positions")
+        console.log("setting positions");
       },
       click: evt => {
         this.interactNetwork(evt);
@@ -66,30 +59,21 @@ class NetworkContainer extends PureComponent {
           console.log("copied: ", command);
           copy(command);
         }
-      },
-      animationFinished: () => {
-        console.log("animation finished");
-        this.animationFinished();
       }
     }
-  }
-
-  animationFinished = () => {
-
   }
 
   interactNetwork = (event) => {
     const nodes = event ? event.nodes : null;
-    console.log("NETWORK CLICKED", event);
+    console.log("NETWORK CLICKED");
     if (nodes && nodes.length === 1) {
       if (this.state.focus !== nodes[0]) {
         this.setState({ focusNode: nodes[0] });
       }
-    } else { 
+    } else {
       // !nodes or nodes length != 1      
       this.setState({ focusNode: null });
     }
-
     this.searchRef.current.blur();
   }
 
@@ -104,17 +88,12 @@ class NetworkContainer extends PureComponent {
       this.network.moveTo({
         animation: false,
         position: { x: 0, y: 0 },
-        scale: 0.30,
+        scale: 0.30, // about the right scale to begin to see labels
         offset: { x: 0, y: 0 }
       });
 
-      const nodes = this.state.graph.nodes.map(node => {
-        const newNode = {
-          ...node
-        };
-        newNode.hidden = false;
-        return newNode;
-      });
+      // unhide the nodes
+      const nodes = this.state.graph.nodes.map(node => ({ ...node, hidden: false }));
 
       // replace reference to options instead of mutate it 
       // so that Graph can compare references and update
@@ -165,12 +144,15 @@ class NetworkContainer extends PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log("NETWORK UPDATE", this.state);
+    console.log("NETWORK UPDATE");
     const focusNode = this.state.focusNode;
     if (focusNode && prevState.focusNode !== focusNode && this.network) {
       this.network.selectNodes([focusNode]);
+      this.network.once('animationFinished', function () {
+
+      });
       this.network.focus(focusNode, {
-        scale: 1,
+        scale: 0.75,
         locked: false,
         animation: true
       });
