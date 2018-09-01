@@ -38,7 +38,8 @@ export const initOptions = (width, height) => ({
     },
     shapeProperties: {
       interpolation: false,    // 'true' for intensive zooming
-      useBorderWithImage: true
+      useBorderWithImage: true,
+      useImageSize: false
     },
     font: { color: '#eeeeee' }
   },

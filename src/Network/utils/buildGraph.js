@@ -1,10 +1,10 @@
 import localForage from "localforage";
-import { connect } from "net";
 
 const NON_IMAGE_COMMANDS = {
   "UNKNOWN COMMAND": true,
   "?welcomehome": true,
-  "?unitedspaceventures": true
+  "?unitedspaceventures": true,
+  "?vd4u08lhb": true
 };
 
 export default ({ items, updated }) => {
@@ -33,7 +33,7 @@ export default ({ items, updated }) => {
       id: ID,
       label: item.command.length === 1 ? item.command[0] : item.command.join("\n"),
       shape: nonImageCommand ? "image" : "circularImage",
-      image: item.static,      
+      image: item.static,
       size: nonImageCommand ? 20 : 25,
       hidden: true,
       x: item.x,
