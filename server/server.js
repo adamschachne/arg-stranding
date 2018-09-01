@@ -6,6 +6,7 @@ const mongo = require('mongodb');
 const paths = require('../config/paths');
 const GoogleSpreadsheet = require('google-spreadsheet');
 const async = require('async');
+const httpsRedirect = require('express-https-redirect');
 const processUrls = require('./utils');
 
 const MongoClient = mongo.MongoClient;
@@ -117,7 +118,7 @@ function authenticate(cb) {
 }
 
 const app = express();
-
+app.use('/', httpsRedirect());
 // Priority serve any static files.
 app.use(express.static(paths.appBuild));
 
