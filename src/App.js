@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Network from './Network/Network';
 import Search from './Menu/Search/Search';
 import { hot } from 'react-hot-loader';
+import { Route, Switch, Redirect } from 'react-router-dom';
+import Landing from './Landing/Landing';
 
 const RESIZE_DELAY = 100; // 100ms
 
@@ -41,7 +43,7 @@ class App extends Component {
 
   componentDidMount() {
     window.addEventListener("resize", this.onResize);
-    fetch("profile")
+    fetch("profile") 
   }
 
   componentWillUnmount() {
@@ -60,15 +62,33 @@ class App extends Component {
   }
 
   render() {
+    console.log("rendering app");
     const { width, height } = this.state.dimensions;
     return (
-      <div style={{ width, height }}>
-        {this.state.session && <Network
-          width={width}
-          height={height}
-          renderMenu={this.renderMenu}
-        />}
-      </div>
+      <Switch>
+        <Route
+          path='/graph'
+          render={() => {
+            return (
+              <div style={{ width, height }}>
+                <Network
+                  width={width}
+                  height={height}
+                  renderMenu={this.renderMenu}
+                />
+              </div>
+            );
+          }}
+        />
+        <Route
+          render={() => {
+            if (this.state.session) {
+              return <Redirect to="/graph" />;
+            }
+            return <Landing />;
+          }}
+        />
+      </Switch>
     );
   }
 }

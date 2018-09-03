@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
+
+.landing-page {
+  width: 100vw;
+  height: 100vh;
+  background-color: #00030b;
+  font-family: 'Source Sans Pro', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;  
+  text-transform: uppercase;
+}
+
+.landing-header {
+  word-spacing: 100vw;
+  letter-spacing: 10px;
+  text-align: center;
+}
+
+.landing-item {
+  text-align: center;
+}
+
+.btn {
+  display: inline-block;
+  background: #4A2BBC;
+  padding: 20px 50px;
+  text-transform: uppercase;
+  letter-spacing: 10px;
+  text-decoration: none;
+  border: none;
+  color: #fff;
+
+}
