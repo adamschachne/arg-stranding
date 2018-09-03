@@ -19,7 +19,8 @@ class App extends Component {
         height
       },
       focus: null,
-      loading: true
+      loading: true,
+      session: false
     };
   }
 
@@ -40,6 +41,7 @@ class App extends Component {
 
   componentDidMount() {
     window.addEventListener("resize", this.onResize);
+    fetch("profile")
   }
 
   componentWillUnmount() {
@@ -61,11 +63,11 @@ class App extends Component {
     const { width, height } = this.state.dimensions;
     return (
       <div style={{ width, height }}>
-        <Network
+        {this.state.session && <Network
           width={width}
           height={height}
           renderMenu={this.renderMenu}
-        />
+        />}
       </div>
     );
   }

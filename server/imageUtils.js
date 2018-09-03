@@ -44,7 +44,7 @@ module.exports = function processUrls(urls, callback) {
       urlItem.command = urlItem.command.split(',').map(cmd => cmd.trim());
       urlItem.leadsto = urlItem.leadsto.split(',').filter(lead => lead !== "").map(lead => lead.trim());
       urlItem.id1 = urlItem.url.split("/image/")[1].replace("/", "");
-      const response = await axios.get(urlItem.url);
+      const response = await axios({ method: 'get', url: urlItem.url });
       const $ = cheerio.load(response.data);
       const staticImgSrc = $('#main-image').attr('src');
       const pathIndex = staticImgSrc.indexOf(POSTIMG_DOMAIN) + POSTIMG_DOMAIN.length;
@@ -60,7 +60,7 @@ module.exports = function processUrls(urls, callback) {
         urlItem.width = parseInt(dimensions[0]);
         urlItem.height = parseInt(dimensions[1]);
 
-        const imgResponse = await axios.get(staticImgSrc);
+        const imgResponse = await axios({ method: 'get', url: staticImgSrc });
         const lastModified = imgResponse.headers["last-modified"];
         urlItem.lastModified = new Date(lastModified).toISOString();
         urlItem.lastModifiedUnix = Date.parse(lastModified);

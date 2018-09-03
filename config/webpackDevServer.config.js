@@ -82,15 +82,10 @@ module.exports = function(proxy, allowedHost) {
     public: allowedHost,
     proxy: {
       "/data": {
-        target: 'http://localhost:5000',
-        // bypass: function(req, res, proxyOptions) {
-        //   // console.log(proxyOptions);
-        //   console.log(req.url);
-        //   // if (req.headers.accept.indexOf('html') !== -1) {
-        //   //   console.log('Skipping proxy for browser request.');
-        //   //   return '/index.html';
-        //   // }
-        // }
+        target: 'http://localhost:5000'
+      },
+      "/profile": {
+        target: 'http://localhost:5000'
       }
     },
     before(app) {

@@ -21,8 +21,8 @@ const creds = {
 const _global = {
   /** @type {any} */
   sheet: null,
-  /** @type {?String} */
-  lastUpdated: null,
+  /** @type {String} */
+  lastUpdated: "",
   /** @type {any} */
   data: null,
   /** @type {?String} */
@@ -93,7 +93,7 @@ function fetchSheetData() {
   });
 }
 
-function authenticate(cb) {
+function authenticateGoogleSheet(cb) {
   console.log("authenticating google sheet...");
   doc.useServiceAccountAuth(creds, cb, fetchSheetData);
 }
@@ -109,51 +109,20 @@ MongoClient.connect(mongo_url, { useNewUrlParser: true }, function (err, client)
 
   _global.app = configureApp(_global, fetchSheetData);
 
-  authenticate(function () {
-    fetchSheetData().then(data => {
-      _global.data = data;
+  authenticateGoogleSheet(function () {
+  //   fetchSheetData().then(data => {
+  //     _global.data = data;
       _global.app.listen(PORT, function () {
         console.error(`Server listening on port ${PORT}`);
       });
-    }).catch(err => {
-      console.debug(err);
-      _global.app.listen(PORT, function () {
-        console.error(`Server listening on port ${PORT}`);
-      });
-    });
+  //   }).catch(err => {
+  //     console.debug(err);
+  //     _global.app.listen(PORT, function () {
+  //       console.error(`Server listening on port ${PORT}`);
+  //     });
+  //   });
   });
 });
-
-function restrict(req, res, next) {
-  if (req.session.uid) {
-    next();
-  } else {
-    // console.log("no user");
-    res.redirect('/landing');
-  }
-} 
-
-function addIpAddress(ip, callback) {
-  console.log(ip);
-  const doc = {
-    ip,
-    timestamp: Date.now()
-  };
-
-  _global.db.collection('ips').updateOne(
-    {
-      ip: doc.ip // query for documents with this ip
-    },
-    {
-      $setOnInsert: doc // only set doc if an insert
-    },
-    { upsert: true }, // insert if not exists
-    function (err, result) {
-      if (err) throw err;
-      callback && callback();
-    }
-  );
-}
 
 process.on('SIGINT', () => {
   console.log("received SIGINT");

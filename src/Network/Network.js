@@ -116,12 +116,15 @@ class NetworkContainer extends PureComponent {
 
   componentDidMount() {
     fetch('/data').then(value => {
+      if (value.status === 401) {
+        throw new Error("unauthorized");
+      }
       return value.json();
     }).then(data => {
       // data.graph, data.updated
       console.log(data);
       console.log(new Date(data.updated).getTime());
-      localForage.getItem("updated").then(lastUpdated => {
+      return localForage.getItem("updated").then(lastUpdated => {
         // console.log("last update: ", new Date(lastUpdated).getTime())
         if (lastUpdated && lastUpdated === data.updated) {
           // get data from localforage and use those positions
@@ -136,11 +139,11 @@ class NetworkContainer extends PureComponent {
           console.log("Sheet updated. Building new graph");
           this.setState(buildGraph(data));
         }
-      }).catch(err => {
-        console.error(err);
-        this.setState(buildGraph(data));
       })
-    });
+    }).catch(err => {
+      console.error(err);
+      // this.setState(buildGraph(data));
+    })
   }
 
   componentDidUpdate(prevProps, prevState) {
