@@ -250,7 +250,7 @@ module.exports = {
                 loader: require.resolve('babel-loader'),
                 options: {
 
-                  presets: [require.resolve('babel-preset-react-app')],
+                  // presets: [require.resolve('babel-preset-react-app')],
                   compact: true,
                   highlightCode: true,
                 },
