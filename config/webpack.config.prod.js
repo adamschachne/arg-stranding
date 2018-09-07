@@ -249,7 +249,6 @@ module.exports = {
               {
                 loader: require.resolve('babel-loader'),
                 options: {
-
                   // presets: [require.resolve('babel-preset-react-app')],
                   compact: true,
                   highlightCode: true,
@@ -268,11 +267,11 @@ module.exports = {
               {
                 loader: require.resolve('babel-loader'),
                 options: {
-                  babelrc: false,
                   compact: false,
-                  presets: [
-                    require.resolve('babel-preset-react-app/dependencies'),
-                  ],
+                  babelrc: false,                  
+                  // presets: [
+                  //   require.resolve('babel-preset-react-app/dependencies'),
+                  // ],
                   cacheDirectory: true,
                   highlightCode: true,
                 },

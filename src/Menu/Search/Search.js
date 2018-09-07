@@ -50,6 +50,7 @@ class Search extends Component {
     }
 
     const commands = [];
+    console.log(this.props.nodes);
     this.props.nodes.forEach(node => {
       node.label.split("\n").forEach(command => {
         commands.push(command);

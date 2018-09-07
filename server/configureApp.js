@@ -1,14 +1,14 @@
 const express = require('express');
 const httpsRedirect = require('express-https-redirect');
 const session = require('express-session');
-const MongoStore = require('connect-mongo')(session);
+const MongoDBStore = require('connect-mongodb-session')(session);
 const path = require('path');
 const paths = require('../config/paths');
 const axios = require('axios').default.create();
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
-const REDIRECT_URL = encodeURIComponent('http://d8e0d68e.ngrok.io/discord/code');
+const REDIRECT_URL = encodeURIComponent('http://a884791c.ngrok.io/discord/code');
 const SCOPES = encodeURIComponent("identify");
 
 function addIpAddress(_global, ip, user, callback) {
@@ -43,25 +43,26 @@ function authenticate(token) {
 
 module.exports = function configureApp(_global, fetchSheetData) {
 
-  function restrict(req, res, next) {
+  async function authMiddleware(req, res, next) {
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     console.log(ip);
     try {
-      if (req.session.guest) {
+      if (req.session.identity && req.session.identity.guest) {
         addIpAddress(_global, ip, "guest");
         return next();
       } else if (req.session.token) {
-        authenticate(req.session.token).then(result => {
-          const { username, discriminator, id } = result.data;
-          addIpAddress(_global, ip, { username, discriminator, id });
-          return next();
-        });
+        const result = await authenticate(req.session.token.access_token);
+        const { username, discriminator, id } = result.data;
+        console.log("adding user to ip collecting");
+        addIpAddress(_global, ip, { username, discriminator, id });
+        return next();
       } else {
         throw new Error("no token")
       }
     } catch (err) {
+      addIpAddress(_global, ip);
       console.log("bad session", err.message);
-      return res.sendStatus(401);      
+      return res.sendStatus(401);
     }
   }
 
@@ -73,19 +74,30 @@ module.exports = function configureApp(_global, fetchSheetData) {
     resave: false,
     saveUninitialized: false,
     secret: process.env.SESSION_SECRET,
-    store: new MongoStore({ db: _global.db })
+    // store: new MongoStore({ db: _global.db }),
+    store: new MongoDBStore({
+      uri: process.env.MONGODB_URI,
+      databaseName: process.env.DATABASE_NAME,
+      collection: 'sessions'
+    }),
+    rolling: true,
+    cookie: {
+      httpOnly: false,
+      expires: new Date(Date.now() + 3600000)
+    }
   }));
 
-  app.use(express.static(paths.appBuild));
   // Priority serve any static files.  
+  app.use(express.static(paths.appBuild));
 
-  app.get('/profile', function (req, res) {
+  // passes authMiddleware if session has a valid auth_token
+  app.get('/profile', authMiddleware, function (req, res) {
     console.log("get profile");
-    return res.send(req.session);
+    return res.send(req.session.identity);
   });
 
   // Answer API requests.
-  app.get('/data', restrict, async function (req, res) {
+  app.get('/data', async function (req, res) {
     // console.log("RECEIVED REQUEST");
     res.set('Content-Type', 'application/json');
     // res.setHeader('Cache-Control', 'public, max-age=31557600'); // one year
@@ -103,6 +115,28 @@ module.exports = function configureApp(_global, fetchSheetData) {
         updated: _global.lastUpdated
       }));
     }
+  });
+
+  // AJAX request for guest account
+  app.get('/guest', function (req, res) {
+
+    if (req.session.identity && req.session.identity.guest) {
+      return res.send({ guest: req.session.identity });
+    }
+
+    req.session.regenerate(function (err) {
+      if (err) return console.error(err);
+
+      req.session.identity = {
+        guest: Date.now(),
+        avatar: Math.floor(Math.random()*5)
+      }
+
+      req.session.save(function (err) {
+        if (err) return console.error(err);
+        return res.send({ guest: req.session.identity });
+      })
+    });
   });
 
   app.get('/auth', function (req, res) {
@@ -130,10 +164,22 @@ module.exports = function configureApp(_global, fetchSheetData) {
 
       /* https://discordapp.com/developers/docs/resources/user#user-object */
       const identity = await authenticate(token.data["access_token"]);
-      const { username, discriminator, avatar, id } = identity.data;
+      // const { username, discriminator, avatar, id } = identity.data;
+
+      req.session.regenerate(function (err) {
+        if (err) return console.error(err);
+
+        req.session.identity = identity.data;
+        req.session.token = token.data;
+
+        req.session.save(function (err) {
+          if (err) return console.error(err);
+          return res.redirect('/');
+        })
+      });
       // res.send(identity);
       // console.log(identity);
-      res.send(`Logged in as: ${username}#${discriminator}`);
+      // res.send(`Logged in as: ${username}#${discriminator}`);
     } catch (err) {
       console.error(err);
       return res.redirect("/");

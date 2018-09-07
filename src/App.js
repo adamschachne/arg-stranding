@@ -4,6 +4,9 @@ import Search from './Menu/Search/Search';
 import { hot } from 'react-hot-loader';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import Landing from './Landing/Landing';
+import { HashLoader } from 'react-spinners';
+import Dashboard from './Dashboard/Dashboard';
+import Loader from './Loader/Loader';
 
 const RESIZE_DELAY = 100; // 100ms
 
@@ -22,7 +25,7 @@ class App extends Component {
       },
       focus: null,
       loading: true,
-      session: false
+      identity: null
     };
   }
 
@@ -41,9 +44,31 @@ class App extends Component {
     this.resizeEnd = setTimeout(this.resize, RESIZE_DELAY);
   }
 
+  clickGuest = async () => {
+    try {
+      const guestResponse = await fetch("guest");
+      const identity = await guestResponse.json();
+      console.log(identity);
+      this.setState({ identity });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   componentDidMount() {
     window.addEventListener("resize", this.onResize);
-    fetch("profile") 
+    fetch("profile").then(response => {
+      if (response.status === 401) {
+        throw new Error("unauthorized");
+      }
+      return response.json();
+    }).then(identity => {
+      console.log(identity);
+      this.setState({ identity, loading: false });
+    }).catch(err => {
+      this.setState({ loading: false });
+      console.log(err);
+    })
   }
 
   componentWillUnmount() {
@@ -64,6 +89,15 @@ class App extends Component {
   render() {
     console.log("rendering app");
     const { width, height } = this.state.dimensions;
+
+    if (this.state.loading) {
+      return <Loader />;
+    }
+
+    if (!this.state.identity) {
+      return <Landing clickGuest={this.clickGuest} />;
+    }
+
     return (
       <Switch>
         <Route
@@ -81,11 +115,14 @@ class App extends Component {
           }}
         />
         <Route
+          path="/dashboard"
           render={() => {
-            if (this.state.session) {
-              return <Redirect to="/graph" />;
-            }
-            return <Landing />;
+            return <Dashboard identity={this.state.identity}/>
+          }}
+        />
+        <Route
+          render={() => {
+            return <Redirect to="/dashboard" />;
           }}
         />
       </Switch>

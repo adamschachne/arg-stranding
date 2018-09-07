@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import purple from '@material-ui/core/colors/purple';
 import Zoom from '@material-ui/core/Zoom';
-import AddIcon from '@material-ui/icons/Add';
+// import AddIcon from '@material-ui/icons/Add';
 import './Landing.css'
 
 const styles = theme => ({
@@ -61,9 +61,11 @@ class Landing extends Component {
     };
     return (
       <div className="landing-page">
-        <div className="landing-item">created by Ixenbay</div>
-        <div className="landing-header landing-item">ARG</div>
-        <div className="landing-header landing-item">Stranding</div>
+        <div className="landing-credit">created by Ixenbay</div>
+        <div className="landing-header">
+          <div>ARG</div>
+          <div>Stranding</div>
+        </div>
 
         <div className={classes.buttonGroup}>
           <div className={classes.stackButtons}>
@@ -71,6 +73,7 @@ class Landing extends Component {
               in={!clicked}
               timeout={transitionDuration}
               unmountOnExit
+              style={{ zIndex: clicked ? -1 : 1 }}
             >
               <Button
                 variant="contained"
@@ -88,14 +91,14 @@ class Landing extends Component {
             <Zoom
               in={clicked}
               timeout={transitionDuration}
-              unmountOnExit
+              style={{ zIndex: clicked ? 1 : -1 }}
             >
               <Button
                 variant="contained"
                 color="primary"
                 className={classNames(classes.button)}
                 size="large"
-              // component={Link} to="/graph"
+                onClick={() => window.location.href = "/auth"}
               >
                 discord
               </Button>
@@ -103,20 +106,20 @@ class Landing extends Component {
             <Zoom
               in={clicked}
               timeout={transitionDuration}
-              unmountOnExit
+              style={{ zIndex: clicked ? 1 : -1 }}
             >
               <Button
                 variant="contained"
                 color="primary"
                 className={classNames(classes.button)}
                 size="large"
+                onClick={this.props.clickGuest}
               >
                 guest
               </Button>
             </Zoom>
           </div>
         </div>
-        {/* <Link to="/graph">Graph</Link> */}
       </div >
     );
   }
@@ -124,6 +127,7 @@ class Landing extends Component {
 
 Landing.propTypes = {
   classes: PropTypes.object.isRequired,
+  clickGuest: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(Landing);

@@ -86,6 +86,9 @@ module.exports = function(proxy, allowedHost) {
       },
       "/profile": {
         target: 'http://localhost:5000'
+      },
+      "/guest": {
+        target: 'http://localhost:5000'
       }
     },
     before(app) {

@@ -1,9 +1,11 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
+
 body {
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #36393f;
+  background-color: #1b1b1b;
   color: #eeeeee;
   overflow: hidden;
 }

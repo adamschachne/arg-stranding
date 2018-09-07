@@ -5,7 +5,7 @@ import { initOptions } from "./utils/config";
 import buildGraph from './utils/buildGraph';
 import localForage from "localforage";
 import copy from 'copy-to-clipboard';
-import Loader from './Loader/Loader';
+import Loader from '../Loader/Loader';
 import InfoBox from '../Info/InfoBox';
 
 class NetworkContainer extends PureComponent {
