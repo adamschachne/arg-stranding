@@ -8,7 +8,7 @@ const axios = require('axios').default.create();
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
-const REDIRECT_URL = encodeURIComponent('http://a884791c.ngrok.io/discord/code');
+const REDIRECT_URL = encodeURIComponent(process.env.REDIRECT_URL);
 const SCOPES = encodeURIComponent("identify");
 
 function addIpAddress(_global, ip, user, callback) {
