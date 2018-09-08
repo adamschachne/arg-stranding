@@ -49,7 +49,7 @@ class App extends Component {
       const guestResponse = await fetch("guest");
       const identity = await guestResponse.json();
       console.log(identity);
-      this.setState({ identity });
+      this.setState({ identity: identity.guest });
     } catch (err) {
       console.error(err);
     }

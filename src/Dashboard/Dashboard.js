@@ -8,6 +8,14 @@ import Avatar from '@material-ui/core/Avatar';
 import NumberToWord from './NumberToWord.js/NumberToWord';
 
 const styles = theme => ({
+  dashboard: {
+    display: 'flex',
+    justifyContent: 'space-evenly',
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: "100vw",
+    height: "100vh"
+  },
   row: {
     display: 'flex',
     justifyContent: 'center',
@@ -34,7 +42,7 @@ const Dashboard = (props) => {
   let avatarURL = BASE_URL;
 
   if (isGuest) {
-    avatarURL += `embed/avatars/${0}.png`;
+    avatarURL += `embed/avatars/${avatar}.png`;
   } else {
     avatarURL += `avatars/${id}/${avatar}.png`;
   }
@@ -42,7 +50,7 @@ const Dashboard = (props) => {
   const name = isGuest ? "Guest" : username;
 
   return (
-    <div>
+    <div className={classes.dashboard}>
       <div className={classes.row}>
         <Avatar
           alt="Avatar"
@@ -51,6 +59,11 @@ const Dashboard = (props) => {
         />
         <div>
           {name}
+        </div>
+        <div>
+          <Link to="/graph">
+            <div style={{ color: "#1b1b1b" }}>Network Graph</div>
+          </Link>
         </div>
       </div>
       <div className={classes.row}>
