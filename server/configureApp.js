@@ -20,7 +20,8 @@ function addIpAddress(_global, ip, user, callback) {
 
   _global.db.collection('ips').updateOne(
     {
-      ip: doc.ip // query for documents with this ip
+      ip: doc.ip, // query for documents with this ip
+      user: doc.user
     },
     {
       $setOnInsert: doc // only set doc if an insert
