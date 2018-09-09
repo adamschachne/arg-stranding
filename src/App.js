@@ -75,12 +75,12 @@ class App extends Component {
     window.removeEventListener("resize", this.resize);
   }
 
-  renderMenu = ({ nodes, loading, searchRef, focusNode }) => {
+  renderMenu = ({ commandToID, loading, searchRef, focusNode }) => {
     return (
       <Search
         loading={loading}
         searchRef={searchRef}
-        nodes={nodes}
+        commandToID={commandToID}
         focusNode={focusNode}
       />
     );
@@ -117,7 +117,7 @@ class App extends Component {
         <Route
           path="/dashboard"
           render={() => {
-            return <Dashboard identity={this.state.identity}/>
+            return <Dashboard identity={this.state.identity} />
           }}
         />
         <Route

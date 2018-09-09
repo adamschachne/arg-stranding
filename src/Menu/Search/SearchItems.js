@@ -1,12 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SearchItem from './SearchItem';
-
-SearchItem.propTypes = {
-  click: PropTypes.func,
-  children: PropTypes.string,
-  selected: PropTypes.bool
-}
 
 function getTarget(target) {
   if (target.className === "search-items") {
@@ -14,6 +7,24 @@ function getTarget(target) {
   } else if (target.className === "search-item") {
     return target.innerText;
   }
+}
+
+const Item = ({ selected = false, children, click }) => {
+  const label = !children ? "No Results" : children;
+  return (
+    <div
+      className={selected ? "search-item-selected" : "search-item"}
+      onClick={click}
+    >
+      {label}
+    </div>
+  );
+};
+
+Item.propTypes = {
+  click: PropTypes.func,
+  children: PropTypes.string,
+  selected: PropTypes.bool
 }
 
 const SearchItems = ({ filteredCommands, click }) => {
@@ -24,14 +35,14 @@ const SearchItems = ({ filteredCommands, click }) => {
     >
       <div className="search-results">
         {filteredCommands.length === 0 ?
-          <SearchItem selected={false} />
+          <Item selected={false} />
           : filteredCommands.map(label => (
-            <SearchItem
+            <Item
               key={label}
               selected={false}
             >
               {label}
-            </SearchItem>
+            </Item>
           ))}
       </div>
     </div>

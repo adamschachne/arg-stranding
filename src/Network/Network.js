@@ -170,7 +170,7 @@ class NetworkContainer extends PureComponent {
         {/* MENU */}
         {this.props.renderMenu({
           searchRef: this.searchRef,
-          nodes: this.state.graph.nodes,
+          commandToID: this.state.commandToID,
           loading: this.state.loading,
           focusNode: (cmd) => this.setState({ focusNode: this.state.commandToID[cmd] })
         })}

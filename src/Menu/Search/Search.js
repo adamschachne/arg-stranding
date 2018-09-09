@@ -21,7 +21,9 @@ class Search extends Component {
       value: "",
       searching: false
     }
-    this.commands = [];
+    this.commandsArray = [];
+    this.commandsArrayLowerCase = [];
+    this.lowerToUpper = {};
     this.usingEdgeOrIE = (document.documentMode || /Edge/.test(navigator.userAgent));
     // this.searching = false;
   }
@@ -49,25 +51,21 @@ class Search extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.nodes === this.props.nodes) {
+    if (prevProps.commandToID === this.props.commandToID) {
       return;
     }
 
-    const commands = [];
-    console.log(this.props.nodes);
-    this.props.nodes.forEach(node => {
-      node.label.split("\n").forEach(command => {
-        commands.push(command);
-      });
-    });
-    this.commands = commands.sort();
-    // console.log(this.commands);
-
+    this.commandsArray = Object.keys(this.props.commandToID).sort();
+    this.commandsArrayLowerCase = this.commandsArray.map(command => command.toLowerCase());
+    this.lowerToUpper = this.commandsArrayLowerCase.reduce((result, item, index) => {
+      result[item] = this.commandsArray[index];
+      return result;
+    }, {});
   }
 
   closeSearch = (target) => {
     // console.log(target);
-    this.setState((prevState) => {
+    this.setState(() => {
       this.props.searchRef.current.blur();
       this.props.searchRef.current.value = "";
       this.props.focusNode(target);
@@ -77,8 +75,9 @@ class Search extends Component {
 
   render() {
     const { value } = this.state;
-    const filteredCommands = value === "" ? [] : this.commands
-      .filter(cmd => cmd.indexOf(value) !== -1);
+    const filteredCommands = value === "" ? [] : this.commandsArrayLowerCase
+      .filter(cmd => cmd.indexOf(value.toLowerCase()) !== -1)
+      .map(cmd => this.lowerToUpper[cmd]);
 
     return (
       <div className="search-component">
@@ -132,7 +131,7 @@ class Search extends Component {
 
 Search.propTypes = {
   loading: PropTypes.bool,
-  nodes: PropTypes.array,
+  commandToID: PropTypes.object,
   searchRef: PropTypes.object.isRequired,
   focusNode: PropTypes.func
 }
