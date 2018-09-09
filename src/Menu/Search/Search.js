@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import SearchItems from './SearchItems';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
+import Home from '@material-ui/icons/Home';
+import { Link } from 'react-router-dom';
 // import InfoBox from '../Info/InfoBox';
 
 import './Search.css';
@@ -78,6 +82,15 @@ class Search extends Component {
 
     return (
       <div className="search-component">
+        <InputAdornment position="end">
+          <IconButton
+            aria-label="Clear"
+            component={Link} to="/dashboard"
+            color="inherit"
+          >
+            <Home />
+          </IconButton>
+        </InputAdornment>
         {/* <InfoBox /> */}
         <input
           type="search"

@@ -104,7 +104,7 @@ class App extends Component {
           path='/graph'
           render={() => {
             return (
-              <div style={{ width, height }}>
+              <div style={{ backgroundColor: '#36393f', width, height }}>
                 <Network
                   width={width}
                   height={height}

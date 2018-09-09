@@ -61,7 +61,7 @@ const Dashboard = (props) => {
         </div>
         <div>
           <Link to="/graph">
-            <div style={{ color: "#1b1b1b" }}>Network Graph</div>
+            <div style={{ color: "#eeeeee" }}>Network Graph</div>
           </Link>
         </div>
       </div>

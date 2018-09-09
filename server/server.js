@@ -110,17 +110,17 @@ MongoClient.connect(mongo_url, { useNewUrlParser: true }, function (err, client)
   _global.app = configureApp(_global, fetchSheetData);
 
   authenticateGoogleSheet(function () {
-  //   fetchSheetData().then(data => {
-  //     _global.data = data;
+    fetchSheetData().then(data => {
+      _global.data = data;
       _global.app.listen(PORT, function () {
         console.error(`Server listening on port ${PORT}`);
       });
-  //   }).catch(err => {
-  //     console.debug(err);
-  //     _global.app.listen(PORT, function () {
-  //       console.error(`Server listening on port ${PORT}`);
-  //     });
-  //   });
+    }).catch(err => {
+      console.debug(err);
+      _global.app.listen(PORT, function () {
+        console.error(`Server listening on port ${PORT}`);
+      });
+    });
   });
 });
 
