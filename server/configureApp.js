@@ -5,7 +5,10 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const path = require('path');
 const paths = require('../config/paths');
 const axios = require('axios').default.create();
+const differenceWith = require('lodash/differenceWith');
+const isEqual = require('lodash/isEqual');
 
+const commandCollection = process.env.NODE_ENV === "production" ? "commands" : "test_commands";
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URL = encodeURIComponent(process.env.REDIRECT_URL);
@@ -98,21 +101,25 @@ module.exports = function configureApp(_global, fetchSheetData) {
   });
 
   // Answer API requests.
-  app.get('/data', async function (req, res) {
+  app.get('/data', authMiddleware, async function (req, res) {
     // console.log("RECEIVED REQUEST");
     res.set('Content-Type', 'application/json');
     // res.setHeader('Cache-Control', 'public, max-age=31557600'); // one year
     try {
       const data = await fetchSheetData();
-      _global.data = data;
+
       res.send(JSON.stringify({
-        items: _global.data,
+        items: Object.values(data),
         updated: _global.lastUpdated
       }));
+
+      _global.data = data;
+
     } catch (err) {
+      console.error(err);
       // send existing data
       res.send(JSON.stringify({
-        items: _global.data,
+        items: Object.values(_global.data),
         updated: _global.lastUpdated
       }));
     }
@@ -130,7 +137,7 @@ module.exports = function configureApp(_global, fetchSheetData) {
 
       req.session.identity = {
         guest: Date.now(),
-        avatar: Math.floor(Math.random()*5)
+        avatar: Math.floor(Math.random() * 5)
       }
 
       req.session.save(function (err) {

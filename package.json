@@ -86,7 +86,7 @@
   },
   "scripts": {
     "dev": "node scripts/start.js",
-    "server": "nodemon --inspect -r dotenv/config --watch server server/server.js",
+    "server": "nodemon --inspect-brk -r dotenv/config --watch server server/server.js",
     "heroku-postbuild": "cross-env GENERATE_SOURCEMAP=false node scripts/build.js",
     "build": "cross-env GENERATE_SOURCEMAP=false node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
