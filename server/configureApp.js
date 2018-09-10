@@ -5,10 +5,8 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const path = require('path');
 const paths = require('../config/paths');
 const axios = require('axios').default.create();
-const differenceWith = require('lodash/differenceWith');
-const isEqual = require('lodash/isEqual');
+const updateData = require('./updateData');
 
-const commandCollection = process.env.NODE_ENV === "production" ? "commands" : "test_commands";
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URL = encodeURIComponent(process.env.REDIRECT_URL);
@@ -100,25 +98,38 @@ module.exports = function configureApp(_global, fetchSheetData) {
     return res.send(req.session.identity);
   });
 
+  app.get('/updated', function (req, res) {
+    res.send(_global.lastUpdated);
+  });
+
   // Answer API requests.
   app.get('/data', authMiddleware, async function (req, res) {
     // console.log("RECEIVED REQUEST");
     res.set('Content-Type', 'application/json');
     // res.setHeader('Cache-Control', 'public, max-age=31557600'); // one year
     try {
-      const data = await fetchSheetData();
+      const rows = await fetchSheetData(_global);
 
+      await updateData(_global, rows);
+      
       res.send(JSON.stringify({
-        items: Object.values(data),
+        /*
+          TODO convert data into minimal array needed
+          to build network graph
+        */
+        items: Object.values(_global.data),
         updated: _global.lastUpdated
       }));
 
-      _global.data = data;
+      // _global.data = rows;
 
     } catch (err) {
       console.error(err);
       // send existing data
       res.send(JSON.stringify({
+        /*
+          TODO same as above
+        */
         items: Object.values(_global.data),
         updated: _global.lastUpdated
       }));

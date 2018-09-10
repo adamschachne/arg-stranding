@@ -89,6 +89,9 @@ module.exports = function(proxy, allowedHost) {
       },
       "/guest": {
         target: 'http://localhost:5000'
+      },
+      "/updated": {
+        target: 'http://localhost:5000'
       }
     },
     before(app) {
