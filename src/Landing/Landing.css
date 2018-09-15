@@ -11,7 +11,8 @@
 }
 
 .landing-credit {
-  font-size: 10px;
+  font-size: 11px;
+  font-weight: 600;
 }
 
 .landing-page > div {
@@ -19,10 +20,10 @@
 }
 
 .landing-header {
-  letter-spacing: 10px;
-  text-indent: 10px;
+  letter-spacing: 30px;
+  text-indent: 30px;
   text-align: center;
-  font-size: 80px;
+  font-size: 53px;
 }
 
 /* If the screen size is 601px wide or more, set the font-size of <div> to 80px */

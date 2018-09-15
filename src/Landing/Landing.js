@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, createStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import purple from '@material-ui/core/colors/purple';
 import Zoom from '@material-ui/core/Zoom';
-// import AddIcon from '@material-ui/icons/Add';
+
 import './Landing.css'
 
-const styles = theme => ({
+const styles = theme => createStyles({
   button: {
     color: theme.palette.getContrastText(purple[500]),
     backgroundColor: "#4A2BBC",
@@ -23,6 +22,7 @@ const styles = theme => ({
     textAlign: 'center',
     margin: '10px',
     minWidth: '200px',
+    fontFamily: "'Source Sans Pro', sans-serif",
     // [theme.breakpoints.down('400')]: {
     //   maxWidth: '100px'
     // },

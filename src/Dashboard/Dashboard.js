@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, createStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import Avatar from '@material-ui/core/Avatar';
 import NumberToWord from './NumberToWord.js/NumberToWord';
 
-const styles = theme => ({
+const styles = () => createStyles({
   dashboard: {
     display: 'flex',
     justifyContent: 'space-evenly',
@@ -20,7 +20,7 @@ const styles = theme => ({
     justifyContent: 'center',
     flexDirection: 'column',
     alignItems: 'center',
-    fontFamily: "'Source Sans Pro', sans-serif"
+    fontFamily: "'Source Sans Pro', sans-serif",
   },
   avatar: {
     margin: 10,

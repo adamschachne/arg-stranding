@@ -11,6 +11,8 @@ import DeleteTwoToneIcon from '@material-ui/icons/DeleteTwoTone';
 import FileCopy from '@material-ui/icons/FileCopy';
 import writtenNumber from 'written-number';
 import copy from 'copy-to-clipboard';
+import Tooltip from '@material-ui/core/Tooltip';
+import { Button } from '@material-ui/core';
 
 const styles = theme => ({
   form: {
@@ -26,10 +28,63 @@ const styles = theme => ({
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
   },
-  textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-    width: 200,
+  arrowPopper: {
+    '&[x-placement*="bottom"] $arrowArrow': {
+      top: 0,
+      left: 0,
+      marginTop: '-0.9em',
+      width: '3em',
+      height: '1em',
+      '&::before': {
+        borderWidth: '0 1em 1em 1em',
+        borderColor: `transparent transparent ${theme.palette.grey[700]} transparent`,
+      },
+    },
+    '&[x-placement*="top"] $arrowArrow': {
+      bottom: 0,
+      left: 0,
+      marginBottom: '-0.9em',
+      width: '3em',
+      height: '1em',
+      '&::before': {
+        borderWidth: '1em 1em 0 1em',
+        borderColor: `${theme.palette.grey[700]} transparent transparent transparent`,
+      },
+    },
+    '&[x-placement*="right"] $arrowArrow': {
+      left: 0,
+      marginLeft: '-0.9em',
+      height: '3em',
+      width: '1em',
+      '&::before': {
+        borderWidth: '1em 1em 1em 0',
+        borderColor: `transparent ${theme.palette.grey[700]} transparent transparent`,
+      },
+    },
+    '&[x-placement*="left"] $arrowArrow': {
+      right: 0,
+      marginRight: '-0.9em',
+      height: '3em',
+      width: '1em',
+      '&::before': {
+        borderWidth: '1em 0 1em 1em',
+        borderColor: `transparent transparent transparent ${theme.palette.grey[700]}`,
+      },
+    },
+  },
+  arrowArrow: {
+    position: 'absolute',
+    fontSize: 7,
+    width: '3em',
+    height: '3em',
+    '&::before': {
+      content: '""',
+      margin: 'auto',
+      display: 'block',
+      width: 0,
+      height: 0,
+      borderStyle: 'solid',
+    },
   },
 });
 
@@ -46,7 +101,9 @@ class NumberToWord extends Component {
     super(props);
 
     this.state = {
-      number: ''
+      number: '',
+      arrowRef: null,
+      tooltip: ''
     };
 
     this.withAnd = '';
@@ -58,21 +115,35 @@ class NumberToWord extends Component {
     this.setState({ [type]: event.target.value });
   }
 
+  handleArrowRef = node => {
+    this.setState({
+      arrowRef: node,
+    });
+  };
+
   clear = () => {
     this.setState({ number: '' });
   }
 
+  handleTooltipClose = () => {
+    this.setState({ tooltip: '' });
+  }
+
   copyToClipboard = type => () => {
+    /*
+      withAnd or withoutAnd
+    */
     const number = this[type];
     if (number) {
       copy(this[type]);
       console.log(this[type]);
     }
+    this.setState({ tooltip: type });
   }
 
   render() {
     const { classes } = this.props;
-    const { number } = this.state;
+    const { number, tooltip, arrowRef } = this.state;
     this.withAnd = "?" + numberToWord(number, true);
     this.withoutAnd = "?" + numberToWord(number, false);
     // console.log(withAnd, withoutAnd);
@@ -82,23 +153,19 @@ class NumberToWord extends Component {
           <Typography variant="headline" component="h3">
             Number to Words Converter
           </Typography>
-          {/* <Typography component="p">
-            Enter a number
-          </Typography> */}
           <div
             style={{
               display: 'flex',
               flexWrap: 'wrap',
             }}
           >
-
             <TextField
               id="number"
               label="Number"
               value={this.state.number}
               onChange={this.handleChange('number')}
               type="number"
-              className={classes.textField}
+              margin="normal"
               InputLabelProps={{
                 shrink: true,
               }}
@@ -114,50 +181,57 @@ class NumberToWord extends Component {
                   </InputAdornment>
                 )
               }}
-              margin="normal"
             />
-            <TextField
-              id="read-only-input"
-              label="Without 'and'"
-              value={this.withoutAnd}
-              margin="normal"
-              fullWidth
-              InputProps={{
-                readOnly: true,
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="Copy to Clipboard"
-                      onClick={this.copyToClipboard('withoutAnd')}
-                    // onMouseDown={this.handleMouseDownPassword}
-                    >
-                      <FileCopy />
-                    </IconButton>
-                  </InputAdornment>
-                )
-              }}
-            />
-            <TextField
-              id="read-only-input"
-              label="With 'and'"
-              value={this.withAnd}
-              margin="normal"
-              fullWidth
-              InputProps={{
-                readOnly: true,
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="Copy to Clipboard"
-                      onClick={this.copyToClipboard('withAnd')}
-                    // onMouseDown={this.handleMouseDownPassword}
-                    >
-                      <FileCopy />
-                    </IconButton>
-                  </InputAdornment>
-                )
-              }}
-            />
+            {[
+              { type: `withAnd`, label: `With 'And'` },
+              { type: `withoutAnd`, label: `Without 'And'` },
+            ].map(({ type, label }) => (
+              <TextField
+                key={type}
+                id="read-only-input"
+                label={label}
+                value={this[type]}
+                margin="normal"
+                fullWidth
+                InputProps={{
+                  readOnly: true,
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="Copy to Clipboard"
+                        onMouseLeave={this.handleTooltipClose}
+                        onClick={(this.copyToClipboard(type))}
+                      >
+                        <Tooltip
+                          open={tooltip === type}
+                          placement="top"
+                          title={
+                            <React.Fragment>
+                              Copied!
+                              <span className={classes.arrowArrow} ref={this.handleArrowRef} />
+                            </React.Fragment>
+                          }
+                          classes={{ popper: classes.arrowPopper }}
+                          PopperProps={{
+                            disablePortal: true,
+                            popperOptions: {
+                              modifiers: {
+                                arrow: {
+                                  enabled: Boolean(arrowRef),
+                                  element: arrowRef,
+                                },
+                              },
+                            },
+                          }}
+                        >
+                          <FileCopy />
+                        </Tooltip>
+                      </IconButton>
+                    </InputAdornment>
+                  )
+                }}
+              />
+            ))}
           </div>
         </Paper>
       </div>
