@@ -33,7 +33,7 @@ export default ({ items, updated }) => {
       id: ID,
       label: item.command.length === 1 ? item.command[0] : item.command.join("\n"),
       shape: nonImageCommand ? "image" : "circularImage",
-      image: item.static,
+      image: item.url,
       size: nonImageCommand ? 20 : 25,
       hidden: true,
       x: item.x,

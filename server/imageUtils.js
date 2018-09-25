@@ -1,8 +1,7 @@
 const axios = require('axios');
-const cheerio = require('cheerio');
+var http = require('http');
 const FastPriorityQueue = require("fastpriorityqueue");
-
-const POSTIMG_DOMAIN = "postimg.cc/";
+const sizeOf = require('image-size');
 
 const NON_IMAGE_COMMANDS = {
   "UNKNOWN COMMAND": true,
@@ -11,15 +10,12 @@ const NON_IMAGE_COMMANDS = {
 };
 
 function sortData(urls, callback) {
-  // sort urlItems by lastModified
   try {
     let pqueue = new FastPriorityQueue(function (a, b) {
-      if (a.lastModified && !b.lastModified) {
+      if (a.lastModifiedUnix && !b.lastModifiedUnix) {
         return true;
       }
-      let aTime = Date.parse(a.lastModified);
-      let bTime = Date.parse(b.lastModified);
-      return aTime < bTime;
+      return a.lastModifiedUnix < b.lastModifiedUnix;
     });
     for (let i = 0; i < urls.length; i++) {
       pqueue.add(urls[i]);
@@ -35,6 +31,35 @@ function sortData(urls, callback) {
   }
 }
 
+function getImageMetadata(url) {
+  return new Promise(function (resolve, reject) {
+    axios({
+      url,
+      method: 'get',
+      responseType: 'stream'
+    }).then(function (response) {
+      const metadata = {
+        lastModified: response.headers["last-modified"]
+      };
+      const chunks = [];
+      response.data.on('data', function (chunk) {
+        chunks.push(chunk);
+      }).on('end', function () {
+        try {
+          const buffer = Buffer.concat(chunks);
+          const size = sizeOf(buffer);
+          Object.assign(metadata, size);
+          resolve(metadata);
+        } catch (err) {
+          reject(err.message);
+        }
+      }).on('error', function (error) {
+        reject(error);
+      });
+    })
+  });
+}
+
 module.exports = function processUrls(urls) {
   return new Promise(resolve => {
 
@@ -48,29 +73,11 @@ module.exports = function processUrls(urls) {
     console.log("getting postimg information...");
     urls.forEach(async urlItem => {
       try {
-        // urlItem.command = urlItem.command.split(',').map(cmd => cmd.trim());
-        // urlItem.leadsto = urlItem.leadsto.split(',').filter(lead => lead !== "").map(lead => lead.trim());
-        // urlItem.id1 = urlItem.url.split("/image/")[1].replace("/", "");
-        const response = await axios({ method: 'get', url: urlItem.url });
-        const $ = cheerio.load(response.data);
-        const staticImgSrc = $('#main-image').attr('src');
-        const pathIndex = staticImgSrc.indexOf(POSTIMG_DOMAIN) + POSTIMG_DOMAIN.length;
-        const parts = staticImgSrc.substring(pathIndex).split("/");
-        urlItem.static = staticImgSrc;
-
         // only do this stuff for real image commands
         if (!NON_IMAGE_COMMANDS[urlItem.command[0]]) {
-          urlItem.id2 = parts[0];
-          urlItem.filename = parts[1];
-
-          const dimensions = $("#download").attr("title").split(" - ")[0].split(" x ");
-          urlItem.width = parseInt(dimensions[0]);
-          urlItem.height = parseInt(dimensions[1]);
-
-          const imgResponse = await axios({ method: 'get', url: staticImgSrc });
-          const lastModified = imgResponse.headers["last-modified"];
-          urlItem.lastModified = new Date(lastModified).toISOString();
-          urlItem.lastModifiedUnix = Date.parse(lastModified);
+          const metadata = await getImageMetadata(urlItem.url);
+          Object.assign(urlItem, metadata)
+          urlItem.lastModifiedUnix = Date.parse(metadata.lastModified);
         }
         if (++completed == urls.length) {
           sortData(urls, resolve);

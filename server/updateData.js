@@ -11,7 +11,7 @@ module.exports = async function updateData(_global, rows) {
   const rowsMap = {};
 
   rows.forEach(row => {
-    const existingImage = _global.data[row.id1];
+    const existingImage = _global.data[row.id];
     if (!existingImage) {
       added.push(row);
     } else {
@@ -19,14 +19,14 @@ module.exports = async function updateData(_global, rows) {
         isEqual(existingImage.leadsto, row.leadsto) &&
         isEqual(existingImage.command, row.command))) {
         changed.push(row);
-        Object.assign(_global.data[row.id1], row);
+        Object.assign(_global.data[row.id], row);
       }
     }
-    rowsMap[row.id1] = row;
+    rowsMap[row.id] = row;
   });
 
   Object.values(_global.data).forEach(item => {
-    if (!rowsMap[item.id1]) {
+    if (!rowsMap[item.id]) {
       removed.push(item);
     }
   });
@@ -36,10 +36,10 @@ module.exports = async function updateData(_global, rows) {
   const updatedRows = await processUrls(toUpdate);
   if (updatedRows != null) {
     updatedRows.forEach(imageData => {
-      if (_global.data[imageData.id1]) {
-        Object.assign(_global.data[imageData.id1], imageData);
+      if (_global.data[imageData.id]) {
+        Object.assign(_global.data[imageData.id], imageData);
       } else {
-        _global.data[imageData.id1] = imageData;
+        _global.data[imageData.id] = imageData;
       }
     });
   }

@@ -52,7 +52,7 @@ MongoClient.connect(mongo_url, { useNewUrlParser: true }, function (err, client)
   _global.db.collection(commandCollection).find(query, options).toArray().then(data => {
     _global.data = {};
     data.forEach(image => {
-      _global.data[image.id1] = image;
+      _global.data[image.id] = image;
     });
 
     _global.app = configureApp(_global, fetchSheetData);

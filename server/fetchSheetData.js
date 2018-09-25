@@ -29,12 +29,14 @@ module.exports = function fetchSheetData(_global) {
           else
             step(null,
               rows.filter(row => row.url != null && row.command != null).map(row => {
+                const urlParts = row.url.split(/postimg.cc\//)[1].split('/');
                 return {
                   url: row.url,
                   command: row.command.split(',').map(cmd => cmd.trim()),
                   leadsto: row.leadsto.split(',').filter(lead => lead !== "").map(lead => lead.trim()),
                   fannames: row.fannames.split(',').filter(name => name !== "").map(name => name.trim()),
-                  id1: row.url.split("/image/")[1].replace("/", ""),
+                  id: urlParts[0],
+                  filename: urlParts[1]
                 }
               })
             );
