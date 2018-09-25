@@ -22,6 +22,8 @@ const _global = {
   lastUpdated: "",
   /** @type {Object} */
   data: null,
+  /** @type {Array} */
+  sortedData: null,
   /** @type {?String} */
   updating: false,
   /** @type {Array} */
@@ -54,7 +56,6 @@ MongoClient.connect(mongo_url, { useNewUrlParser: true }, function (err, client)
     data.forEach(image => {
       _global.data[image.id] = image;
     });
-
     _global.app = configureApp(_global, fetchSheetData);
 
     authenticateGoogleSheet(async function () {

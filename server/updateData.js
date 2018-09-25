@@ -1,5 +1,6 @@
 const isEqual = require('lodash/isEqual');
 const processUrls = require('./imageUtils');
+const sortURLs = require('./sortUrls');
 
 const commandCollection = process.env.NODE_ENV === "production" ? "commands" : "test_commands";
 
@@ -51,11 +52,14 @@ module.exports = async function updateData(_global, rows) {
         $set: { deleted: Date.now() }
       });
     });
-    updatedRows.forEach(command => {
+    updatedRows && updatedRows.forEach(command => {
       bulkOp.find({ url: command.url }).upsert().updateOne({
         $set: { ...command, deleted: null }
       });
     });
     bulkOp.execute().then(console.log).catch(console.error);
   }
+
+  // keep data sorted by time in an array
+  _global.sortedData = sortURLs(Object.values(_global.data));
 }

@@ -113,11 +113,7 @@ module.exports = function configureApp(_global, fetchSheetData) {
       await updateData(_global, rows);
       
       res.send(JSON.stringify({
-        /*
-          TODO convert data into minimal array needed
-          to build network graph
-        */
-        items: Object.values(_global.data),
+        items: _global.sortedData,
         updated: _global.lastUpdated
       }));
 
@@ -127,10 +123,7 @@ module.exports = function configureApp(_global, fetchSheetData) {
       console.error(err);
       // send existing data
       res.send(JSON.stringify({
-        /*
-          TODO same as above
-        */
-        items: Object.values(_global.data),
+        items: _global.sortedData,
         updated: _global.lastUpdated
       }));
     }

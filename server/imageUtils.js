@@ -1,6 +1,4 @@
 const axios = require('axios');
-var http = require('http');
-const FastPriorityQueue = require("fastpriorityqueue");
 const sizeOf = require('image-size');
 
 const NON_IMAGE_COMMANDS = {
@@ -8,28 +6,6 @@ const NON_IMAGE_COMMANDS = {
   "?welcomehome": true,
   "?unitedspaceventures": true
 };
-
-function sortData(urls, callback) {
-  try {
-    let pqueue = new FastPriorityQueue(function (a, b) {
-      if (a.lastModifiedUnix && !b.lastModifiedUnix) {
-        return true;
-      }
-      return a.lastModifiedUnix < b.lastModifiedUnix;
-    });
-    for (let i = 0; i < urls.length; i++) {
-      pqueue.add(urls[i]);
-    }
-    let newUrls = [];
-    while (!pqueue.isEmpty()) {
-      newUrls.push(pqueue.poll());
-    }
-    callback(newUrls);
-  } catch (err) {
-    console.error(err);
-    callback(null);
-  }
-}
 
 function getImageMetadata(url) {
   return new Promise(function (resolve, reject) {
@@ -80,7 +56,7 @@ module.exports = function processUrls(urls) {
           urlItem.lastModifiedUnix = Date.parse(metadata.lastModified);
         }
         if (++completed == urls.length) {
-          sortData(urls, resolve);
+          resolve(urls);
         }
       } catch (error) {
         console.error(error);
