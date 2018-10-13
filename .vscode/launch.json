@@ -7,7 +7,7 @@
     {
       "type": "node",
       "request": "attach",
-      "name": "Attach",
+      "name": "Debug server",
       "port": 9229,
       "localRoot": "${workspaceFolder}/server",
       "remoteRoot": "${workspaceFolder}/server",
