@@ -12,7 +12,7 @@ export const initOptions = (width, height) => ({
   // },
   physics: {
     enabled: false,
-    solver: 'forceAtlas2Based',
+    solver: "forceAtlas2Based",
     forceAtlas2Based: {
       gravitationalConstant: -120,
       centralGravity: 0.01,
@@ -41,7 +41,7 @@ export const initOptions = (width, height) => ({
       useBorderWithImage: true,
       useImageSize: false
     },
-    font: { color: '#eeeeee' }
+    font: { color: "#eeeeee" }
   },
   layout: {
     randomSeed: 1, // constant seed

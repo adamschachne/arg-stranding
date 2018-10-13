@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import SearchItems from './SearchItems';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
-import Home from '@material-ui/icons/Home';
-import { Link } from 'react-router-dom';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import SearchItems from "./SearchItems";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import IconButton from "@material-ui/core/IconButton";
+import Home from "@material-ui/icons/Home";
+import { Link } from "react-router-dom";
+import keycode from "keycode";
 // import InfoBox from '../Info/InfoBox';
 
-import './Search.css';
+import "./Search.css";
 
 const PLACEHOLDER = "start typing to search..."
 
@@ -28,8 +29,8 @@ class Search extends Component {
     // this.searching = false;
   }
 
+  // eslint-disable-next-line
   onWindowKeydown = event => {
-    // console.log(event);
     if (event.keyCode < 112 || event.keyCode > 121) {
       if (event.keyCode === 27) { // Esc      
         this.closeSearch();
@@ -73,6 +74,7 @@ class Search extends Component {
     });
   }
 
+  // eslint-disable-next-line
   render() {
     const { value } = this.state;
     const filteredCommands = value === "" ? [] : this.commandsArrayLowerCase

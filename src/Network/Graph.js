@@ -40,6 +40,7 @@ class Graph extends Component {
     }
   }
 
+  // eslint-disable-next-line complexity
   shouldComponentUpdate(nextProps, nextState) {
     console.log("shouldComponentUpdate");
     let nodesChange = !isEqual(this.props.graph.nodes, nextProps.graph.nodes);

@@ -1,25 +1,25 @@
-import React from 'react'
-import { Link } from 'react-router-dom';
-import { withStyles, createStyles } from '@material-ui/core/styles';
-import classNames from 'classnames';
-import PropTypes from 'prop-types';
-import Avatar from '@material-ui/core/Avatar';
-import NumberToWord from './NumberToWord.js/NumberToWord';
+import React from "react"
+import { Link } from "react-router-dom";
+import { withStyles, createStyles } from "@material-ui/core/styles";
+import classNames from "classnames";
+import PropTypes from "prop-types";
+import Avatar from "@material-ui/core/Avatar";
+import NumberToWord from "./NumberToWord.js/NumberToWord";
 
 const styles = () => createStyles({
   dashboard: {
-    display: 'flex',
-    justifyContent: 'space-evenly',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    justifyContent: "space-evenly",
+    flexDirection: "column",
+    alignItems: "center",
     width: "100vw",
     height: "100vh"
   },
   row: {
-    display: 'flex',
-    justifyContent: 'center',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    justifyContent: "center",
+    flexDirection: "column",
+    alignItems: "center",
     fontFamily: "'Source Sans Pro', sans-serif",
   },
   avatar: {

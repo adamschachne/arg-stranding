@@ -1,45 +1,45 @@
-import React, { Component } from 'react'
-import Button from '@material-ui/core/Button';
-import { withStyles, createStyles } from '@material-ui/core/styles';
-import classNames from 'classnames';
-import PropTypes from 'prop-types';
-import purple from '@material-ui/core/colors/purple';
-import Zoom from '@material-ui/core/Zoom';
+import React, { Component } from "react"
+import Button from "@material-ui/core/Button";
+import { withStyles, createStyles } from "@material-ui/core/styles";
+import classNames from "classnames";
+import PropTypes from "prop-types";
+import purple from "@material-ui/core/colors/purple";
+import Zoom from "@material-ui/core/Zoom";
 
-import './Landing.css'
+import "./Landing.css"
 
 const styles = theme => createStyles({
   button: {
     color: theme.palette.getContrastText(purple[500]),
     backgroundColor: "#4A2BBC",
-    '&:hover': {
+    "&:hover": {
       backgroundColor: purple[300],
     },
-    borderRadius: '0px',
-    letterSpacing: '10px',
-    textIndent: '10px',
-    textDecoration: 'none',
-    textAlign: 'center',
-    margin: '10px',
-    minWidth: '200px',
+    borderRadius: "0px",
+    letterSpacing: "10px",
+    textIndent: "10px",
+    textDecoration: "none",
+    textAlign: "center",
+    margin: "10px",
+    minWidth: "200px",
     fontFamily: "'Source Sans Pro', sans-serif",
     // [theme.breakpoints.down('400')]: {
     //   maxWidth: '100px'
     // },
   },
   stackButtons: {
-    position: 'absolute',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    flexDirection: 'row'
+    position: "absolute",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    flexWrap: "wrap",
+    flexDirection: "row"
   },
   buttonGroup: {
-    width: '100vw',
-    display: 'flex',
-    justifyContent: 'center',
-    flexDirection: 'row',
+    width: "100vw",
+    display: "flex",
+    justifyContent: "center",
+    flexDirection: "row",
   }
 });
 

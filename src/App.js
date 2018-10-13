@@ -1,12 +1,11 @@
-import React, { Component } from 'react';
-import Network from './Network/Network';
-import Search from './Menu/Search/Search';
-import { hot } from 'react-hot-loader';
-import { Route, Switch, Redirect } from 'react-router-dom';
-import Landing from './Landing/Landing';
-import { HashLoader } from 'react-spinners';
-import Dashboard from './Dashboard/Dashboard';
-import Loader from './Loader/Loader';
+import React, { Component } from "react";
+import Network from "./Network/Network";
+import Search from "./Menu/Search/Search";
+import { hot } from "react-hot-loader";
+import { Route, Switch, Redirect } from "react-router-dom";
+import Landing from "./Landing/Landing";
+import Dashboard from "./Dashboard/Dashboard";
+import Loader from "./Loader/Loader";
 
 const RESIZE_DELAY = 100; // 100ms
 
@@ -102,7 +101,7 @@ class App extends Component {
             return (
               <Network
                 style={{
-                  backgroundColor: '#36393f',
+                  backgroundColor: "#36393f",
                   width,
                   height
                 }}

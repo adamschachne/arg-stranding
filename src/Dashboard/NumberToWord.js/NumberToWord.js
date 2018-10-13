@@ -1,25 +1,24 @@
-import React, { Component } from 'react'
-import { withStyles } from '@material-ui/core/styles';
-import classNames from 'classnames';
-import PropTypes from 'prop-types';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteTwoToneIcon from '@material-ui/icons/DeleteTwoTone';
-import FileCopy from '@material-ui/icons/FileCopy';
-import writtenNumber from 'written-number';
-import copy from 'copy-to-clipboard';
-import Tooltip from '@material-ui/core/Tooltip';
-import { Button } from '@material-ui/core';
+import React, { Component } from "react"
+import { withStyles } from "@material-ui/core/styles";
+import classNames from "classnames";
+import PropTypes from "prop-types";
+import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
+import TextField from "@material-ui/core/TextField";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteTwoToneIcon from "@material-ui/icons/DeleteTwoTone";
+import FileCopy from "@material-ui/icons/FileCopy";
+import writtenNumber from "written-number";
+import copy from "copy-to-clipboard";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const styles = theme => ({
   form: {
     // backgroundColor: 'white',
     // fontFamily: "'Source Sans Pro', sans-serif",
     // paddingTop: '50px',
-    paddingBottom: '10vh'
+    paddingBottom: "10vh"
     // width: '50vw',
     // height: '50vh'
   },
@@ -29,61 +28,61 @@ const styles = theme => ({
     paddingBottom: theme.spacing.unit * 2,
   },
   arrowPopper: {
-    '&[x-placement*="bottom"] $arrowArrow': {
+    "&[x-placement*=\"bottom\"] $arrowArrow": {
       top: 0,
       left: 0,
-      marginTop: '-0.9em',
-      width: '3em',
-      height: '1em',
-      '&::before': {
-        borderWidth: '0 1em 1em 1em',
+      marginTop: "-0.9em",
+      width: "3em",
+      height: "1em",
+      "&::before": {
+        borderWidth: "0 1em 1em 1em",
         borderColor: `transparent transparent ${theme.palette.grey[700]} transparent`,
       },
     },
-    '&[x-placement*="top"] $arrowArrow': {
+    "&[x-placement*=\"top\"] $arrowArrow": {
       bottom: 0,
       left: 0,
-      marginBottom: '-0.9em',
-      width: '3em',
-      height: '1em',
-      '&::before': {
-        borderWidth: '1em 1em 0 1em',
+      marginBottom: "-0.9em",
+      width: "3em",
+      height: "1em",
+      "&::before": {
+        borderWidth: "1em 1em 0 1em",
         borderColor: `${theme.palette.grey[700]} transparent transparent transparent`,
       },
     },
-    '&[x-placement*="right"] $arrowArrow': {
+    "&[x-placement*=\"right\"] $arrowArrow": {
       left: 0,
-      marginLeft: '-0.9em',
-      height: '3em',
-      width: '1em',
-      '&::before': {
-        borderWidth: '1em 1em 1em 0',
+      marginLeft: "-0.9em",
+      height: "3em",
+      width: "1em",
+      "&::before": {
+        borderWidth: "1em 1em 1em 0",
         borderColor: `transparent ${theme.palette.grey[700]} transparent transparent`,
       },
     },
-    '&[x-placement*="left"] $arrowArrow': {
+    "&[x-placement*=\"left\"] $arrowArrow": {
       right: 0,
-      marginRight: '-0.9em',
-      height: '3em',
-      width: '1em',
-      '&::before': {
-        borderWidth: '1em 0 1em 1em',
+      marginRight: "-0.9em",
+      height: "3em",
+      width: "1em",
+      "&::before": {
+        borderWidth: "1em 0 1em 1em",
         borderColor: `transparent transparent transparent ${theme.palette.grey[700]}`,
       },
     },
   },
   arrowArrow: {
-    position: 'absolute',
+    position: "absolute",
     fontSize: 7,
-    width: '3em',
-    height: '3em',
-    '&::before': {
-      content: '""',
-      margin: 'auto',
-      display: 'block',
+    width: "3em",
+    height: "3em",
+    "&::before": {
+      content: "\"\"",
+      margin: "auto",
+      display: "block",
       width: 0,
       height: 0,
-      borderStyle: 'solid',
+      borderStyle: "solid",
     },
   },
 });
@@ -101,17 +100,16 @@ class NumberToWord extends Component {
     super(props);
 
     this.state = {
-      number: '',
+      number: "",
       arrowRef: null,
-      tooltip: ''
+      tooltip: ""
     };
 
-    this.withAnd = '';
-    this.withoutAnd = '';
+    this.withAnd = "";
+    this.withoutAnd = "";
   }
 
   handleChange = type => event => {
-    // console.log(event.target.value);
     this.setState({ [type]: event.target.value });
   }
 
@@ -122,17 +120,14 @@ class NumberToWord extends Component {
   };
 
   clear = () => {
-    this.setState({ number: '' });
+    this.setState({ number: "" });
   }
 
   handleTooltipClose = () => {
-    this.setState({ tooltip: '' });
+    this.setState({ tooltip: "" });
   }
 
   copyToClipboard = type => () => {
-    /*
-      withAnd or withoutAnd
-    */
     const number = this[type];
     if (number) {
       copy(this[type]);
@@ -146,7 +141,6 @@ class NumberToWord extends Component {
     const { number, tooltip, arrowRef } = this.state;
     this.withAnd = "?" + numberToWord(number, true);
     this.withoutAnd = "?" + numberToWord(number, false);
-    // console.log(withAnd, withoutAnd);
     return (
       <div className={classes.form} >
         <Paper className={classNames(classes.root, classes.form)} elevation={1}>
@@ -155,15 +149,15 @@ class NumberToWord extends Component {
           </Typography>
           <div
             style={{
-              display: 'flex',
-              flexWrap: 'wrap',
+              display: "flex",
+              flexWrap: "wrap",
             }}
           >
             <TextField
               id="number"
               label="Number"
               value={this.state.number}
-              onChange={this.handleChange('number')}
+              onChange={this.handleChange("number")}
               type="number"
               margin="normal"
               InputLabelProps={{

@@ -2,11 +2,11 @@ import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import Graph from "./Graph";
 import { initOptions } from "./utils/config";
-import buildGraph from './utils/buildGraph';
+import buildGraph from "./utils/buildGraph";
 import localForage from "localforage";
-import copy from 'copy-to-clipboard';
-import Loader from '../Loader/Loader';
-import InfoBox from '../Info/InfoBox';
+import copy from "copy-to-clipboard";
+import Loader from "../Loader/Loader";
+import InfoBox from "../Info/InfoBox";
 
 class NetworkContainer extends PureComponent {
 
@@ -116,7 +116,7 @@ class NetworkContainer extends PureComponent {
   }
 
   componentDidMount() {
-    fetch('/data').then(value => {
+    fetch("/data").then(value => {
       if (value.status === 401) {
         throw new Error("unauthorized");
       }
@@ -152,7 +152,7 @@ class NetworkContainer extends PureComponent {
     const focusNode = this.state.focusNode;
     if (focusNode && prevState.focusNode !== focusNode && this.network) {
       this.network.selectNodes([focusNode]);
-      this.network.once('animationFinished', function () {
+      this.network.once("animationFinished", function () {
 
       });
       this.network.focus(focusNode, {
