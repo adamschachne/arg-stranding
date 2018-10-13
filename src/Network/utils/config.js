@@ -1,10 +1,10 @@
 export const initOptions = (width, height) => ({
   width: width + "px",
   height: height + "px",
+  autoResize: false,
   groups: {
     useDefaultGroups: true
   },
-  autoResize: false,
   // configure: {
   //   enabled: true,
   //   filter: 'physics, layout',

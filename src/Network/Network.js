@@ -12,12 +12,13 @@ class NetworkContainer extends PureComponent {
 
   constructor(props) {
     super(props);
+    const { style: { width, height } } = this.props;
     this.state = {
       graph: {
         nodes: [],
         edges: []
       },
-      options: initOptions(this.props.width, this.props.height),
+      options: initOptions(width, height),
       commandToID: {},
       loading: true,
       focusNode: null
@@ -164,8 +165,11 @@ class NetworkContainer extends PureComponent {
 
   render() {
     // console.log("Network called render", this.state);
+    const { style } = this.props;
+    const { width, height } = style;
+    console.log(style);
     return (
-      <div>
+      <div style={style}>
         {this.state.loading && <Loader loading={this.state.loading} />}
         {/* MENU */}
         {this.props.renderMenu({
@@ -180,8 +184,8 @@ class NetworkContainer extends PureComponent {
           graph={this.state.graph}
           options={{
             ...this.state.options,
-            width: this.props.width + "px",
-            height: this.props.height + "px",
+            width: width + "px",
+            height: height + "px",
           }}
           events={this.events}
         />
@@ -191,9 +195,11 @@ class NetworkContainer extends PureComponent {
 }
 
 NetworkContainer.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number,
-  renderMenu: PropTypes.func.isRequired
+  renderMenu: PropTypes.func.isRequired,
+  style: PropTypes.shape({
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired
+  }).isRequired
 };
 
 export default NetworkContainer;

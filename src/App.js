@@ -14,14 +14,11 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-
     this.resizeEnd = null;
     this.state = {
       dimensions: {
-        width,
-        height
+        width: window.innerWidth,
+        height: window.innerHeight
       },
       focus: null,
       loading: true,
@@ -87,7 +84,6 @@ class App extends Component {
   }
 
   render() {
-    console.log("rendering app");
     const { width, height } = this.state.dimensions;
 
     if (this.state.loading) {
@@ -104,13 +100,14 @@ class App extends Component {
           path='/graph'
           render={() => {
             return (
-              <div style={{ backgroundColor: '#36393f', width, height }}>
-                <Network
-                  width={width}
-                  height={height}
-                  renderMenu={this.renderMenu}
-                />
-              </div>
+              <Network
+                style={{
+                  backgroundColor: '#36393f',
+                  width,
+                  height
+                }}
+                renderMenu={this.renderMenu}
+              />
             );
           }}
         />
