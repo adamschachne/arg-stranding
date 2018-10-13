@@ -7,10 +7,10 @@
     {
       "type": "node",
       "request": "attach",
-      "name": "Attach to Remote",
-      "address": "localhost",
+      "name": "Attach",
       "port": 9229,
       "localRoot": "${workspaceFolder}/server",
+      "remoteRoot": "${workspaceFolder}/server",
     },
     {
       "type": "chrome",
