@@ -37,16 +37,17 @@ module.exports = async function updateData(_global, rows) {
   const updatedRows = await processUrls(toUpdate);
   if (updatedRows != null) {
     updatedRows.forEach(imageData => {
-      if (_global.data[imageData.id]) {
-        Object.assign(_global.data[imageData.id], imageData);
-      } else {
-        _global.data[imageData.id] = imageData;
-      }
+      _global.data[imageData.id] = imageData;
     });
   }
 
+  removed.forEach(imageData => {
+    delete _global.data[imageData.id];
+  });
+
   if (removed.length > 0 || added.length > 0 || changed.length > 0) {
     const bulkOp = _global.db.collection(commandCollection).initializeUnorderedBulkOp();
+    // if any entries are to be removed, just mark the time that they were deleted
     removed.forEach(command => {
       bulkOp.find({ url: command.url }).updateOne({
         $set: { deleted: Date.now() }
