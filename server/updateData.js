@@ -58,7 +58,10 @@ module.exports = async function updateData(_global, rows) {
         $set: { ...command, deleted: null }
       });
     });
-    bulkOp.execute().then(console.log).catch(console.error);
+    bulkOp.execute().then(() => {
+      console.log("upserted:", updatedRows);
+      console.log("removed:", removed);
+    }).catch(console.error);
   }
 
   // keep data sorted by time in an array

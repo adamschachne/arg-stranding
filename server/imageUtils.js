@@ -5,7 +5,10 @@ const sizeOf = require('image-size');
 const NON_IMAGE_COMMANDS = {
   "UNKNOWN COMMAND": true,
   "?welcomehome": true,
-  "?unitedspaceventures": true
+  "?unitedspaceventures": true,
+  "?vd4u08lhb": true,
+  "?transcendingdeath": true,
+  "?lookaroundyoujack": true
 };
 
 function getStaticImageHeaders(url) {

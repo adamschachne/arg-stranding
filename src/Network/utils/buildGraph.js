@@ -1,11 +1,11 @@
 import localForage from "localforage";
 
-const NON_IMAGE_COMMANDS = {
-  "UNKNOWN COMMAND": true,
-  "?welcomehome": true,
-  "?unitedspaceventures": true,
-  "?vd4u08lhb": true
-};
+// const NON_IMAGE_COMMANDS = {
+//   "UNKNOWN COMMAND": true,
+//   "?welcomehome": true,
+//   "?unitedspaceventures": true,
+//   "?vd4u08lhb": true
+// };
 
 export default ({ items, updated }) => {
   console.log("building graph");
@@ -27,7 +27,7 @@ export default ({ items, updated }) => {
 
   // iterate again to generate nodes and edges
   items.forEach((item, ID) => {
-    const nonImageCommand = NON_IMAGE_COMMANDS[item.command[0]];
+    const nonImageCommand = !Boolean(item.lastModified);
     // nodes            
     nodes.push({
       id: ID,
