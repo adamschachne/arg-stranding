@@ -156,7 +156,7 @@ class NetworkContainer extends PureComponent {
 
       });
       this.network.focus(focusNode, {
-        scale: 0.75,
+        scale: this.network.getScale(),
         locked: false,
         animation: true
       });
