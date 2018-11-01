@@ -14,39 +14,54 @@ class Graph extends Component {
   }
 
   componentDidMount() {
-    // console.log("mounted", this.props);
-    // reference to the network edges and nodes
+    const { identifier } = this.state;
+    const {
+      graph, options, events, getNetwork
+    } = this.props;
+
     this.edges = new vis.DataSet();
     this.nodes = new vis.DataSet();
+    this.edges.add(graph.edges);
+    this.nodes.add(graph.nodes);
 
-    let container = document.getElementById(this.state.identifier);
+    const container = document.getElementById(identifier);
 
     this.Network = new vis.Network(
       container,
-      Object.assign({}, this.props.graph, {
+      Object.assign({}, graph, {
         edges: this.edges,
         nodes: this.nodes
       }),
-      this.props.options
+      options
     );
 
-    let events = this.props.events || {};
+    /* eslint-disable */
     for (let eventName of Object.keys(events)) {
       this.Network.on(eventName, events[eventName]);
     }
+    /* eslint-enable */
 
-    if (this.props.getNetwork) {
-      this.props.getNetwork(this.Network);
+    // Object.keys(events).forEach((eventName) => {
+    //   this.Network.on(eventName, events[eventName]);
+    // });
+
+    if (getNetwork) {
+      getNetwork(this.Network);
     }
   }
 
   // eslint-disable-next-line complexity
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log("shouldComponentUpdate");
-    let nodesChange = !isEqual(this.props.graph.nodes, nextProps.graph.nodes);
-    let edgesChange = !isEqual(this.props.graph.edges, nextProps.graph.edges);
-    let optionsChange = !isEqual(this.props.options, nextProps.options);
-    let eventsChange = !isEqual(this.props.events, nextProps.events);
+  shouldComponentUpdate(nextProps) {
+    const { options, events, graph: { nodes, edges } } = this.props;
+    const {
+      options: nextOptions,
+      events: nextEvents,
+      graph: { nodes: nextNodes, edges: nextEdges }
+    } = nextProps;
+    const nodesChange = !isEqual(nodes, nextNodes);
+    const edgesChange = !isEqual(edges, nextEdges);
+    const optionsChange = !isEqual(options, nextOptions);
+    const eventsChange = !isEqual(events, nextEvents);
 
     if (nodesChange || edgesChange || optionsChange || eventsChange) {
       console.log("UPDATING GRAPH", nextProps, this.props);
@@ -54,36 +69,38 @@ class Graph extends Component {
 
     if (nodesChange) {
       const idIsEqual = (n1, n2) => n1.id === n2.id;
-      const nodesRemoved = differenceWith(this.props.graph.nodes, nextProps.graph.nodes, idIsEqual);
-      const nodesAdded = differenceWith(nextProps.graph.nodes, this.props.graph.nodes, idIsEqual);
+      const nodesRemoved = differenceWith(nodes, nextNodes, idIsEqual);
+      const nodesAdded = differenceWith(nextNodes, nodes, idIsEqual);
       const nodesChanged = differenceWith(
-        differenceWith(nextProps.graph.nodes, this.props.graph.nodes, isEqual),
+        differenceWith(nextNodes, nodes, isEqual),
         nodesAdded
       );
       this.patchNodes({ nodesRemoved, nodesAdded, nodesChanged });
     }
 
     if (edgesChange) {
-      const edgesRemoved = differenceWith(this.props.graph.edges, nextProps.graph.edges, isEqual);
-      const edgesAdded = differenceWith(nextProps.graph.edges, this.props.graph.edges, isEqual);
+      const edgesRemoved = differenceWith(edges, nextEdges, isEqual);
+      const edgesAdded = differenceWith(nextEdges, edges, isEqual);
       const edgesChanged = differenceWith(
-        differenceWith(nextProps.graph.edges, this.props.graph.edges, isEqual),
+        differenceWith(nextEdges, edges, isEqual),
         edgesAdded
       );
       this.patchEdges({ edgesRemoved, edgesAdded, edgesChanged });
     }
 
     if (optionsChange) {
-      this.Network.setOptions(nextProps.options);
       console.log("options changed");
+      this.Network.setOptions(nextProps.options);
     }
 
     if (eventsChange) {
-      let events = this.props.events || {};
-      for (let eventName of Object.keys(events)) this.Network.off(eventName, events[eventName]);
+      Object.keys(events).forEach((eventName) => {
+        this.Network.off(eventName, events[eventName]);
+      });
 
-      events = nextProps.events || {};
-      for (let eventName of Object.keys(events)) this.Network.on(eventName, events[eventName]);
+      Object.keys(nextEvents).forEach((eventName) => {
+        this.Network.on(eventName, nextEvents[eventName]);
+      });
     }
 
     this.Network.stabilize();
@@ -119,19 +136,26 @@ Graph.defaultProps = {
     nodes: [],
     edges: []
   },
-  style: { width: "100%", height: "100%" }
+  events: {},
+  style: { width: "100%", height: "100%" },
+  getNetwork: null
 };
+
 Graph.propTypes = {
-  options: PropTypes.object,
-  events: PropTypes.object,
+  options: PropTypes.shape({
+    width: PropTypes.string,
+    height: PropTypes.string
+  }).isRequired,
+  events: PropTypes.objectOf(PropTypes.func),
   graph: PropTypes.shape({
     nodes: PropTypes.array,
     edges: PropTypes.array
   }),
-  style: PropTypes.object,
-  getNetwork: PropTypes.func,
-  getNodes: PropTypes.func,
-  getEdges: PropTypes.func,
+  style: PropTypes.shape({
+    width: PropTypes.string,
+    height: PropTypes.string
+  }),
+  getNetwork: PropTypes.func
 };
 
 export default Graph;

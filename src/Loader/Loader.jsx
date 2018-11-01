@@ -7,13 +7,17 @@ const Loader = ({ loading }) => (
   <div className="loader">
     <HashLoader
       loading={loading}
-      color={"#eeeeee"}
+      color="#eeeeee"
     />
   </div>
 );
 
+Loader.defaultProps = {
+  loading: true
+};
+
 Loader.propTypes = {
   loading: PropTypes.bool
-}
+};
 
 export default Loader;

@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
 import { withStyles, createStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import purple from "@material-ui/core/colors/purple";
 import Zoom from "@material-ui/core/Zoom";
 
-import "./Landing.css"
+import "./Landing.css";
 
 const styles = theme => createStyles({
   button: {
@@ -44,16 +44,15 @@ const styles = theme => createStyles({
 });
 
 class Landing extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
       clicked: false
-    }
+    };
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, clickGuest } = this.props;
     const { clicked } = this.state;
     const transitionDuration = {
       enter: 200,
@@ -98,7 +97,7 @@ class Landing extends Component {
                 color="primary"
                 className={classNames(classes.button)}
                 size="large"
-                onClick={() => window.location.href = "/auth"}
+                onClick={() => { window.location.href = "/auth"; }}
               >
                 discord
               </Button>
@@ -113,20 +112,20 @@ class Landing extends Component {
                 color="primary"
                 className={classNames(classes.button)}
                 size="large"
-                onClick={this.props.clickGuest}
+                onClick={clickGuest}
               >
                 guest
               </Button>
             </Zoom>
           </div>
         </div>
-      </div >
+      </div>
     );
   }
 }
 
 Landing.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.shape({ button: PropTypes.string }).isRequired,
   clickGuest: PropTypes.func.isRequired
 };
 

@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
 import PropTypes from "prop-types";
@@ -109,11 +109,11 @@ class NumberToWord extends Component {
     this.withoutAnd = "";
   }
 
-  handleChange = type => event => {
+  handleChange = type => (event) => {
     this.setState({ [type]: event.target.value });
   }
 
-  handleArrowRef = node => {
+  handleArrowRef = (node) => {
     this.setState({
       arrowRef: node,
     });
@@ -139,10 +139,10 @@ class NumberToWord extends Component {
   render() {
     const { classes } = this.props;
     const { number, tooltip, arrowRef } = this.state;
-    this.withAnd = "?" + numberToWord(number, true);
-    this.withoutAnd = "?" + numberToWord(number, false);
+    this.withAnd = `?${numberToWord(number, true)}`;
+    this.withoutAnd = `?${numberToWord(number, false)}`;
     return (
-      <div className={classes.form} >
+      <div className={classes.form}>
         <Paper className={classNames(classes.root, classes.form)} elevation={1}>
           <Typography variant="headline" component="h3">
             Number to Words Converter
@@ -156,7 +156,7 @@ class NumberToWord extends Component {
             <TextField
               id="number"
               label="Number"
-              value={this.state.number}
+              value={number}
               onChange={this.handleChange("number")}
               type="number"
               margin="normal"
@@ -199,12 +199,12 @@ class NumberToWord extends Component {
                         <Tooltip
                           open={tooltip === type}
                           placement="top"
-                          title={
+                          title={(
                             <React.Fragment>
                               Copied!
                               <span className={classes.arrowArrow} ref={this.handleArrowRef} />
                             </React.Fragment>
-                          }
+                          )}
                           classes={{ popper: classes.arrowPopper }}
                           PopperProps={{
                             disablePortal: true,
@@ -233,7 +233,10 @@ class NumberToWord extends Component {
   }
 }
 NumberToWord.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.shape({
+    arrowPopper: PropTypes.string,
+    arrowArrow: PropTypes.string
+  }).isRequired,
 };
 
 export default withStyles(styles)(NumberToWord);

@@ -1,6 +1,6 @@
-export const initOptions = (width, height) => ({
-  width: width + "px",
-  height: height + "px",
+export const initOptions = (initialWidth, initialHeight) => ({
+  width: `${initialWidth}px`,
+  height: `${initialHeight}px`,
   autoResize: false,
   groups: {
     useDefaultGroups: true
@@ -37,7 +37,7 @@ export const initOptions = (width, height) => ({
       highlight: "#55befc",
     },
     shapeProperties: {
-      interpolation: false,    // 'true' for intensive zooming
+      interpolation: false, // 'true' for intensive zooming
       useBorderWithImage: true,
       useImageSize: false
     },
@@ -62,7 +62,7 @@ export const initOptions = (width, height) => ({
     },
     length: 100,
     width: 1,
-    selectionWidth: function (width) {
+    selectionWidth(width) {
       return width + 1;
     },
     arrows: {
@@ -75,28 +75,28 @@ export const initOptions = (width, height) => ({
 });
 
 export const createEvents = ({ unfocusNode, onDrag, onDragEnd }) => ({
-  selectNode: function (event) {
+  selectNode(event) {
     // console.log(event);
   },
-  select: function (event) {
+  select(event) {
     // console.log(this);
     // var { nodes, edges } = event;
   },
-  release: function (event) {
+  release(event) {
     // console.log(event);
   },
-  stabilized: function () {
+  stabilized() {
 
   },
-  deselectNode: function (deselect) {
+  deselectNode(deselect) {
     unfocusNode();
     // console.log("deselect: ", deselect);
   },
-  dragStart: function (event) {
+  dragStart(event) {
     console.log("dragstart");
     unfocusNode();
   },
-  dragEnd: function (event) {
+  dragEnd(event) {
 
   }
   // afterDrawing: function() {

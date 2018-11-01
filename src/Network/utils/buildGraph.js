@@ -1,17 +1,10 @@
 import localForage from "localforage";
 
-// const NON_IMAGE_COMMANDS = {
-//   "UNKNOWN COMMAND": true,
-//   "?welcomehome": true,
-//   "?unitedspaceventures": true,
-//   "?vd4u08lhb": true
-// };
-
-export default ({ items, updated }) => {
+export default (items, updated, hidden = false) => {
   console.log("building graph");
-  let commandToID = {};
-  let nodes = [];
-  let edges = [];
+  const commandToID = {};
+  const nodes = [];
+  const edges = [];
   const hasIncomingEdge = {};
 
   localForage.setItem("updated", updated);
@@ -19,7 +12,7 @@ export default ({ items, updated }) => {
   // iterate through each image once to generate mappings
   items.forEach((item, index) => {
     // each command in that image
-    item.command.forEach(cmd => {
+    item.command.forEach((cmd) => {
       // map the command name to the ID (index)
       commandToID[cmd] = index;
     });
@@ -27,21 +20,21 @@ export default ({ items, updated }) => {
 
   // iterate again to generate nodes and edges
   items.forEach((item, ID) => {
-    const nonImageCommand = !Boolean(item.lastModified);
-    // nodes            
+    const nonImageCommand = !item.lastModified;
+    // nodes
     nodes.push({
       id: ID,
       label: item.command.length === 1 ? item.command[0] : item.command.join("\n"),
       shape: nonImageCommand ? "image" : "circularImage",
       image: item.url,
       size: nonImageCommand ? 20 : 25,
-      hidden: true,
+      hidden,
       x: item.x,
       y: item.y
     });
 
     // outgoing edges for this node
-    item.leadsto.forEach(toNode => {
+    item.leadsto.forEach((toNode) => {
       const connectedID = commandToID[toNode];
       if (connectedID) {
         hasIncomingEdge[connectedID] = true;
@@ -52,11 +45,11 @@ export default ({ items, updated }) => {
 
   // loop through once more to color nodes without
   // any incoming edges
-  Object.keys(hasIncomingEdge).forEach(nodeID => {
+  Object.keys(hasIncomingEdge).forEach((nodeID) => {
     nodes[nodeID].color = {
       border: "black",
       highlight: "#55befc"
-    }
+    };
   });
 
   const graph = {
@@ -65,4 +58,4 @@ export default ({ items, updated }) => {
   };
 
   return { graph, commandToID };
-}
+};

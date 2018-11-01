@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 import { Link } from "react-router-dom";
 import { withStyles, createStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
@@ -33,11 +33,8 @@ const styles = () => createStyles({
 
 const BASE_URL = "https://cdn.discordapp.com/";
 
-const Dashboard = (props) => {
-  const { classes } = props;
-  const { avatar, username, id } = props.identity;
-
-  const isGuest = username ? false : true;
+const Dashboard = ({ identity: { avatar, username, id }, classes }) => {
+  const isGuest = !username;
   let avatarURL = BASE_URL;
 
   if (isGuest) {
@@ -70,11 +67,19 @@ const Dashboard = (props) => {
       </div>
     </div>
   );
-}
+};
+
 
 Dashboard.propTypes = {
-  identity: PropTypes.object.isRequired,
-  classes: PropTypes.object.isRequired,
+  identity: PropTypes.shape({
+    avatar: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    username: PropTypes.string,
+  }).isRequired,
+  classes: PropTypes.shape({
+    avatar: PropTypes.string,
+    bigAvatar: PropTypes.string
+  }).isRequired,
 };
 
 export default withStyles(styles)(Dashboard);

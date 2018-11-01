@@ -1,7 +1,7 @@
-import React from "react";
+// import React from "react";
 
-const InfoBox = () => (
-  <div style={{position: "absolute"}}>hello</div>
-)
+// const InfoBox = () => (
+//   <div style={{ position: "absolute" }}>hello</div>
+// );
 
-export default InfoBox;
+// export default InfoBox;
