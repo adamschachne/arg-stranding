@@ -71,13 +71,9 @@ MongoClient.connect(mongo_url, { useNewUrlParser: true }, function (err, client)
   });
 });
 
-function gracefulShutdown() {
+process.on('SIGINT', () => {
+  console.log("received SIGINT");
   console.log('Closing mongodb connection');
   _global.client.close();
   process.exit();
-}
-
-process.on('SIGINT', () => {
-  console.log("received SIGINT");
-  gracefulShutdown();
 });
