@@ -70,18 +70,18 @@ function getImageMetadata(url) {
         }).catch(err => {
           reject(err);
         });
-        return;
-      }
-      const $ = cheerio.load(response.data);
-      const { 0: width, 2: height, 4: type } = $("#download").attr("title").split(" ");
-      getStaticImageHeaders(url).then(({ "last-modified": lastModified }) => {
-        resolve({
-          lastModified,
-          width,
-          height,
-          type
+      } else {
+        const $ = cheerio.load(response.data);
+        const { 0: width, 2: height, 4: type } = $("#download").attr("title").split(" ");
+        getStaticImageHeaders(url).then(({ "last-modified": lastModified }) => {
+          resolve({
+            lastModified,
+            width: parseInt(width),
+            height: parseInt(height),
+            type
+          });
         });
-      });
+      }
     });
   });
 }
