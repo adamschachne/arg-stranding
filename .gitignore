@@ -28,4 +28,5 @@ creds
 
 .vs
 
-mongodb
+db/*
+!db/backup.js
