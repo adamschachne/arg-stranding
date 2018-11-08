@@ -144,7 +144,7 @@ class NumberToWord extends Component {
     return (
       <div className={classes.form}>
         <Paper className={classNames(classes.root, classes.form)} elevation={1}>
-          <Typography variant="headline" component="h3">
+          <Typography variant="h6" component="h3">
             Number to Words Converter
           </Typography>
           <div
