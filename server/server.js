@@ -1,13 +1,13 @@
-const mongo = require('mongodb');
-const GoogleSpreadsheet = require('google-spreadsheet');
-const configureApp = require('./configureApp');
-const fetchSheetData = require('./fetchSheetData');
-const updateData = require('./updateData');
+const mongo = require("mongodb");
+const GoogleSpreadsheet = require("google-spreadsheet");
+const configureApp = require("./configureApp");
+const fetchSheetData = require("./fetchSheetData");
+const updateData = require("./updateData");
 
 const MongoClient = mongo.MongoClient;
 const mongo_url = process.env.MONGODB_URI;
 const commandCollection = process.env.NODE_ENV === "production" ? "commands" : "test_commands";
-const ss_key = process.env.NODE_ENV === "production" ? '1v2R7KnoheXKbceBzJyj9c5n5m2BM1ELNXg8A7xEY0gg' : '1KaFqCNbLuMRa2prpDzyBITS8Txk9AxZX7nPZzp3WHLE';
+const ss_key = process.env.NODE_ENV === "production" ? "1v2R7KnoheXKbceBzJyj9c5n5m2BM1ELNXg8A7xEY0gg" : "1KaFqCNbLuMRa2prpDzyBITS8Txk9AxZX7nPZzp3WHLE";
 const PORT = process.env.PORT || 5000;
 const creds = {
   client_email: process.env.CLIENT_EMAIL,
@@ -40,7 +40,7 @@ function authenticateGoogleSheet(cb) {
   _global.doc.useServiceAccountAuth(creds, cb, fetchSheetData);
 }
 
-MongoClient.connect(mongo_url, { useNewUrlParser: true }, function (err, client) {
+MongoClient.connect(mongo_url, { useNewUrlParser: true }, (err, client) => {
   if (err) {
     console.error(err);
   }
@@ -71,9 +71,9 @@ MongoClient.connect(mongo_url, { useNewUrlParser: true }, function (err, client)
   });
 });
 
-process.on('SIGINT', () => {
+process.on("SIGINT", () => {
   console.log("received SIGINT");
-  console.log('Closing mongodb connection');
+  console.log("Closing mongodb connection");
   _global.client.close();
   process.exit();
 });
