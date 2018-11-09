@@ -18,7 +18,7 @@ const styles = theme => ({
     // backgroundColor: 'white',
     // fontFamily: "'Source Sans Pro', sans-serif",
     // paddingTop: '50px',
-    paddingBottom: "10vh"
+    // paddingBottom: "10vh"
     // width: '50vw',
     // height: '50vh'
   },

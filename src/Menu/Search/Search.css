@@ -40,20 +40,6 @@
   border: none;
 }
 
-/* .search-item {
-  color: black;
-  display: grid;
-  align-items: center;
-  padding: 4px 10px;
-  cursor: pointer;
-  min-height: 50px;
-  border-bottom: 1px solid rgba(51,51,51,.12);
-}
-
-.search-item:hover {
-  background-color: #e0e4e7;
-} */
-
 .search-message {
   align-self: center;
   flex-grow: 1;
