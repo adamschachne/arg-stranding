@@ -5,10 +5,14 @@ import IconButton from "@material-ui/core/IconButton";
 import Home from "@material-ui/icons/Home";
 import { Link } from "react-router-dom";
 import keycode from "keycode";
+import { withStyles, createStyles } from "@material-ui/core";
 import SearchItems from "./SearchItems";
+import "./Search.css";
 // import InfoBox from '../Info/InfoBox';
 
-import "./Search.css";
+const styles = createStyles({
+
+});
 
 const PLACEHOLDER = "start typing to search...";
 
@@ -141,6 +145,10 @@ class Search extends Component {
 }
 
 Search.propTypes = {
+  classes: PropTypes.shape({
+    // searchItems: PropTypes.string.isRequired,
+    // searchResults: PropTypes.string.isRequired,
+  }).isRequired,
   loading: PropTypes.bool.isRequired,
   commandToID: PropTypes.objectOf(PropTypes.number).isRequired,
   searchRef: PropTypes.shape({
@@ -149,4 +157,4 @@ Search.propTypes = {
   focusNode: PropTypes.func.isRequired
 };
 
-export default Search;
+export default withStyles(styles)(Search);
