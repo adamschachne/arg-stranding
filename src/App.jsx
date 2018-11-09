@@ -25,7 +25,9 @@ class App extends Component {
 
   componentDidMount() {
     window.addEventListener("resize", this.onResize);
-    fetch("profile").then((response) => {
+    fetch("profile", {
+      credentials: "same-origin"
+    }).then((response) => {
       if (response.status === 401) {
         throw new Error("unauthorized");
       }
@@ -60,7 +62,9 @@ class App extends Component {
 
   clickGuest = async () => {
     try {
-      const guestResponse = await fetch("guest");
+      const guestResponse = await fetch("guest", {
+        credentials: "same-origin"
+      });
       const identity = await guestResponse.json();
       console.log(identity);
       this.setState({ identity: identity.guest });

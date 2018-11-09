@@ -65,7 +65,9 @@ class NetworkContainer extends PureComponent {
   }
 
   componentDidMount() {
-    fetch("/data").then((value) => {
+    fetch("/data", {
+      credentials: "same-origin"
+    }).then((value) => {
       if (value.status === 401) {
         throw new Error("unauthorized");
       }
