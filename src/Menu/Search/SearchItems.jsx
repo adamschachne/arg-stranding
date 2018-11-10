@@ -16,9 +16,6 @@ const styles = createStyles({
       backgroundColor: "#e0e4e7"
     }
   },
-  selected: {
-    backgroundColor: "#bfc1c1"
-  },
   searchItems: {
     position: "absolute",
     top: 35,
@@ -43,14 +40,23 @@ const styles = createStyles({
 const NO_RESULTS = "No Results";
 
 const Item = ({
-  label, className, onHover, index
+  label,
+  className,
+  onHover,
+  index,
+  selected
 }) => {
+  const style = selected ? {
+    backgroundColor: "#bfc1c1"
+  } : undefined;
+
   return (
     <div
       className={className}
       data-index={index}
       onMouseOver={() => onHover(index)}
       onFocus={() => undefined}
+      style={style}
     >
       {label}
     </div>
@@ -61,7 +67,8 @@ Item.propTypes = {
   index: PropTypes.number.isRequired,
   label: PropTypes.string.isRequired,
   className: PropTypes.string.isRequired,
-  onHover: PropTypes.func.isRequired
+  onHover: PropTypes.func.isRequired,
+  selected: PropTypes.bool.isRequired
 };
 
 function getIndex({ target }) {
@@ -69,19 +76,18 @@ function getIndex({ target }) {
   return index || null;
 }
 
-const SearchItems = (props) => {
-  const {
-    filteredCommands, classes, selectItem, hoverItem, selected
-  } = props;
-  const { searchItem, searchItems, searchResults } = classes;
-
-  let commands;
-  if (filteredCommands.length === 0) {
-    commands = [NO_RESULTS];
-  } else {
-    commands = filteredCommands;
-  }
-
+const SearchItems = ({
+  filteredCommands,
+  classes: {
+    searchItem,
+    searchItems,
+    searchResults,
+  },
+  selectItem,
+  hoverItem,
+  selected
+}) => {
+  const commands = filteredCommands.length === 0 ? [NO_RESULTS] : filteredCommands;
   return (
     <div
       role="presentation"
@@ -97,7 +103,8 @@ const SearchItems = (props) => {
         {commands.map((label, index) => (
           <Item
             key={label}
-            className={searchItem}
+            className={classNames(searchItem)}
+            selected={index === selected}
             index={index}
             onHover={hoverItem}
             label={label}

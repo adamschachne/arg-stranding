@@ -45,8 +45,9 @@ class Search extends Component {
       },
       down: () => {
         this.setState(({ selected }) => {
+          const commandsLength = this.filteredCommands.length;
           const inc = selected + 1;
-          const max = this.filteredCommands.length - 1;
+          const max = commandsLength > 0 ? commandsLength - 1 : 0;
           return {
             selected: inc > max ? max : inc
           };
