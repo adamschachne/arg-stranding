@@ -85,6 +85,7 @@
     "react-hot-loader": "^4.3.11",
     "react-router-dom": "^4.3.1",
     "react-spinners": "^0.4.7",
+    "react-virtualized": "^9.21.0",
     "resolve": "1.8.1",
     "sass-loader": "7.1.0",
     "shelljs": "^0.8.2",
