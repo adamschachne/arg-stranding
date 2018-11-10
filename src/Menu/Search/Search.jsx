@@ -25,13 +25,46 @@ class Search extends Component {
     this.state = {
       size: PLACEHOLDER.length,
       value: "",
-      searching: false
+      selected: 0
     };
+    this.hasFocus = false;
     this.commandsArray = [];
     this.commandsArrayLowerCase = [];
     this.lowerToUpper = {};
     this.usingEdgeOrIE = (document.documentMode || /Edge/.test(navigator.userAgent));
-    // this.searching = false;
+    this.filteredCommands = [];
+
+    this.handleKey = {
+      up: () => {
+        this.setState(({ selected }) => {
+          const dec = selected - 1;
+          return {
+            selected: dec < 0 ? 0 : dec
+          };
+        });
+      },
+      down: () => {
+        this.setState(({ selected }) => {
+          const inc = selected + 1;
+          const max = this.filteredCommands.length - 1;
+          return {
+            selected: inc > max ? max : inc
+          };
+        });
+      },
+      enter: () => {
+        const { selected } = this.state;
+        this.closeSearch(this.filteredCommands[selected]);
+      },
+      esc: () => {
+        this.closeSearch();
+      },
+      tab: (event) => {
+        const { searchRef: { current } } = this.props;
+        event.preventDefault();
+        current.blur();
+      }
+    };
   }
 
 
@@ -58,31 +91,49 @@ class Search extends Component {
   }
 
   onWindowKeydown = (event) => {
+    const { keyCode } = event;
     const { searchRef: { current } } = this.props;
-    if (keycode(event) === "esc") {
-      this.closeSearch();
-    } else if (keycode(event) === "tab") {
-      event.preventDefault();
-      current.blur();
-    } else if (keycode(event) !== "ctrl" && keycode(event) !== "alt") { // not Ctrl or Alt
-      current.focus();
+    const key = keycode(event);
+
+    if (this.hasFocus === false) {
+      const lower = keycode("0");
+      const upper = keycode("z");
+      if (keyCode >= lower && keyCode <= upper) {
+        current.focus();
+      }
     }
+
+    const func = this.handleKey[key];
+    if (func) func(event);
   }
 
-  closeSearch = (target) => {
+  closeSearch = (target = null) => {
     const { focusNode, searchRef: { current } } = this.props;
     this.setState(() => {
       current.blur();
       current.value = "";
       focusNode(target);
-      return { searching: false, value: "", size: PLACEHOLDER.length };
+      return {
+        selected: 0,
+        value: "",
+        size: PLACEHOLDER.length
+      };
     });
   }
 
+  hoverItem = (index) => {
+    // console.log(index);
+    this.setState({ selected: index });
+  }
+
   render() {
-    const { value, size, searching } = this.state;
+    const {
+      value,
+      size,
+      selected
+    } = this.state;
     const { loading, searchRef } = this.props;
-    const filteredCommands = value === "" ? [] : this.commandsArrayLowerCase
+    this.filteredCommands = value === "" ? [] : this.commandsArrayLowerCase
       .filter(cmd => cmd.indexOf(value.toLowerCase()) !== -1)
       .map(cmd => this.lowerToUpper[cmd]);
 
@@ -98,59 +149,35 @@ class Search extends Component {
             <Home />
           </IconButton>
         </InputAdornment>
-        {/* <InfoBox /> */}
-
-        {/* <input
-          type="search"
-          autoComplete="off"
-          autoCapitalize="off"
-          spellCheck="false"
-          size={size}
-          placeholder={loading ? "loading..." : PLACEHOLDER}
-          ref={searchRef}
-          onFocus={() => {
-            console.log("focusing");
-            this.setState({ searching: true });
-          }}
-          onBlur={() => {
-            console.log("blurring");
-          }}
-          onChange={({ target: { value: newValue } }) => {
-            this.setState({
-              size: PLACEHOLDER.length < newValue.length ? newValue.length : PLACEHOLDER.length,
-              value: newValue
-            });
-          }}
-        /> */}
         <Input
           type="search"
+          fullWidth
           autoComplete="off"
           placeholder={loading ? "loading..." : PLACEHOLDER}
           inputProps={{
             size,
             autoCapitalize: "off",
             spellCheck: "false",
-            onFocus: () => {
-              console.log("focusing");
-              this.setState({ searching: true });
-            },
-            onBlur: () => {
-              console.log("blurring");
-            },
+            onFocus: () => { this.hasFocus = true; },
+            onBlur: () => { this.hasFocus = false; },
             onChange: ({ target: { value: newValue } }) => {
-              this.setState({
+              // TODO use old selected value
+              this.setState(oldState => ({
                 size: PLACEHOLDER.length < newValue.length ? newValue.length : PLACEHOLDER.length,
-                value: newValue
-              });
+                value: newValue,
+                selected: 0
+              }));
             }
           }}
           inputRef={searchRef}
         />
         <CompatibilityMessage show={this.usingEdgeOrIE} loading={loading} />
-        {searching && value.length > 0 && (
+        {value.length > 0 && (
           <SearchItems
-            filteredCommands={filteredCommands}
-            closeSearch={this.closeSearch}
+            selected={selected}
+            filteredCommands={this.filteredCommands}
+            selectItem={this.closeSearch}
+            hoverItem={this.hoverItem}
           />
         )}
       </div>

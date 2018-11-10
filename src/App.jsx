@@ -28,6 +28,7 @@ class App extends Component {
     fetch("profile", {
       credentials: "same-origin"
     }).then((response) => {
+      // TODO CHANGE THIS STATUS
       if (response.status === 401) {
         throw new Error("unauthorized");
       }
@@ -73,16 +74,16 @@ class App extends Component {
     }
   }
 
-  renderMenu = ({
-    commandToID, loading, searchRef, focusNode
-  }) => (
-    <Search
-      loading={loading}
-      searchRef={searchRef}
-      commandToID={commandToID}
-      focusNode={focusNode}
-    />
-  )
+  // renderMenu = ({
+  //   commandToID, loading, searchRef, focusNode
+  // }) => (
+  //   <Search
+  //     loading={loading}
+  //     searchRef={searchRef}
+  //     commandToID={commandToID}
+  //     focusNode={focusNode}
+  //   />
+  // )
 
   render() {
     const { identity, loading, dimensions: { width, height } } = this.state;
@@ -106,7 +107,7 @@ class App extends Component {
                 width,
                 height
               }}
-              renderMenu={this.renderMenu}
+              // renderMenu={this.renderMenu}
             />
           )}
         />

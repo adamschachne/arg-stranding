@@ -6,6 +6,7 @@ import Graph from "./Graph";
 import { initOptions } from "./utils/config";
 import buildGraph from "./utils/buildGraph";
 import Loader from "../Loader/Loader";
+import Search from "../Menu/Search/Search";
 // import InfoBox from "../Info/InfoBox";
 
 class NetworkContainer extends PureComponent {
@@ -163,7 +164,7 @@ class NetworkContainer extends PureComponent {
 
   render() {
     // console.log("Network called render", this.state);
-    const { style, renderMenu } = this.props;
+    const { style } = this.props;
     const {
       loading, commandToID, graph, options
     } = this.state;
@@ -173,12 +174,12 @@ class NetworkContainer extends PureComponent {
       <div style={style}>
         {loading && <Loader loading={loading} />}
         {/* MENU */}
-        {renderMenu({
-          searchRef: this.searchRef,
-          commandToID,
-          loading,
-          focusNode: cmd => this.setState({ focusNode: commandToID[cmd] })
-        })}
+        <Search
+          loading={loading}
+          searchRef={this.searchRef}
+          commandToID={commandToID}
+          focusNode={cmd => this.setState({ focusNode: commandToID[cmd] })}
+        />
         {/* <InfoBox /> */}
         <Graph
           getNetwork={(network) => { this.network = network; }}
@@ -196,7 +197,6 @@ class NetworkContainer extends PureComponent {
 }
 
 NetworkContainer.propTypes = {
-  renderMenu: PropTypes.func.isRequired,
   style: PropTypes.shape({
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired

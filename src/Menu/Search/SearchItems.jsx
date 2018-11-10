@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import classNames from "classnames";
 import { withStyles, createStyles } from "@material-ui/core";
 
 const styles = createStyles({
@@ -14,6 +15,9 @@ const styles = createStyles({
     "&:hover": {
       backgroundColor: "#e0e4e7"
     }
+  },
+  selected: {
+    backgroundColor: "#bfc1c1"
   },
   searchItems: {
     position: "absolute",
@@ -36,61 +40,76 @@ const styles = createStyles({
   }
 });
 
-const Item = ({ children, className }) => {
-  const label = !children ? "No Results" : children;
+const NO_RESULTS = "No Results";
+
+const Item = ({
+  label, className, onHover, index
+}) => {
   return (
     <div
       className={className}
-      data-label={label}
+      data-index={index}
+      onMouseOver={() => onHover(index)}
+      onFocus={() => undefined}
     >
       {label}
     </div>
   );
 };
 
-Item.defaultProps = {
-  children: null
-};
-
 Item.propTypes = {
+  index: PropTypes.number.isRequired,
+  label: PropTypes.string.isRequired,
   className: PropTypes.string.isRequired,
-  children: PropTypes.string
+  onHover: PropTypes.func.isRequired
 };
 
-function handleClick(target, closeSearch) {
-  const label = target.getAttribute("data-label");
-  // this will focus the node, or remove focus (if nothing is clicked)
-  closeSearch(label);
+function getIndex({ target }) {
+  const index = parseInt(target.getAttribute("data-index"), 10);
+  return index || null;
 }
 
-function handleKeyDown(event) {
-
-}
-
-const SearchItems = ({ filteredCommands, closeSearch, classes }) => {
+const SearchItems = (props) => {
+  const {
+    filteredCommands, classes, selectItem, hoverItem, selected
+  } = props;
   const { searchItem, searchItems, searchResults } = classes;
+
+  let commands;
+  if (filteredCommands.length === 0) {
+    commands = [NO_RESULTS];
+  } else {
+    commands = filteredCommands;
+  }
+
   return (
     <div
       role="presentation"
-      onClick={event => handleClick(event.target, closeSearch)}
+      onClick={(event) => {
+        const index = getIndex(event);
+        const label = filteredCommands[index];
+        selectItem(label);
+      }}
       className={searchItems}
-      onKeyDown={handleKeyDown}
+      onKeyDown={() => undefined}
     >
       <div className={searchResults}>
-        {filteredCommands.length === 0
-          ? (
-            <Item className={searchItem} />
-          ) : filteredCommands.map(label => (
-            <Item
-              key={label}
-              className={searchItem}
-            >
-              {label}
-            </Item>
-          ))}
+        {commands.map((label, index) => (
+          <Item
+            key={label}
+            className={searchItem}
+            index={index}
+            onHover={hoverItem}
+            label={label}
+          />
+        ))}
       </div>
     </div>
   );
+};
+
+SearchItems.defaultProps = {
+  selected: 0
 };
 
 SearchItems.propTypes = {
@@ -99,8 +118,10 @@ SearchItems.propTypes = {
     searchItems: PropTypes.string.isRequired,
     searchResults: PropTypes.string.isRequired,
   }).isRequired,
-  closeSearch: PropTypes.func.isRequired,
-  filteredCommands: PropTypes.arrayOf(PropTypes.string).isRequired
+  filteredCommands: PropTypes.arrayOf(PropTypes.string).isRequired,
+  selected: PropTypes.number,
+  selectItem: PropTypes.func.isRequired,
+  hoverItem: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(SearchItems);
