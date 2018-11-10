@@ -5,9 +5,11 @@ import IconButton from "@material-ui/core/IconButton";
 import Home from "@material-ui/icons/Home";
 import { Link } from "react-router-dom";
 import keycode from "keycode";
-import { withStyles, createStyles } from "@material-ui/core";
+import { withStyles, createStyles, Input } from "@material-ui/core";
 import SearchItems from "./SearchItems";
+import CompatibilityMessage from "./CompatibilityMessage";
 import "./Search.css";
+
 // import InfoBox from '../Info/InfoBox';
 
 const styles = createStyles({
@@ -32,27 +34,9 @@ class Search extends Component {
     // this.searching = false;
   }
 
-  // eslint-disable-next-line
-  onWindowKeydown = event => {
-    const { searchRef: { current } } = this.props;
-    if (event.keyCode < 112 || event.keyCode > 121) {
-      if (keycode(event) === "esc") {
-        this.closeSearch();
-      } else if (keycode(event) === "tab") {
-        event.preventDefault();
-        current.blur();
-      } else if (keycode(event) !== "ctrl" && keycode(event) !== "alt") { // not Ctrl or Alt
-        current.focus();
-      }
-    }
-  }
 
   componentDidMount() {
     window.addEventListener("keydown", this.onWindowKeydown);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener("keydown", this.onWindowKeydown);
   }
 
   componentDidUpdate(prevProps) {
@@ -69,6 +53,22 @@ class Search extends Component {
     }, {});
   }
 
+  componentWillUnmount() {
+    window.removeEventListener("keydown", this.onWindowKeydown);
+  }
+
+  onWindowKeydown = (event) => {
+    const { searchRef: { current } } = this.props;
+    if (keycode(event) === "esc") {
+      this.closeSearch();
+    } else if (keycode(event) === "tab") {
+      event.preventDefault();
+      current.blur();
+    } else if (keycode(event) !== "ctrl" && keycode(event) !== "alt") { // not Ctrl or Alt
+      current.focus();
+    }
+  }
+
   closeSearch = (target) => {
     const { focusNode, searchRef: { current } } = this.props;
     this.setState(() => {
@@ -79,7 +79,6 @@ class Search extends Component {
     });
   }
 
-  // eslint-disable-next-line
   render() {
     const { value, size, searching } = this.state;
     const { loading, searchRef } = this.props;
@@ -100,7 +99,8 @@ class Search extends Component {
           </IconButton>
         </InputAdornment>
         {/* <InfoBox /> */}
-        <input
+
+        {/* <input
           type="search"
           autoComplete="off"
           autoCapitalize="off"
@@ -121,22 +121,36 @@ class Search extends Component {
               value: newValue
             });
           }}
+        /> */}
+        <Input
+          type="search"
+          autoComplete="off"
+          placeholder={loading ? "loading..." : PLACEHOLDER}
+          inputProps={{
+            size,
+            autoCapitalize: "off",
+            spellCheck: "false",
+            onFocus: () => {
+              console.log("focusing");
+              this.setState({ searching: true });
+            },
+            onBlur: () => {
+              console.log("blurring");
+            },
+            onChange: ({ target: { value: newValue } }) => {
+              this.setState({
+                size: PLACEHOLDER.length < newValue.length ? newValue.length : PLACEHOLDER.length,
+                value: newValue
+              });
+            }
+          }}
+          inputRef={searchRef}
         />
-        {this.usingEdgeOrIE && (
-          <div
-            className="search-message"
-            style={{
-              opacity: loading ? 1 : 0
-            }}
-          >
-            There are some compatibility issues with Edge and IE
-          </div>
-        )}
-
+        <CompatibilityMessage show={this.usingEdgeOrIE} loading={loading} />
         {searching && value.length > 0 && (
           <SearchItems
             filteredCommands={filteredCommands}
-            click={this.closeSearch}
+            closeSearch={this.closeSearch}
           />
         )}
       </div>

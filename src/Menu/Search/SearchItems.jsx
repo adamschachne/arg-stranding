@@ -24,7 +24,7 @@ const styles = createStyles({
     width: "100vw",
     height: "calc(100vh - 35px)",
     background: "rgba(0,0,0,.5)",
-    display: "inline-block"
+    display: "inline-block",
   },
   searchResults: {
     width: 700,
@@ -36,36 +36,46 @@ const styles = createStyles({
   }
 });
 
-const Item = ({ children, click, className }) => {
+const Item = ({ children, className }) => {
   const label = !children ? "No Results" : children;
-  /* eslint-disable */
   return (
     <div
       className={className}
-      onClick={click}
+      data-label={label}
     >
       {label}
     </div>
   );
-  /* eslint-enable */
 };
 
 Item.defaultProps = {
-  click: null,
   children: null
 };
 
 Item.propTypes = {
   className: PropTypes.string.isRequired,
-  click: PropTypes.func,
   children: PropTypes.string
 };
 
-const SearchItems = ({ filteredCommands, click, classes }) => {
+function handleClick(target, closeSearch) {
+  const label = target.getAttribute("data-label");
+  // this will focus the node, or remove focus (if nothing is clicked)
+  closeSearch(label);
+}
+
+function handleKeyDown(event) {
+
+}
+
+const SearchItems = ({ filteredCommands, closeSearch, classes }) => {
   const { searchItem, searchItems, searchResults } = classes;
   return (
-    /* eslint-disable */
-    <div className={searchItems}>
+    <div
+      role="presentation"
+      onClick={event => handleClick(event.target, closeSearch)}
+      className={searchItems}
+      onKeyDown={handleKeyDown}
+    >
       <div className={searchResults}>
         {filteredCommands.length === 0
           ? (
@@ -74,14 +84,12 @@ const SearchItems = ({ filteredCommands, click, classes }) => {
             <Item
               key={label}
               className={searchItem}
-              click={() => { click(label); }}
             >
               {label}
             </Item>
           ))}
       </div>
     </div>
-    /* eslint-enable */
   );
 };
 
@@ -91,7 +99,7 @@ SearchItems.propTypes = {
     searchItems: PropTypes.string.isRequired,
     searchResults: PropTypes.string.isRequired,
   }).isRequired,
-  click: PropTypes.func.isRequired,
+  closeSearch: PropTypes.func.isRequired,
   filteredCommands: PropTypes.arrayOf(PropTypes.string).isRequired
 };
 
