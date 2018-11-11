@@ -15,8 +15,12 @@ import "./Search.css";
 const styles = createStyles({
 
 });
-
 const PLACEHOLDER = "start typing to search...";
+
+function getDataIndex(target) {
+  const index = parseInt(target.getAttribute("data-index"), 10);
+  return index || -1;
+}
 
 class Search extends Component {
   constructor(props) {
@@ -33,13 +37,14 @@ class Search extends Component {
     this.lowerToUpper = {};
     this.usingEdgeOrIE = (document.documentMode || /Edge/.test(navigator.userAgent));
     this.filteredCommands = [];
-
+    this.itemsRef = React.createRef();
     this.handleKey = {
       up: () => {
         this.setState(({ selected }) => {
           const dec = selected - 1;
+          const next = dec < 0 ? 0 : dec;
           return {
-            selected: dec < 0 ? 0 : dec
+            selected: next
           };
         });
       },
@@ -68,23 +73,35 @@ class Search extends Component {
     };
   }
 
-
   componentDidMount() {
     window.addEventListener("keydown", this.onWindowKeydown);
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     const { commandToID } = this.props;
-    if (prevProps.commandToID === commandToID) {
-      return;
+    const { selected } = this.state;
+
+    if (prevState.selected !== selected) {
+      const { current } = this.itemsRef;
+      if (current) {
+        const node = current.querySelectorAll(`*[data-index='${selected}']`)[0];
+        if (node) {
+          node.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest"
+          });
+        }
+      }
     }
 
-    this.commandsArray = Object.keys(commandToID).sort();
-    this.commandsArrayLowerCase = this.commandsArray.map(command => command.toLowerCase());
-    this.lowerToUpper = this.commandsArrayLowerCase.reduce((result, item, index) => {
-      result[item] = this.commandsArray[index]; // eslint-disable-line no-param-reassign
-      return result;
-    }, {});
+    if (prevProps.commandToID !== commandToID) {
+      this.commandsArray = Object.keys(commandToID).sort();
+      this.commandsArrayLowerCase = this.commandsArray.map(command => command.toLowerCase());
+      this.lowerToUpper = this.commandsArrayLowerCase.reduce((result, item, index) => {
+        result[item] = this.commandsArray[index]; // eslint-disable-line no-param-reassign
+        return result;
+      }, {});
+    }
   }
 
   componentWillUnmount() {
@@ -108,12 +125,18 @@ class Search extends Component {
     if (func) func(event);
   }
 
-  closeSearch = (target = null) => {
+  clickItem = ({ target = null }) => {
+    // get label from target
+    const label = target ? this.filteredCommands[getDataIndex(target)] : null;
+    this.closeSearch(label);
+  }
+
+  closeSearch = (label = null) => {
     const { focusNode, searchRef: { current } } = this.props;
     this.setState(() => {
       current.blur();
       current.value = "";
-      focusNode(target);
+      focusNode(label);
       return {
         selected: 0,
         value: "",
@@ -177,8 +200,9 @@ class Search extends Component {
           <SearchItems
             selected={selected}
             filteredCommands={this.filteredCommands}
-            selectItem={this.closeSearch}
+            selectItem={this.clickItem}
             hoverItem={this.hoverItem}
+            itemsRef={this.itemsRef}
           />
         )}
       </div>

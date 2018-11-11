@@ -71,11 +71,6 @@ Item.propTypes = {
   selected: PropTypes.bool.isRequired
 };
 
-function getIndex({ target }) {
-  const index = parseInt(target.getAttribute("data-index"), 10);
-  return index || null;
-}
-
 const SearchItems = ({
   filteredCommands,
   classes: {
@@ -85,21 +80,21 @@ const SearchItems = ({
   },
   selectItem,
   hoverItem,
-  selected
+  selected,
+  itemsRef
 }) => {
   const commands = filteredCommands.length === 0 ? [NO_RESULTS] : filteredCommands;
   return (
     <div
       role="presentation"
-      onClick={(event) => {
-        const index = getIndex(event);
-        const label = filteredCommands[index];
-        selectItem(label);
-      }}
+      onClick={selectItem}
       className={searchItems}
       onKeyDown={() => undefined}
     >
-      <div className={searchResults}>
+      <div
+        className={searchResults}
+        ref={itemsRef}
+      >
         {commands.map((label, index) => (
           <Item
             key={label}
@@ -128,7 +123,11 @@ SearchItems.propTypes = {
   filteredCommands: PropTypes.arrayOf(PropTypes.string).isRequired,
   selected: PropTypes.number,
   selectItem: PropTypes.func.isRequired,
-  hoverItem: PropTypes.func.isRequired
+  hoverItem: PropTypes.func.isRequired,
+  itemsRef: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.any })
+  ]).isRequired
 };
 
 export default withStyles(styles)(SearchItems);
