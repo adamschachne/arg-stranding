@@ -67,33 +67,13 @@ class NetworkContainer extends PureComponent {
 
   componentDidMount() {
     fetch("/data", {
-      credentials: "same-origin"
+      credentials: "same-origin",
+      redirect: "follow"
     }).then((value) => {
-      if (value.status === 401) {
-        throw new Error("unauthorized");
-      }
       return value.json();
     }).then(({ items, updated }) => {
       console.log({ items, updated }, new Date(updated).getTime());
       const hideBeforeStabilize = Boolean(this.network);
-
-      localForage.getItem("updated").then((lastUpdated) => {
-        // console.log("last update: ", new Date(lastUpdated).getTime())
-        if (lastUpdated && lastUpdated === updated) {
-          // get data from localforage and use those positions
-          localForage.getItem("positions").then((positions) => {
-            console.log("USING EXISTING POSITIONS: ");
-            items.forEach((item, ID) => {
-              // set each node's x,y where they were last
-              Object.assign(item, positions[ID]);
-            });
-          });
-        }
-        this.setState({
-          ...buildGraph(items, updated, hideBeforeStabilize),
-          loading: hideBeforeStabilize
-        });
-      });
 
       if (hideBeforeStabilize) {
         this.network.once("stabilized", () => {
@@ -107,9 +87,36 @@ class NetworkContainer extends PureComponent {
           this.unhideNodes();
         });
       }
+
+      localForage.getItem("updated").then((lastUpdated) => {
+        // console.log("last update: ", new Date(lastUpdated).getTime())
+        if (lastUpdated && lastUpdated !== updated) {
+          // data has changed, build graph with new data
+          this.setState({
+            ...buildGraph(items, updated, hideBeforeStabilize),
+            loading: hideBeforeStabilize
+          });
+        } else {
+          // get data from localforage and use those positions
+          localForage.getItem("positions").then((positions) => {
+            console.log("USING EXISTING POSITIONS: ");
+            // items.forEach((item, ID) => {
+            //   // set each node's x,y where they were last
+            //   Object.assign(item, positions[ID]);
+            // });
+            this.setState({
+              ...buildGraph(
+                items.map((item, ID) => Object.assign({}, item, positions[ID])),
+                updated,
+                hideBeforeStabilize
+              ),
+              loading: hideBeforeStabilize
+            });
+          });
+        }
+      });
     }).catch((err) => {
       console.error(err);
-      // this.setState(buildGraph(data));
     });
   }
 

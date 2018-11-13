@@ -58,13 +58,13 @@ module.exports = function configureApp(_global, fetchSheetData) {
         console.log("adding user to ip collecting");
         addIpAddress(_global, ip, { username, discriminator, id });
         return next();
-      } else {
-        throw new Error("no token")
       }
+      throw new Error("no identity");
     } catch (err) {
+      console.log("bad session:", ip);
       addIpAddress(_global, ip);
-      console.log("bad session", err.message);
-      return res.sendStatus(401);
+      return res.redirect("/");
+      // return res.sendStatus(401);
     }
   }
 
@@ -200,7 +200,6 @@ module.exports = function configureApp(_global, fetchSheetData) {
 
   // All remaining requests return the React app, so it can handle routing.
   app.get('*', function (request, response) {
-    console.log("sending index");
     response.sendFile(path.resolve(paths.appBuild, 'index.html'));
   });
 

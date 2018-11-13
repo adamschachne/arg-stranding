@@ -26,12 +26,9 @@ class App extends Component {
   componentDidMount() {
     window.addEventListener("resize", this.onResize);
     fetch("profile", {
-      credentials: "same-origin"
+      credentials: "same-origin",
+      redirect: "follow"
     }).then((response) => {
-      // TODO CHANGE THIS STATUS
-      if (response.status === 401) {
-        throw new Error("unauthorized");
-      }
       return response.json();
     }).then((identity) => {
       console.log(identity);
