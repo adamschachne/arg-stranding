@@ -139,6 +139,7 @@ class NumberToWord extends Component {
   render() {
     const { classes } = this.props;
     const { number, tooltip, arrowRef } = this.state;
+    const error = number > Number.MAX_SAFE_INTEGER;
     this.withAnd = `?${numberToWord(number, true)}`;
     this.withoutAnd = `?${numberToWord(number, false)}`;
     return (
@@ -155,7 +156,8 @@ class NumberToWord extends Component {
           >
             <TextField
               id="number"
-              label="Number"
+              label={error ? "Possible loss of precision" : "Number"}
+              error={error}
               value={number}
               onChange={this.handleChange("number")}
               type="number"
