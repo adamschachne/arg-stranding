@@ -78,7 +78,6 @@ class Landing extends Component {
                 variant="contained"
                 color="primary"
                 className={classNames(classes.button)}
-                // component={Link} to="/graph"
                 onClick={() => this.setState({ clicked: true })}
                 size="large"
               >

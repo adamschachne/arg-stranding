@@ -1,7 +1,8 @@
-export const initOptions = (initialWidth, initialHeight) => ({
-  width: `${initialWidth}px`,
-  height: `${initialHeight}px`,
-  autoResize: false,
+/** @type {vis.Options} */
+export const options = {
+  width: "100%",
+  height: "100%",
+  autoResize: true,
   groups: {
     useDefaultGroups: true
   },
@@ -72,7 +73,7 @@ export const initOptions = (initialWidth, initialHeight) => ({
       }
     }
   }
-});
+};
 
 export const createEvents = ({ unfocusNode, onDrag, onDragEnd }) => ({
   selectNode(event) {

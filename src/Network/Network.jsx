@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import localForage from "localforage";
 import copy from "copy-to-clipboard";
 import Graph from "./Graph";
-import { initOptions } from "./utils/config";
+import { options as initialOptions } from "./utils/config";
 import buildGraph from "./utils/buildGraph";
 import Loader from "../Loader/Loader";
 import Search from "../Menu/Search/Search";
@@ -18,7 +18,7 @@ class NetworkContainer extends PureComponent {
         nodes: [],
         edges: []
       },
-      options: initOptions(width, height),
+      options: initialOptions,
       commandToID: {},
       loading: true,
       focusNode: null
@@ -178,7 +178,13 @@ class NetworkContainer extends PureComponent {
     const { width, height } = style;
     console.log(style);
     return (
-      <div style={style}>
+      <div
+        style={{
+          ...style,
+          width: "100vw",
+          height: "100vh"
+        }}
+      >
         {loading && <Loader loading={loading} />}
         {/* MENU */}
         <Search
@@ -193,8 +199,8 @@ class NetworkContainer extends PureComponent {
           graph={graph}
           options={{
             ...options,
-            width: `${width}px`,
-            height: `${height}px`,
+            // width: `${width}px`,
+            // height: `${height}px`,
           }}
           events={this.events}
         />
