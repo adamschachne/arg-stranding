@@ -7,6 +7,8 @@ import { options as initialOptions } from "./utils/config";
 import buildGraph from "./utils/buildGraph";
 import Loader from "../Loader/Loader";
 import Search from "../Menu/Search/Search";
+import SearchAppBar from "./SearchAppBar";
+
 // import InfoBox from "../Info/InfoBox";
 
 class NetworkContainer extends PureComponent {
@@ -147,7 +149,7 @@ class NetworkContainer extends PureComponent {
     } else {
       this.setState({ focusNode: null });
     }
-    this.searchRef.current.blur();
+    // this.searchRef.current.blur();
   }
 
   unhideNodes = () => {
@@ -186,13 +188,14 @@ class NetworkContainer extends PureComponent {
         }}
       >
         {loading && <Loader loading={loading} />}
+        <SearchAppBar />
         {/* MENU */}
-        <Search
+        {/* <Search
           loading={loading}
           searchRef={this.searchRef}
           commandToID={commandToID}
           focusNode={cmd => this.setState({ focusNode: commandToID[cmd] })}
-        />
+        /> */}
         {/* <InfoBox /> */}
         <Graph
           getNetwork={(network) => { this.network = network; }}
@@ -211,8 +214,7 @@ class NetworkContainer extends PureComponent {
 
 NetworkContainer.propTypes = {
   style: PropTypes.shape({
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired
+    backgroundColor: PropTypes.string.isRequired
   }).isRequired
 };
 

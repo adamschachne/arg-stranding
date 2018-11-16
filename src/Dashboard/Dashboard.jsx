@@ -4,16 +4,19 @@ import { withStyles, createStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import Avatar from "@material-ui/core/Avatar";
+import { Zoom, Button } from "@material-ui/core";
+import purple from "@material-ui/core/colors/purple";
 import NumberToWord from "./NumberToWord.js/NumberToWord";
+import Sidebar from "./Sidebar/Sidebar";
 
-const styles = () => createStyles({
+const styles = theme => createStyles({
   flexCenter: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
   },
   dashboard: {
-    width: "100vw",
+    top: 0,
     height: "100vh",
     fontFamily: "'Source Sans Pro', sans-serif",
   },
@@ -27,7 +30,22 @@ const styles = () => createStyles({
   bigAvatar: {
     width: 60,
     height: 60,
-  }
+  },
+  button: {
+    color: theme.palette.getContrastText(purple[500]),
+    backgroundColor: "#4A2BBC",
+    "&:hover": {
+      backgroundColor: purple[300],
+    },
+    borderRadius: "0px",
+    letterSpacing: "10px",
+    textIndent: "10px",
+    textDecoration: "none",
+    textAlign: "center",
+    margin: "10px",
+    // minWidth: "200px",
+    fontFamily: "'Source Sans Pro', sans-serif",
+  },
 });
 
 const BASE_URL = "https://cdn.discordapp.com/";
@@ -46,7 +64,8 @@ const Dashboard = ({ identity: { avatar, username, id }, classes }) => {
 
   return (
     <div className={classNames(classes.dashboard, classes.flexCenter)}>
-      <div
+      <Sidebar />
+      {/* <div
         className={classes.row}
         style={{ flex: "0.5 0 auto" }}
       >
@@ -60,9 +79,18 @@ const Dashboard = ({ identity: { avatar, username, id }, classes }) => {
             {name}
           </div>
           <div>
-            <Link to="/graph">
-              <div style={{ color: "#eeeeee" }}>Network Graph</div>
-            </Link>
+            <Zoom in>
+              <Button
+                variant="contained"
+                color="primary"
+                className={classNames(classes.button)}
+                component={Link}
+                to="/graph"
+                size="large"
+              >
+                Graph
+              </Button>
+            </Zoom>
           </div>
         </div>
       </div>
@@ -71,7 +99,7 @@ const Dashboard = ({ identity: { avatar, username, id }, classes }) => {
         style={{ flex: "0 0 auto" }}
       >
         <NumberToWord />
-      </div>
+      </div> */}
     </div>
   );
 };

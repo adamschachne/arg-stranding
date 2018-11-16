@@ -5,12 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-
-const theme = createMuiTheme({
-  typography: {
-    useNextVariants: true,
-  },
-});
+import theme from "./theme";
 
 ReactDOM.render(
   <BrowserRouter>
