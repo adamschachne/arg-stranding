@@ -15,6 +15,10 @@ const styles = theme => createStyles({
     boxShadow: "none",
     pointerEvents: "none"
   },
+  fixedGutter: {
+    paddingLeft: theme.spacing.unit * 2,
+    paddingRight: theme.spacing.unit * 2,
+  },
   allPointerEvents: {
     pointerEvents: "all"
   },
@@ -25,7 +29,7 @@ const styles = theme => createStyles({
     flexGrow: 1,
   },
   menuButton: {
-    marginLeft: -12,
+    // marginLeft: -12,
   },
   title: {
     display: "none",
@@ -43,15 +47,18 @@ const styles = theme => createStyles({
     // },
     // backgroundColor: fade(theme.palette.common.white, 0.25),
     marginLeft: 0,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      // marginLeft: theme.spacing.unit,
-      width: "auto",
-    },
+    // transition: theme.transitions.create("width"),
+    // transition: theme.transitions.create("width", {
+    //   duration: "500ms"
+    // }),
+    // width: "100%",
+    // [theme.breakpoints.up("sm")]: {
+    //   // marginLeft: theme.spacing.unit,
+    //   width: "10%",
+    // },
   },
   searchIcon: {
-    width: theme.spacing.unit * 5,
+    width: theme.spacing.unit * 6,
     height: "100%",
     position: "absolute",
     pointerEvents: "none",
@@ -67,7 +74,7 @@ const styles = theme => createStyles({
     paddingTop: theme.spacing.unit,
     // paddingRight: theme.spacing.unit,
     paddingBottom: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit * 5,
+    paddingLeft: theme.spacing.unit * 6,
     // width: "0%",
     // "&focus": {
     //   width: "100%",
@@ -79,6 +86,8 @@ const styles = theme => createStyles({
       backgroundColor: fade(theme.palette.common.white, 0.15),
     },
     borderRadius: "4px",
+    width: 150,
+    maxWidth: "100%",
     [theme.breakpoints.up("sm")]: {
       width: 0,
       "&:focus": {
@@ -121,7 +130,14 @@ class SearchAppBar extends React.Component {
           position="absolute"
         >
           {/* <Collapse in={show}> */}
-          <Toolbar variant="dense">
+          <Toolbar
+            // disableGutters
+            style={{
+              justifyContent: "space-between"
+            }}
+            className={classes.fixedGutter}
+            variant="dense"
+          >
             <IconButton
               className={classNames(classes.allPointerEvents, classes.menuButton)}
               color="inherit"
@@ -129,7 +145,7 @@ class SearchAppBar extends React.Component {
             >
               <MenuIcon />
             </IconButton>
-            <div className={classes.grow} />
+            {/* <div className={classes.grow} /> */}
             <div className={classNames(classes.allPointerEvents, classes.search)}>
               <div className={classes.searchIcon}>
                 <SearchIcon />
