@@ -92,12 +92,13 @@ class NetworkContainer extends PureComponent {
 
       localForage.getItem("updated").then((lastUpdated) => {
         // console.log("last update: ", new Date(lastUpdated).getTime())
-        if (lastUpdated && lastUpdated !== updated) {
+        if (lastUpdated === null || lastUpdated !== updated) {
           // data has changed, build graph with new data
           this.setState({
             ...buildGraph(items, updated, hideBeforeStabilize),
             loading: hideBeforeStabilize
           });
+          localForage.setItem("updated", updated);
         } else {
           // get data from localforage and use those positions
           localForage.getItem("positions").then((positions) => {
