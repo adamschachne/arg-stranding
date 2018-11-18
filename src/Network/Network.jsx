@@ -7,7 +7,7 @@ import { options as initialOptions } from "./utils/config";
 import buildGraph from "./utils/buildGraph";
 import Loader from "../Loader/Loader";
 import Search from "../Menu/Search/Search";
-import SearchAppBar from "./SearchAppBar";
+import SearchAppBar from "../SearchAppBar/SearchAppBar";
 
 // import InfoBox from "../Info/InfoBox";
 
