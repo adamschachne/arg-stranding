@@ -89,7 +89,6 @@ const SearchItems = ({
       role="presentation"
       onClick={selectItem}
       className={searchItems}
-      onKeyDown={() => undefined}
     >
       <div
         className={searchResults}

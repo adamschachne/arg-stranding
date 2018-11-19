@@ -19,7 +19,7 @@ const PLACEHOLDER = "start typing to search...";
 
 function getDataIndex(target) {
   const index = parseInt(target.getAttribute("data-index"), 10);
-  return index || -1;
+  return Number.isNaN(index) ? -1 : index;
 }
 
 class Search extends Component {
