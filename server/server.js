@@ -7,7 +7,7 @@ const updateData = require("./updateData");
 const MongoClient = mongo.MongoClient;
 const mongo_url = process.env.MONGODB_URI;
 const commandCollection = process.env.NODE_ENV === "production" ? "commands" : "test_commands";
-const ss_key = process.env.NODE_ENV === "production" ? "1v2R7KnoheXKbceBzJyj9c5n5m2BM1ELNXg8A7xEY0gg" : "1KaFqCNbLuMRa2prpDzyBITS8Txk9AxZX7nPZzp3WHLE";
+const ss_key = process.env.NODE_ENV === "production" ? "1v2R7KnoheXKbceBzJyj9c5n5m2BM1ELNXg8A7xEY0gg" : process.env.TEST_SHEET_KEY;
 const PORT = process.env.PORT || 5000;
 const creds = {
   client_email: process.env.CLIENT_EMAIL,
