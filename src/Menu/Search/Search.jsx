@@ -22,6 +22,23 @@ function getDataIndex(target) {
   return Number.isNaN(index) ? -1 : index;
 }
 
+/**
+ * @param {KeyboardEvent} event
+ */
+// eslint-disable-next-line complexity
+function isPrintableKeycode(event) {
+  const { keyCode: code } = event;
+  if (event.ctrlKey || event.altKey) {
+    return false;
+  }
+  return (code > 47 && code < 58) // number keys
+    || code === 32 // spacebar
+    || (code > 64 && code < 91) // letter keys
+    || (code > 95 && code < 112) // numpad keys
+    || (code > 185 && code < 193) // ;=,-./` (in order)
+    || (code > 218 && code < 223); // [\]' (in order)
+}
+
 class Search extends Component {
   constructor(props) {
     super(props);
@@ -113,12 +130,8 @@ class Search extends Component {
     const { searchRef: { current } } = this.props;
     const key = keycode(event);
 
-    if (this.hasFocus === false) {
-      const lower = keycode("0");
-      const upper = keycode("z");
-      if (keyCode >= lower && keyCode <= upper) {
-        current.focus();
-      }
+    if (this.hasFocus === false && isPrintableKeycode(event)) {
+      current.focus();
     }
 
     const func = this.handleKey[key];
