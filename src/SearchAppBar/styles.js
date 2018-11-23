@@ -19,9 +19,10 @@ const styles = theme => createStyles({
     width: "100%",
   },
   grow: {
-    // transition: theme.transitions.create("flex-grow", {
-    //   delay: "0ms"
-    // }),
+    flexGrow: 0,
+    transition: theme.transitions.create("flex-grow", {
+      duration: "500ms"
+    }),
     [theme.breakpoints.up("sm")]: {
       flexGrow: 1,
     },
@@ -58,6 +59,8 @@ const styles = theme => createStyles({
     paddingLeft: theme.spacing.unit * 6,
     transition: `${theme.transitions.create("background", {
       duration: "500ms",
+    })}, ${theme.transitions.create("width", {
+      duration: "500ms",
     })}`,
     "&:focus": {
       backgroundColor: fade(theme.palette.common.white, 0.15),
@@ -65,11 +68,11 @@ const styles = theme => createStyles({
     borderRadius: "4px",
     width: `calc(100vw - ${theme.spacing.unit * 16}px)`,
     [theme.breakpoints.up("sm")]: {
-      transition: `${theme.transitions.create("background", {
-        duration: "500ms",
-      })}, ${theme.transitions.create("width", {
-        duration: "500ms",
-      })}`,
+      // transition: `${theme.transitions.create("background", {
+      //   duration: "500ms",
+      // })}, ${theme.transitions.create("width", {
+      //   duration: "500ms",
+      // })}`,
       width: "0vw",
       "&:focus": {
         width: 200,

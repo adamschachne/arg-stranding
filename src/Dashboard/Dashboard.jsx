@@ -10,6 +10,10 @@ import NumberToWord from "./NumberToWord.js/NumberToWord";
 import Sidebar from "./Sidebar/Sidebar";
 
 const styles = theme => createStyles({
+  root: {
+    display: "flex",
+    fontFamily: "'Source Sans Pro', sans-serif",
+  },
   flexCenter: {
     display: "flex",
     flexDirection: "column",
@@ -63,8 +67,9 @@ const Dashboard = ({ identity: { avatar, username, id }, classes }) => {
   const name = isGuest ? "Guest" : username;
 
   return (
-    <div className={classNames(classes.dashboard, classes.flexCenter)}>
+    <div className={classes.root}>
       <Sidebar />
+      <div>aiwudhaiwud</div>
       {/* <div
         className={classes.row}
         style={{ flex: "0.5 0 auto" }}
