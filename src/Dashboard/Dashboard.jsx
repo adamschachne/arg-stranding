@@ -4,10 +4,13 @@ import { withStyles, createStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import Avatar from "@material-ui/core/Avatar";
-import { Zoom, Button } from "@material-ui/core";
+import { Zoom, Button, withTheme } from "@material-ui/core";
 import purple from "@material-ui/core/colors/purple";
+import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
 import NumberToWord from "./NumberToWord.js/NumberToWord";
 import Sidebar from "./Sidebar/Sidebar";
+import SearchAppBar from "../SearchAppBar/SearchAppBar";
+import Sizer from "./Sizer";
 
 const styles = theme => createStyles({
   root: {
@@ -50,65 +53,108 @@ const styles = theme => createStyles({
     // minWidth: "200px",
     fontFamily: "'Source Sans Pro', sans-serif",
   },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing.unit * 3,
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: -theme.drawerWidth,
+  },
+  contentShift: {
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: 0,
+  },
+  drawerHeader: {
+    display: "flex",
+    alignItems: "center",
+    padding: "0 8px",
+    ...theme.mixins.toolbar,
+    justifyContent: "flex-end",
+  },
 });
 
 const BASE_URL = "https://cdn.discordapp.com/";
 
-const Dashboard = ({ identity: { avatar, username, id }, classes }) => {
-  const isGuest = !username;
-  let avatarURL = BASE_URL;
+class Dashboard extends React.Component {
+  constructor(props) {
+    super(props);
 
-  if (isGuest) {
-    avatarURL += `embed/avatars/${avatar}.png`;
-  } else {
-    avatarURL += `avatars/${id}/${avatar}.png`;
+    this.state = {
+      open: false
+    };
   }
 
-  const name = isGuest ? "Guest" : username;
+  toggleDrawer = (value) => {
+    this.setState({ open: value });
+  }
 
-  return (
-    <div className={classes.root}>
-      <Sidebar />
-      <div>aiwudhaiwud</div>
-      {/* <div
-        className={classes.row}
-        style={{ flex: "0.5 0 auto" }}
-      >
-        <div className={classes.flexCenter}>
-          <Avatar
-            alt="Avatar"
-            src={avatarURL}
-            className={classNames(classes.avatar, classes.bigAvatar)}
-          />
-          <div>
-            {name}
-          </div>
-          <div>
-            <Zoom in>
-              <Button
-                variant="contained"
-                color="primary"
-                className={classNames(classes.button)}
-                component={Link}
-                to="/graph"
-                size="large"
-              >
-                Graph
-              </Button>
-            </Zoom>
+  render() {
+    const { identity: { avatar, username, id }, classes, width } = this.props;
+    const { open } = this.state;
+    const isGuest = !username;
+    const avatarURL = BASE_URL + (isGuest ? `embed/avatars/${avatar}.png` : `avatars/${id}/${avatar}.png`);
+    const name = isGuest ? "Guest" : username;
+    const isSwipeable = !isWidthUp("sm", width);
+    return (
+      <div className={classes.root}>
+        <SearchAppBar clickMenu={() => this.toggleDrawer(true)} />
+        <Sidebar
+          swipeable={isSwipeable}
+          open={!isSwipeable || open}
+          toggleDrawer={this.toggleDrawer}
+        />
+        {/* <main
+          className={classNames(classes.content, {
+            [classes.contentShift]: open,
+          })}
+        >
+          <div className={classes.drawerHeader} />
+        </main> */}
+        {/* <div>aiwudhaiwud</div> */}
+        {/* <div
+          className={classes.row}
+          style={{ flex: "0.5 0 auto" }}
+        >
+          <div className={classes.flexCenter}>
+            <Avatar
+              alt="Avatar"
+              src={avatarURL}
+              className={classNames(classes.avatar, classes.bigAvatar)}
+            />
+            <div>
+              {name}
+            </div>
+            <div>
+              <Zoom in>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className={classNames(classes.button)}
+                  component={Link}
+                  to="/graph"
+                  size="large"
+                >
+                  Graph
+                </Button>
+              </Zoom>
+            </div>
           </div>
         </div>
+        <div
+          className={classes.row}
+          style={{ flex: "0 0 auto" }}
+        >
+          <NumberToWord />
+        </div> */}
       </div>
-      <div
-        className={classes.row}
-        style={{ flex: "0 0 auto" }}
-      >
-        <NumberToWord />
-      </div> */}
-    </div>
-  );
-};
-
+    );
+  }
+}
 
 Dashboard.propTypes = {
   classes: PropTypes.shape({
@@ -120,6 +166,7 @@ Dashboard.propTypes = {
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     username: PropTypes.string,
   }).isRequired,
+  width: PropTypes.string.isRequired
 };
 
-export default withStyles(styles)(Dashboard);
+export default withStyles(styles)(withWidth()(Dashboard));

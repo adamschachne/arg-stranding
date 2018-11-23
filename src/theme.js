@@ -13,7 +13,8 @@ const theme = createMuiTheme({
     secondary: {
       main: blueGrey[200]
     }
-  }
+  },
+  drawerWidth: 260
 });
 
 export default theme;

@@ -25,56 +25,58 @@ class SearchAppBar extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, clickMenu } = this.props;
     const { show } = this.state;
 
     return (
-      <div
-        className={classes.root}
-        onMouseOver={this.showToolbar}
-        onFocus={this.showToolbar}
-        onMouseLeave={this.hideToolbar}
-        onBlur={this.hideToolbar}
+      // <div
+      //   className={classes.root}
+      //   onMouseOver={this.showToolbar}
+      //   onFocus={this.showToolbar}
+      //   onMouseLeave={this.hideToolbar}
+      //   onBlur={this.hideToolbar}
+      // >
+      <AppBar
+        className={classes.transparentBar}
+        position="absolute"
       >
-        <AppBar
-          className={classes.transparentBar}
-          position="absolute"
+        {/* <Collapse in={show}> */}
+        <Toolbar
+          className={classes.fixedGutter}
+          variant="dense"
         >
-          {/* <Collapse in={show}> */}
-          <Toolbar
-            className={classes.fixedGutter}
-            variant="dense"
+          <IconButton
+            className={classes.allPointerEvents}
+            color="inherit"
+            aria-label="Open drawer"
+            onClick={clickMenu}
           >
-            <IconButton
-              className={classes.allPointerEvents}
-              color="inherit"
-              aria-label="Open drawer"
-            >
-              <MenuIcon />
-            </IconButton>
-            <div className={classes.grow} />
-            <div className={classNames(classes.allPointerEvents, classes.search)}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                placeholder="Search…"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-              />
+            <MenuIcon />
+          </IconButton>
+          <div className={classes.grow} />
+          <div className={classNames(classes.allPointerEvents, classes.search)}>
+            <div className={classes.searchIcon}>
+              <SearchIcon />
             </div>
-          </Toolbar>
-          {/* </Collapse> */}
-        </AppBar>
-      </div>
+            <InputBase
+              placeholder="Search…"
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+            />
+          </div>
+        </Toolbar>
+        {/* </Collapse> */}
+      </AppBar>
+      // </div>
     );
   }
 }
 
 SearchAppBar.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  clickMenu: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(SearchAppBar);
