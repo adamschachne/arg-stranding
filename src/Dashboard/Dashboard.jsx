@@ -4,7 +4,9 @@ import { withStyles, createStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import Avatar from "@material-ui/core/Avatar";
-import { Zoom, Button, withTheme } from "@material-ui/core";
+import {
+  Zoom, Button, withTheme, Typography
+} from "@material-ui/core";
 import purple from "@material-ui/core/colors/purple";
 import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
 import NumberToWord from "./NumberToWord.js/NumberToWord";
@@ -55,12 +57,15 @@ const styles = theme => createStyles({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing.unit * 3,
+    // padding: theme.spacing.unit * 3,
+    paddingRight: theme.spacing.unit * 3,
+    paddingBottom: theme.spacing.unit * 3,
+    paddingLeft: theme.spacing.unit * 3,
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    marginLeft: -theme.drawerWidth,
+    // marginLeft: -theme.drawerWidth,
   },
   contentShift: {
     transition: theme.transitions.create("margin", {
@@ -73,7 +78,7 @@ const styles = theme => createStyles({
     display: "flex",
     alignItems: "center",
     padding: "0 8px",
-    ...theme.mixins.toolbar,
+    height: theme.spacing.unit * 6,
     justifyContent: "flex-end",
   },
 });
@@ -99,23 +104,47 @@ class Dashboard extends React.Component {
     const isGuest = !username;
     const avatarURL = BASE_URL + (isGuest ? `embed/avatars/${avatar}.png` : `avatars/${id}/${avatar}.png`);
     const name = isGuest ? "Guest" : username;
-    const isSwipeable = !isWidthUp("sm", width);
+    const isSwipeable = !isWidthUp("md", width);
+    const showSidebar = !isSwipeable || open;
     return (
       <div className={classes.root}>
         <SearchAppBar clickMenu={() => this.toggleDrawer(true)} />
         <Sidebar
           swipeable={isSwipeable}
-          open={!isSwipeable || open}
+          open={showSidebar}
           toggleDrawer={this.toggleDrawer}
         />
-        {/* <main
+        <main
           className={classNames(classes.content, {
-            [classes.contentShift]: open,
+            [classes.contentShift]: showSidebar,
           })}
         >
           <div className={classes.drawerHeader} />
-        </main> */}
-        {/* <div>aiwudhaiwud</div> */}
+          <Typography paragraph>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent
+            elementum facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in
+            hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id interdum
+            velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing.
+            Amet nisl suscipit adipiscing bibendum est ultricies integer quis. Cursus euismod quis
+            viverra nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum leo.
+            Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus
+            at augue. At augue eget arcu dictum varius duis at consectetur lorem. Velit sed
+            ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
+          </Typography>
+          <Typography paragraph>
+            Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
+            facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
+            tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
+            consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus
+            sed vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in.
+            In hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
+            et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique
+            sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo
+            viverra maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam
+            ultrices sagittis orci a.
+          </Typography>
+        </main>
         {/* <div
           className={classes.row}
           style={{ flex: "0.5 0 auto" }}

@@ -85,17 +85,13 @@ const Sidebar = ({
   open, classes, toggleDrawer, swipeable
 }) => {
   return (
-    // <MakeDrawer
-    //   classes={classes}
-    //   swipeable={false}
-    //   toggleDrawer={toggleDrawer}
-    // />
     <SwipeableDrawer
       anchor="left"
       disableSwipeToOpen={!swipeable}
       disableDiscovery={!swipeable}
       disableBackdropTransition={!swipeable}
       variant={swipeable ? "temporary" : "persistent"}
+      // variant="persistent"
       open={open}
       onOpen={() => toggleDrawer(true)}
       onClose={() => toggleDrawer(false)}

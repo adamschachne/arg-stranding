@@ -7,8 +7,11 @@ const theme = createMuiTheme({
     useNextVariants: true,
   },
   palette: {
+    text: {
+      primary: grey[300]
+    },
     primary: {
-      main: grey[800]
+      main: grey[800],
     },
     secondary: {
       main: blueGrey[200]
@@ -16,5 +19,7 @@ const theme = createMuiTheme({
   },
   drawerWidth: 260
 });
+
+console.log(theme);
 
 export default theme;
