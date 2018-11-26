@@ -25,19 +25,12 @@ class SearchAppBar extends React.Component {
   }
 
   render() {
-    const { classes, clickMenu } = this.props;
+    const { classes, transparent, clickMenu } = this.props;
     const { show } = this.state;
 
     return (
-      // <div
-      //   className={classes.root}
-      //   onMouseOver={this.showToolbar}
-      //   onFocus={this.showToolbar}
-      //   onMouseLeave={this.hideToolbar}
-      //   onBlur={this.hideToolbar}
-      // >
       <AppBar
-        className={classes.transparentBar}
+        className={classNames({ [classes.transparentBar]: transparent })}
         position="absolute"
       >
         {/* <Collapse in={show}> */}
@@ -69,13 +62,13 @@ class SearchAppBar extends React.Component {
         </Toolbar>
         {/* </Collapse> */}
       </AppBar>
-      // </div>
     );
   }
 }
 
 SearchAppBar.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  transparent: PropTypes.bool.isRequired,
   clickMenu: PropTypes.func.isRequired
 };
 

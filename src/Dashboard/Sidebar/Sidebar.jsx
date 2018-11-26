@@ -12,8 +12,12 @@ import image from "../../assets/sidebar.png";
 const styles = (theme) => {
   return createStyles({
     drawer: {
-      width: theme.drawerWidth,
+      // width: theme.drawerWidth,
       flexShrink: 0,
+    },
+    drawerPaper: {
+      width: theme.drawerWidth,
+      border: "none",
     },
     drawerHeader: {
       zIndex: "1",
@@ -56,10 +60,6 @@ const styles = (theme) => {
       }),
       marginLeft: 0,
     },
-    drawerPaper: {
-      width: theme.drawerWidth,
-      border: "none",
-    },
     background: {
       backgroundImage: `url(${image})`,
       backgroundSize: "cover",
@@ -71,13 +71,13 @@ const styles = (theme) => {
         content: `""`,
         display: "block",
         background: "#000",
-        opacity: "0.7"
+        opacity: "0.5"
       }
     },
     end: {
       position: "absolute",
       right: 0
-    }
+    },
   });
 };
 
@@ -90,6 +90,9 @@ const Sidebar = ({
       disableSwipeToOpen={!swipeable}
       disableDiscovery={!swipeable}
       disableBackdropTransition={!swipeable}
+      ModalProps={{
+        disablePortal: true
+      }}
       variant={swipeable ? "temporary" : "persistent"}
       // variant="persistent"
       open={open}
@@ -102,14 +105,14 @@ const Sidebar = ({
     >
       <div className={classes.logo}>
         ARG Stranding
-        {swipeable && (
-          <IconButton
-            className={classes.end}
-            onClick={() => toggleDrawer(false)}
-          >
-            <ChevronLeftIcon color="secondary" />
-          </IconButton>
-        )}
+        {/* {swipeable && ( */}
+        <IconButton
+          className={classes.end}
+          onClick={() => toggleDrawer(false)}
+        >
+          <ChevronLeftIcon color="secondary" />
+        </IconButton>
+        {/* } */}
       </div>
     </SwipeableDrawer>
   );

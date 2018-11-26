@@ -57,22 +57,22 @@ const styles = theme => createStyles({
   },
   content: {
     flexGrow: 1,
-    // padding: theme.spacing.unit * 3,
-    paddingRight: theme.spacing.unit * 3,
-    paddingBottom: theme.spacing.unit * 3,
-    paddingLeft: theme.spacing.unit * 3,
+    padding: theme.spacing.unit * 3,
+    // paddingRight: theme.spacing.unit * 3,
+    // paddingBottom: theme.spacing.unit * 3,
+    // paddingLeft: theme.spacing.unit * 3,
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    // marginLeft: -theme.drawerWidth,
+    marginLeft: 0,
   },
   contentShift: {
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    marginLeft: 0,
+    marginLeft: theme.drawerWidth,
   },
   drawerHeader: {
     display: "flex",
@@ -105,10 +105,11 @@ class Dashboard extends React.Component {
     const avatarURL = BASE_URL + (isGuest ? `embed/avatars/${avatar}.png` : `avatars/${id}/${avatar}.png`);
     const name = isGuest ? "Guest" : username;
     const isSwipeable = !isWidthUp("md", width);
-    const showSidebar = !isSwipeable || open;
+    // const showSidebar = !isSwipeable || open;
+    const showSidebar = open;
     return (
       <div className={classes.root}>
-        <SearchAppBar clickMenu={() => this.toggleDrawer(true)} />
+        <SearchAppBar transparent={false} clickMenu={() => this.toggleDrawer(true)} />
         <Sidebar
           swipeable={isSwipeable}
           open={showSidebar}
@@ -116,7 +117,7 @@ class Dashboard extends React.Component {
         />
         <main
           className={classNames(classes.content, {
-            [classes.contentShift]: showSidebar,
+            [classes.contentShift]: open && !isSwipeable
           })}
         >
           <div className={classes.drawerHeader} />
