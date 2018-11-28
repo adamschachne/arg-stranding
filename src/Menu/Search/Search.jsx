@@ -180,7 +180,7 @@ class Search extends Component {
           <IconButton
             aria-label="Clear"
             component={Link}
-            to="/dashboard"
+            to="/"
             color="inherit"
           >
             <Home />

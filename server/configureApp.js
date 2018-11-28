@@ -111,7 +111,7 @@ module.exports = function configureApp(_global, fetchSheetData) {
       const rows = await fetchSheetData(_global);
 
       await updateData(_global, rows);
-      
+
       res.send(JSON.stringify({
         items: _global.sortedData,
         updated: _global.lastUpdated
@@ -130,25 +130,31 @@ module.exports = function configureApp(_global, fetchSheetData) {
   });
 
   // AJAX request for guest account
-  app.get('/guest', function (req, res) {
+  app.post('/guest', function (req, res) {
 
     if (req.session.identity && req.session.identity.guest) {
       return res.send({ guest: req.session.identity });
     }
 
-    req.session.regenerate(function (err) {
-      if (err) return console.error(err);
+    try {
+      req.session.regenerate(function (err) {
+        if (err) throw new Error(err);
 
-      req.session.identity = {
-        guest: Date.now(),
-        avatar: Math.floor(Math.random() * 5)
-      }
+        req.session.identity = {
+          guest: Date.now(),
+          avatar: Math.floor(Math.random() * 5)
+        }
 
-      req.session.save(function (err) {
-        if (err) return console.error(err);
-        return res.send({ guest: req.session.identity });
-      })
-    });
+        req.session.save(function (err) {
+          if (err) throw new Error(err);
+
+          return res.send({ guest: req.session.identity });
+        })
+      });
+    } catch (err) {
+      console.error(err);
+      res.redirect("/");
+    }
   });
 
   app.get('/auth', function (req, res) {

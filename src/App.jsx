@@ -33,6 +33,7 @@ class App extends Component {
   clickGuest = async () => {
     try {
       const guestResponse = await fetch("guest", {
+        method: "POST",
         credentials: "same-origin"
       });
       const identity = await guestResponse.json();
@@ -63,16 +64,17 @@ class App extends Component {
               style={{
                 backgroundColor: "#36393f"
               }}
-              // renderMenu={this.renderMenu}
+            // renderMenu={this.renderMenu}
             />
           )}
         />
         <Route
-          path="/dashboard"
+          exact
+          path="/"
           render={() => <Dashboard identity={identity} />}
         />
         <Route
-          render={() => <Redirect to="/dashboard" />}
+          render={() => <Redirect to="/" />}
         />
       </Switch>
     );
