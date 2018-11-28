@@ -105,19 +105,18 @@ class Dashboard extends React.Component {
     const avatarURL = BASE_URL + (isGuest ? `embed/avatars/${avatar}.png` : `avatars/${id}/${avatar}.png`);
     const name = isGuest ? "Guest" : username;
     const isSwipeable = !isWidthUp("md", width);
-    // const showSidebar = !isSwipeable || open;
-    const showSidebar = open;
+
     return (
       <div className={classes.root}>
         <SearchAppBar
           sidebarOpen={open}
-          sidebarSwipeable={isSwipeable}
+          isSwipeable={isSwipeable}
           transparent={false}
           clickMenu={() => this.toggleDrawer(true)}
         />
         <Sidebar
           swipeable={isSwipeable}
-          open={showSidebar}
+          open={open}
           toggleDrawer={this.toggleDrawer}
         />
         <main

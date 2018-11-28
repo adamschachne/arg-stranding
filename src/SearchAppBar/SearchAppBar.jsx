@@ -39,7 +39,7 @@ class SearchAppBar extends React.Component {
         className={classNames(
           classes.appBar,
           { [classes.transparentBar]: transparent },
-          { [classes.appBarShift]: sidebarOpen && isSwipeable }
+          { [classes.appBarShift]: sidebarOpen && !isSwipeable }
         )}
         position="absolute"
       >
