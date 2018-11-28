@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import purple from "@material-ui/core/colors/purple";
 import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
-import NumberToWord from "./NumberToWord.js/NumberToWord";
+import NumberToWord from "./NumberToWord/NumberToWord";
 import Sidebar from "./Sidebar/Sidebar";
 import SearchAppBar from "../SearchAppBar/SearchAppBar";
 import Sizer from "./Sizer";
@@ -90,7 +90,7 @@ class Dashboard extends React.Component {
     super(props);
 
     this.state = {
-      open: false
+      open: isWidthUp("md", props.width)
     };
   }
 
@@ -109,7 +109,12 @@ class Dashboard extends React.Component {
     const showSidebar = open;
     return (
       <div className={classes.root}>
-        <SearchAppBar transparent={false} clickMenu={() => this.toggleDrawer(true)} />
+        <SearchAppBar
+          sidebarOpen={open}
+          sidebarSwipeable={isSwipeable}
+          transparent={false}
+          clickMenu={() => this.toggleDrawer(true)}
+        />
         <Sidebar
           swipeable={isSwipeable}
           open={showSidebar}
@@ -121,7 +126,7 @@ class Dashboard extends React.Component {
           })}
         >
           <div className={classes.drawerHeader} />
-          <Typography paragraph>
+          {/* <Typography paragraph>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
             incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent
             elementum facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in
@@ -144,7 +149,8 @@ class Dashboard extends React.Component {
             sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo
             viverra maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam
             ultrices sagittis orci a.
-          </Typography>
+          </Typography> */}
+          <NumberToWord />
         </main>
         {/* <div
           className={classes.row}

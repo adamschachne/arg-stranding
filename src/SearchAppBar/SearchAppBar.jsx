@@ -25,12 +25,22 @@ class SearchAppBar extends React.Component {
   }
 
   render() {
-    const { classes, transparent, clickMenu } = this.props;
+    const {
+      classes,
+      transparent,
+      clickMenu,
+      sidebarOpen,
+      isSwipeable
+    } = this.props;
     const { show } = this.state;
 
     return (
       <AppBar
-        className={classNames({ [classes.transparentBar]: transparent })}
+        className={classNames(
+          classes.appBar,
+          { [classes.transparentBar]: transparent },
+          { [classes.appBarShift]: sidebarOpen && isSwipeable }
+        )}
         position="absolute"
       >
         {/* <Collapse in={show}> */}
@@ -39,7 +49,11 @@ class SearchAppBar extends React.Component {
           variant="dense"
         >
           <IconButton
-            className={classes.allPointerEvents}
+            className={classNames(
+              { [classes.hide]: sidebarOpen && !isSwipeable },
+              classes.allPointerEvents
+            )}
+            // className={classNames(classes.menuButton, open && classes.hide)}
             color="inherit"
             aria-label="Open drawer"
             onClick={clickMenu}
@@ -68,6 +82,8 @@ class SearchAppBar extends React.Component {
 
 SearchAppBar.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  sidebarOpen: PropTypes.bool.isRequired,
+  isSwipeable: PropTypes.bool.isRequired,
   transparent: PropTypes.bool.isRequired,
   clickMenu: PropTypes.func.isRequired
 };
