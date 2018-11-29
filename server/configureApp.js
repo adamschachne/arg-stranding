@@ -53,8 +53,9 @@ module.exports = function configureApp(_global, fetchSheetData) {
         addIpAddress(_global, ip, "guest");
         return next();
       } else if (req.session.token) {
-        const result = await authenticate(req.session.token.access_token);
-        const { username, discriminator, id } = result.data;
+        const identity = await authenticate(req.session.token.access_token);
+        req.session.identity = identity.data;
+        const { username, discriminator, id } = identity.data;
         console.log("adding user to ip collecting");
         addIpAddress(_global, ip, { username, discriminator, id });
         return next();
@@ -187,7 +188,7 @@ module.exports = function configureApp(_global, fetchSheetData) {
         req.session.save(function (err) {
           if (err) return console.error(err);
           return res.redirect('/');
-        })
+        });
       });
       // res.send(identity);
       // console.log(identity);
