@@ -5,6 +5,7 @@ const proxy = require('http-proxy-middleware')(
     "/profile",
     "/guest",
     "/updated",
+    "/auth",
   ],
   {
     target: "http://localhost:5000"
