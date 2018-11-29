@@ -36,7 +36,11 @@ class Search extends Component {
     this.commandsArrayLowerCase = [];
     this.lowerToUpper = {};
     this.usingEdgeOrIE = (document.documentMode || /Edge/.test(navigator.userAgent));
-    this.filteredCommands = [];
+
+    // memo search filter
+    this.lastValue = "";
+    this.filteredMemo = [];
+
     this.itemsRef = React.createRef();
     this.handleKey = {
       up: () => {
@@ -50,7 +54,7 @@ class Search extends Component {
       },
       down: () => {
         this.setState(({ selected }) => {
-          const commandsLength = this.filteredCommands.length;
+          const commandsLength = this.filteredMemo.length;
           const inc = selected + 1;
           const max = commandsLength > 0 ? commandsLength - 1 : 0;
           return {
@@ -60,7 +64,7 @@ class Search extends Component {
       },
       enter: () => {
         const { selected } = this.state;
-        this.closeSearch(this.filteredCommands[selected]);
+        this.closeSearch(this.filteredMemo[selected]);
       },
       esc: () => {
         this.closeSearch();
@@ -127,7 +131,7 @@ class Search extends Component {
 
   clickItem = ({ target = null }) => {
     // get label from target
-    const label = target ? this.filteredCommands[getDataIndex(target)] : null;
+    const label = target ? this.filteredMemo[getDataIndex(target)] : null;
     this.closeSearch(label);
   }
 
@@ -150,6 +154,16 @@ class Search extends Component {
     this.setState({ selected: index });
   }
 
+  getFilteredCommandsMemo = (value) => {
+    if (value !== this.lastValue) {
+      this.lastValue = value;
+      this.filteredMemo = value === "" ? [] : this.commandsArrayLowerCase
+        .filter(cmd => cmd.indexOf(value.toLowerCase()) !== -1)
+        .map(cmd => this.lowerToUpper[cmd]);
+    }
+    return this.filteredMemo;
+  }
+
   render() {
     const {
       value,
@@ -157,9 +171,7 @@ class Search extends Component {
       selected
     } = this.state;
     const { loading, searchRef } = this.props;
-    this.filteredCommands = value === "" ? [] : this.commandsArrayLowerCase
-      .filter(cmd => cmd.indexOf(value.toLowerCase()) !== -1)
-      .map(cmd => this.lowerToUpper[cmd]);
+    const filteredCommands = this.getFilteredCommandsMemo(value);
 
     return (
       <div className="search-component">
@@ -199,7 +211,7 @@ class Search extends Component {
         {value.length > 0 && (
           <SearchItems
             selected={selected}
-            filteredCommands={this.filteredCommands}
+            filteredCommands={filteredCommands}
             selectItem={this.clickItem}
             hoverItem={this.hoverItem}
             itemsRef={this.itemsRef}
