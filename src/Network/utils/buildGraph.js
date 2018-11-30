@@ -1,21 +1,22 @@
 import localForage from "localforage";
 
-export default (items, updated, hidden = false) => {
+export default (items, hidden = false) => {
   console.log("building graph");
   const commandToID = {};
   const nodes = [];
   const edges = [];
   const hasIncomingEdge = {};
-
-  localForage.setItem("updated", updated);
+  const bruteForcedMap = {};
 
   // iterate through each image once to generate mappings
   items.forEach((item, index) => {
-    // each command in that image
+    // map the command name to the ID (index)
     item.command.forEach((cmd) => {
-      // map the command name to the ID (index)
       commandToID[cmd] = index;
     });
+
+    // populate brute forced nodes map
+    bruteForcedMap[index] = item.bruteforce;
   });
 
   // iterate again to generate nodes and edges
@@ -57,5 +58,5 @@ export default (items, updated, hidden = false) => {
     edges
   };
 
-  return { graph, commandToID };
+  return { graph, commandToID, bruteForcedMap };
 };

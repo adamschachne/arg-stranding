@@ -82,9 +82,7 @@ class Search extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { commandToID } = this.props;
     const { selected } = this.state;
-
     if (prevState.selected !== selected) {
       const { current } = this.itemsRef;
       if (current) {
@@ -97,19 +95,33 @@ class Search extends Component {
         }
       }
     }
+    this.rebuildSearch(prevProps);
+  }
 
-    if (prevProps.commandToID !== commandToID) {
-      this.commandsArray = Object.keys(commandToID).sort();
+  componentWillUnmount() {
+    window.removeEventListener("keydown", this.onWindowKeydown);
+  }
+
+  rebuildSearch = (prevProps) => {
+    const { commandToID, bruteForcedMap, showBruteForce } = this.props;
+    if (showBruteForce !== prevProps.showBruteForce
+      || prevProps.commandToID !== commandToID
+      || prevProps.bruteForcedMap !== bruteForcedMap) {
+      this.commandsArray = showBruteForce
+        ? Object.keys(commandToID).sort()
+        : Object.keys(commandToID)
+          .filter(key => !bruteForcedMap[commandToID[key]])
+          .sort();
       this.commandsArrayLowerCase = this.commandsArray.map(command => command.toLowerCase());
       this.lowerToUpper = this.commandsArrayLowerCase.reduce((result, item, index) => {
         result[item] = this.commandsArray[index]; // eslint-disable-line no-param-reassign
         return result;
       }, {});
-    }
-  }
 
-  componentWillUnmount() {
-    window.removeEventListener("keydown", this.onWindowKeydown);
+      // invalidate memo
+      this.lastValue = null;
+      this.forceUpdate();
+    }
   }
 
   onWindowKeydown = (event) => {
@@ -170,7 +182,10 @@ class Search extends Component {
       size,
       selected
     } = this.state;
-    const { loading, searchRef } = this.props;
+    const {
+      loading,
+      searchRef,
+    } = this.props;
     const filteredCommands = this.getFilteredCommandsMemo(value);
 
     return (
@@ -232,7 +247,12 @@ Search.propTypes = {
   searchRef: PropTypes.shape({
     current: PropTypes.object
   }).isRequired,
-  focusNode: PropTypes.func.isRequired
+  focusNode: PropTypes.func.isRequired,
+  showBruteForce: PropTypes.bool.isRequired,
+  bruteForcedMap: PropTypes.oneOfType([
+    PropTypes.objectOf(PropTypes.bool),
+    PropTypes.object
+  ]).isRequired
 };
 
 export default withStyles(styles)(Search);

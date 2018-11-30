@@ -59,19 +59,19 @@ class Graph extends Component {
       graph: { nodes: nextNodes, edges: nextEdges }
     } = nextProps;
     const nodesChange = !isEqual(nodes, nextNodes);
+    let nodesRemoved = [];
+    let nodesAdded = [];
+    let nodesChanged = [];
+
     const edgesChange = !isEqual(edges, nextEdges);
     const optionsChange = !isEqual(options, nextOptions);
     const eventsChange = !isEqual(events, nextEvents);
 
-    if (nodesChange || edgesChange || optionsChange || eventsChange) {
-      console.log("UPDATING GRAPH", nextProps, this.props);
-    }
-
     if (nodesChange) {
       const idIsEqual = (n1, n2) => n1.id === n2.id;
-      const nodesRemoved = differenceWith(nodes, nextNodes, idIsEqual);
-      const nodesAdded = differenceWith(nextNodes, nodes, idIsEqual);
-      const nodesChanged = differenceWith(
+      nodesRemoved = differenceWith(nodes, nextNodes, idIsEqual);
+      nodesAdded = differenceWith(nextNodes, nodes, idIsEqual);
+      nodesChanged = differenceWith(
         differenceWith(nextNodes, nodes, isEqual),
         nodesAdded
       );
@@ -103,7 +103,10 @@ class Graph extends Component {
       });
     }
 
-    this.Network.stabilize();
+    // only stabilize if nodes were added or removed
+    if (nodesChange && (nodesAdded.length > 0 || nodesRemoved.length > 0)) {
+      this.Network.stabilize();
+    }
 
     return false;
   }

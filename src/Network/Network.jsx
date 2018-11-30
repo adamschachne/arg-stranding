@@ -7,6 +7,7 @@ import { initOptions } from "./utils/config";
 import buildGraph from "./utils/buildGraph";
 import Loader from "../Loader/Loader";
 import Search from "../Menu/Search/Search";
+import GraphSettings from "./GraphSettings";
 // import InfoBox from "../Info/InfoBox";
 
 class NetworkContainer extends PureComponent {
@@ -21,15 +22,18 @@ class NetworkContainer extends PureComponent {
       options: initOptions(width, height),
       commandToID: {},
       loading: true,
-      focusNode: null
+      focusNode: null,
+      bruteForcedMap: {},
+      showBruteForce: true
     };
+    this.numItems = 0;
     this.searchRef = React.createRef();
     this.dragging = false;
     /** @type {vis.Network} */
     this.network = null;
     this.events = {
       dragStart: (evt) => {
-        console.log("dragging");
+        // console.log("dragging");
         this.dragging = true;
         // this.props.unfocus();
         if (evt.nodes.length === 0) {
@@ -38,17 +42,11 @@ class NetworkContainer extends PureComponent {
         this.interactNetwork();
       },
       dragEnd: () => {
-        console.log("done dragging");
+        // console.log("done dragging");
         this.dragging = false;
       },
       stabilized: () => {
-        if (this.dragging === true) {
-          return;
-        }
-
-        localForage.setItem("positions", this.network.getPositions());
-        // save positions
-        console.log("setting positions");
+        this.savePositions();
       },
       click: (evt) => {
         this.interactNetwork(evt);
@@ -73,46 +71,37 @@ class NetworkContainer extends PureComponent {
       return value.json();
     }).then(({ items, updated }) => {
       console.log({ items, updated }, new Date(updated).getTime());
+      this.numItems = items.length;
       const hideBeforeStabilize = Boolean(this.network);
 
-      if (hideBeforeStabilize) {
-        this.network.once("stabilized", () => {
-          this.network.moveTo({
-            animation: false,
-            position: { x: 0, y: 0 },
-            scale: 0.30, // about the right scale to begin to see labels
-            offset: { x: 0, y: 0 }
-          });
-          console.log("stabilized", performance.now());
-          this.unhideNodes();
+      const buildNewData = () => {
+        this.setState({
+          ...buildGraph(items, hideBeforeStabilize),
+          loading: hideBeforeStabilize
         });
-      }
+        localForage.setItem("updated", updated);
+      };
 
       localForage.getItem("updated").then((lastUpdated) => {
         // console.log("last update: ", new Date(lastUpdated).getTime())
         if (lastUpdated === null || lastUpdated !== updated) {
           // data has changed, build graph with new data
-          this.setState({
-            ...buildGraph(items, updated, hideBeforeStabilize),
-            loading: hideBeforeStabilize
-          });
-          localForage.setItem("updated", updated);
+          buildNewData();
         } else {
           // get data from localforage and use those positions
           localForage.getItem("positions").then((positions) => {
-            console.log("USING EXISTING POSITIONS: ");
-            // items.forEach((item, ID) => {
-            //   // set each node's x,y where they were last
-            //   Object.assign(item, positions[ID]);
-            // });
-            this.setState({
-              ...buildGraph(
-                items.map((item, ID) => Object.assign({}, item, positions[ID])),
-                updated,
-                hideBeforeStabilize
-              ),
-              loading: hideBeforeStabilize
-            });
+            if (positions === null) {
+              buildNewData();
+            } else {
+              console.log("USING EXISTING POSITIONS: ", positions);
+              this.setState({
+                ...buildGraph(
+                  items.map((item, ID) => Object.assign({}, item, positions[ID])),
+                  hideBeforeStabilize
+                ),
+                loading: hideBeforeStabilize
+              });
+            }
           });
         }
       });
@@ -127,7 +116,8 @@ class NetworkContainer extends PureComponent {
     if (focusNode && prevState.focusNode !== focusNode && this.network) {
       this.network.selectNodes([focusNode]);
       this.network.once("animationFinished", () => {
-
+        //
+        console.log("animation finished");
       });
       this.network.focus(focusNode, {
         scale: this.network.getScale(),
@@ -135,6 +125,32 @@ class NetworkContainer extends PureComponent {
         animation: true
       });
     }
+  }
+
+  savePositions = () => {
+    if (this.dragging === true) {
+      return;
+    }
+    const request = Array.from(Array(this.numItems).keys());
+    localForage.setItem("positions", this.network.getPositions(request));
+    // save positions
+    console.log("setting positions");
+  }
+
+  createNetwork = (network) => {
+    this.network = network;
+    console.log(network);
+    this.network.once("stabilizationIterationsDone", () => {
+      this.network.moveTo({
+        animation: false,
+        position: { x: 0, y: 0 },
+        scale: 0.30, // about the right scale to begin to see labels
+        offset: { x: 0, y: 0 }
+      });
+      console.log("iterations done; total time:", performance.now());
+      this.savePositions();
+      this.unhideNodes();
+    });
   }
 
   interactNetwork = (event) => {
@@ -153,7 +169,6 @@ class NetworkContainer extends PureComponent {
 
   unhideNodes = () => {
     const { graph, options } = this.state;
-
     this.setState({
       graph: {
         nodes: graph.nodes.map(node => ({ ...node, hidden: false })),
@@ -170,14 +185,36 @@ class NetworkContainer extends PureComponent {
     });
   }
 
+  toggleBruteForce = () => {
+    const { graph, showBruteForce, bruteForcedMap } = this.state;
+    this.setState({
+      showBruteForce: !showBruteForce,
+      graph: {
+        nodes: graph.nodes.map(({
+          x, // take out x
+          y, // take out y
+          hidden, // take out hidden
+          ...node // spread remaining properties
+        }) => ({
+          ...node,
+          hidden: bruteForcedMap[node.id] && showBruteForce
+        })),
+        edges: graph.edges
+      }
+    });
+  }
+
   render() {
-    // console.log("Network called render", this.state);
     const { style } = this.props;
     const {
-      loading, commandToID, graph, options
+      loading,
+      commandToID,
+      graph,
+      options,
+      showBruteForce,
+      bruteForcedMap
     } = this.state;
     const { width, height } = style;
-    console.log(style);
     return (
       <div style={style}>
         {loading && <Loader loading={loading} />}
@@ -186,11 +223,18 @@ class NetworkContainer extends PureComponent {
           loading={loading}
           searchRef={this.searchRef}
           commandToID={commandToID}
+          showBruteForce={showBruteForce}
+          bruteForcedMap={bruteForcedMap}
           focusNode={cmd => this.setState({ focusNode: commandToID[cmd] })}
+        />
+        <GraphSettings
+          showBruteForce={showBruteForce}
+          toggleBruteForce={this.toggleBruteForce}
+          disabled={loading}
         />
         {/* <InfoBox /> */}
         <Graph
-          getNetwork={(network) => { this.network = network; }}
+          getNetwork={this.createNetwork}
           graph={graph}
           options={{
             ...options,
