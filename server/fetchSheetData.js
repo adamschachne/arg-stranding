@@ -35,6 +35,7 @@ module.exports = function fetchSheetData(_global) {
                   command: row.command.split(',').map(cmd => cmd.trim()),
                   leadsto: row.leadsto.split(',').filter(lead => lead !== "").map(lead => lead.trim()),
                   fannames: row.fannames.split(',').filter(name => name !== "").map(name => name.trim()),
+                  bruteforce: row["brute-forcedrandomguesses"].toUpperCase().startsWith("Y"),
                   id: urlParts[0],
                   filename: urlParts[1]
                 }

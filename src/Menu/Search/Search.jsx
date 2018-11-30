@@ -53,7 +53,11 @@ class Search extends Component {
     this.commandsArrayLowerCase = [];
     this.lowerToUpper = {};
     this.usingEdgeOrIE = (document.documentMode || /Edge/.test(navigator.userAgent));
-    this.filteredCommands = [];
+
+    // memo search filter
+    this.lastValue = "";
+    this.filteredMemo = [];
+
     this.itemsRef = React.createRef();
     this.handleKey = {
       up: () => {
@@ -67,7 +71,7 @@ class Search extends Component {
       },
       down: () => {
         this.setState(({ selected }) => {
-          const commandsLength = this.filteredCommands.length;
+          const commandsLength = this.filteredMemo.length;
           const inc = selected + 1;
           const max = commandsLength > 0 ? commandsLength - 1 : 0;
           return {
@@ -77,7 +81,7 @@ class Search extends Component {
       },
       enter: () => {
         const { selected } = this.state;
-        this.closeSearch(this.filteredCommands[selected]);
+        this.closeSearch(this.filteredMemo[selected]);
       },
       esc: () => {
         this.closeSearch();
@@ -95,9 +99,7 @@ class Search extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { commandToID } = this.props;
     const { selected } = this.state;
-
     if (prevState.selected !== selected) {
       const { current } = this.itemsRef;
       if (current) {
@@ -110,19 +112,33 @@ class Search extends Component {
         }
       }
     }
+    this.rebuildSearch(prevProps);
+  }
 
-    if (prevProps.commandToID !== commandToID) {
-      this.commandsArray = Object.keys(commandToID).sort();
+  componentWillUnmount() {
+    window.removeEventListener("keydown", this.onWindowKeydown);
+  }
+
+  rebuildSearch = (prevProps) => {
+    const { commandToID, bruteForcedMap, showBruteForce } = this.props;
+    if (showBruteForce !== prevProps.showBruteForce
+      || prevProps.commandToID !== commandToID
+      || prevProps.bruteForcedMap !== bruteForcedMap) {
+      this.commandsArray = showBruteForce
+        ? Object.keys(commandToID).sort()
+        : Object.keys(commandToID)
+          .filter(key => !bruteForcedMap[commandToID[key]])
+          .sort();
       this.commandsArrayLowerCase = this.commandsArray.map(command => command.toLowerCase());
       this.lowerToUpper = this.commandsArrayLowerCase.reduce((result, item, index) => {
         result[item] = this.commandsArray[index]; // eslint-disable-line no-param-reassign
         return result;
       }, {});
-    }
-  }
 
-  componentWillUnmount() {
-    window.removeEventListener("keydown", this.onWindowKeydown);
+      // invalidate memo
+      this.lastValue = null;
+      this.forceUpdate();
+    }
   }
 
   onWindowKeydown = (event) => {
@@ -140,7 +156,7 @@ class Search extends Component {
 
   clickItem = ({ target = null }) => {
     // get label from target
-    const label = target ? this.filteredCommands[getDataIndex(target)] : null;
+    const label = target ? this.filteredMemo[getDataIndex(target)] : null;
     this.closeSearch(label);
   }
 
@@ -163,16 +179,27 @@ class Search extends Component {
     this.setState({ selected: index });
   }
 
+  getFilteredCommandsMemo = (value) => {
+    if (value !== this.lastValue) {
+      this.lastValue = value;
+      this.filteredMemo = value === "" ? [] : this.commandsArrayLowerCase
+        .filter(cmd => cmd.indexOf(value.toLowerCase()) !== -1)
+        .map(cmd => this.lowerToUpper[cmd]);
+    }
+    return this.filteredMemo;
+  }
+
   render() {
     const {
       value,
       size,
       selected
     } = this.state;
-    const { loading, searchRef } = this.props;
-    this.filteredCommands = value === "" ? [] : this.commandsArrayLowerCase
-      .filter(cmd => cmd.indexOf(value.toLowerCase()) !== -1)
-      .map(cmd => this.lowerToUpper[cmd]);
+    const {
+      loading,
+      searchRef,
+    } = this.props;
+    const filteredCommands = this.getFilteredCommandsMemo(value);
 
     return (
       <div className="search-component">
@@ -212,7 +239,7 @@ class Search extends Component {
         {value.length > 0 && (
           <SearchItems
             selected={selected}
-            filteredCommands={this.filteredCommands}
+            filteredCommands={filteredCommands}
             selectItem={this.clickItem}
             hoverItem={this.hoverItem}
             itemsRef={this.itemsRef}
@@ -233,7 +260,12 @@ Search.propTypes = {
   searchRef: PropTypes.shape({
     current: PropTypes.object
   }).isRequired,
-  focusNode: PropTypes.func.isRequired
+  focusNode: PropTypes.func.isRequired,
+  showBruteForce: PropTypes.bool.isRequired,
+  bruteForcedMap: PropTypes.oneOfType([
+    PropTypes.objectOf(PropTypes.bool),
+    PropTypes.object
+  ]).isRequired
 };
 
 export default withStyles(styles)(Search);

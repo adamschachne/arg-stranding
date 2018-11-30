@@ -37,7 +37,7 @@ const _global = {
 
 function authenticateGoogleSheet(cb) {
   console.log("authenticating google sheet...");
-  _global.doc.useServiceAccountAuth(creds, cb, fetchSheetData);
+  _global.doc.useServiceAccountAuth(creds, cb);
 }
 
 MongoClient.connect(mongo_url, { useNewUrlParser: true }, (err, client) => {
