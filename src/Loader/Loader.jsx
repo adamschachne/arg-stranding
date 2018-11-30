@@ -1,10 +1,19 @@
 import React from "react";
 import { HashLoader } from "react-spinners";
 import PropTypes from "prop-types";
-import "./Loader.css";
+import { createStyles, withStyles } from "@material-ui/core";
 
-const Loader = ({ loading }) => (
-  <div className="loader">
+const styles = createStyles({
+  centered: {
+    position: "absolute",
+    left: "50%",
+    top: "50%",
+    transform: "translate(-50%, -50%)"
+  }
+});
+
+const Loader = ({ loading, classes }) => (
+  <div className={classes.centered}>
     <HashLoader
       loading={loading}
       color="#eeeeee"
@@ -17,7 +26,10 @@ Loader.defaultProps = {
 };
 
 Loader.propTypes = {
+  classes: PropTypes.shape({
+    centered: PropTypes.string.isRequired
+  }).isRequired,
   loading: PropTypes.bool
 };
 
-export default Loader;
+export default withStyles(styles)(Loader);
