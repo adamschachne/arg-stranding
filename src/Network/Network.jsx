@@ -54,7 +54,7 @@ class NetworkContainer extends PureComponent {
       },
       doubleClick: (doubleClick) => {
         if (doubleClick && doubleClick.nodes.length > 0) {
-          const { nodes: { 0: firstNode } } = doubleClick;
+          const { nodes: [firstNode] } = doubleClick;
           const { graph: { nodes: { [firstNode]: { label } } } } = this.state;
           const command = label.split("\n")[0];
           console.log("copied: ", command);
