@@ -33,13 +33,6 @@ const styles = theme => createStyles({
     display: "flex",
     alignItems: "center"
   },
-  avatar: {
-    margin: 10,
-  },
-  bigAvatar: {
-    width: 60,
-    height: 60,
-  },
   button: {
     color: theme.palette.getContrastText(purple[500]),
     backgroundColor: "#4A2BBC",
@@ -83,8 +76,6 @@ const styles = theme => createStyles({
   },
 });
 
-const BASE_URL = "https://cdn.discordapp.com/";
-
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
@@ -99,12 +90,9 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    const { identity: { avatar, username, id }, classes, width } = this.props;
+    const { identity, classes, width } = this.props;
     const { open } = this.state;
-    const isGuest = !username;
-    const avatarURL = BASE_URL + (isGuest ? `embed/avatars/${avatar}.png` : `avatars/${id}/${avatar}.png`);
-    const name = isGuest ? "Guest" : username;
-    const isSwipeable = !isWidthUp("md", width);
+    const isSwipeable = !isWidthUp("sm", width);
 
     return (
       <div className={classes.root}>
@@ -118,6 +106,7 @@ class Dashboard extends React.Component {
           swipeable={isSwipeable}
           open={open}
           toggleDrawer={this.toggleDrawer}
+          identity={identity}
         />
         <main
           className={classNames(classes.content, {

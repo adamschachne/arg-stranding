@@ -235,11 +235,6 @@ class NetworkContainer extends PureComponent {
           bruteForcedMap={bruteForcedMap}
           focusNode={cmd => this.setState({ focusNode: commandToID[cmd] })}
         /> */}
-        <GraphSettings
-          showBruteForce={showBruteForce}
-          toggleBruteForce={this.toggleBruteForce}
-          disabled={loading}
-        />
         {/* <InfoBox /> */}
         <Graph
           getNetwork={this.createNetwork}

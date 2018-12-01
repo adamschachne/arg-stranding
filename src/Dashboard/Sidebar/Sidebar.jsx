@@ -1,14 +1,15 @@
 import React from "react";
 import {
-  Drawer, withStyles, createStyles, Hidden, SwipeableDrawer, IconButton, InputAdornment
+  withStyles, SwipeableDrawer, IconButton, Divider
 } from "@material-ui/core";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import styles from "./styles";
+import UserDetails from "../UserDetails";
 
 const Sidebar = ({
-  open, classes, toggleDrawer, swipeable
+  open, classes, toggleDrawer, swipeable, identity
 }) => {
   return (
     <SwipeableDrawer
@@ -20,7 +21,6 @@ const Sidebar = ({
         disablePortal: true
       }}
       variant={swipeable ? "temporary" : "persistent"}
-      // variant="persistent"
       open={open}
       onOpen={() => toggleDrawer(true)}
       onClose={() => toggleDrawer(false)}
@@ -31,15 +31,29 @@ const Sidebar = ({
     >
       <div className={classes.logo}>
         ARG Stranding
-        {/* {swipeable && ( */}
         <IconButton
           className={classes.end}
           onClick={() => toggleDrawer(false)}
         >
           <ChevronLeftIcon color="secondary" />
         </IconButton>
-        {/* } */}
       </div>
+      <Divider
+        classes={{
+          root: classes.dividerRoot
+        }}
+        variant="middle"
+      />
+      <div className={classes.sidebarMenu}>
+        stuff goes here
+      </div>
+      <Divider
+        classes={{
+          root: classes.dividerRoot
+        }}
+        variant="middle"
+      />
+      <UserDetails identity={identity} />
     </SwipeableDrawer>
   );
 };
@@ -48,6 +62,11 @@ Sidebar.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   open: PropTypes.bool.isRequired,
   swipeable: PropTypes.bool.isRequired,
+  identity: PropTypes.shape({
+    avatar: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    username: PropTypes.string,
+  }).isRequired,
   toggleDrawer: PropTypes.func.isRequired
 };
 

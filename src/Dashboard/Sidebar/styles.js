@@ -3,18 +3,18 @@ import { fade } from "@material-ui/core/styles/colorManipulator";
 import image from "../../assets/sidebar.png";
 
 /** @param {import("@material-ui/core").Theme} theme */
-export default (theme) => {
+const styles = (theme) => {
   return createStyles({
     drawer: {
       // width: theme.drawerWidth,
       flexShrink: 0,
+      userSelect: "none"
     },
     drawerPaper: {
       width: theme.drawerWidth,
       border: "none",
     },
     drawerHeader: {
-      zIndex: "1",
       display: "flex",
       alignItems: "center",
       // padding: "0 8px",
@@ -27,16 +27,6 @@ export default (theme) => {
       alignItems: "center",
       justifyContent: "center",
       height: theme.spacing.unit * 6,
-      zIndex: "1",
-      "&:after": {
-        content: `""`,
-        position: "absolute",
-        bottom: "0",
-        height: "1px",
-        right: "15px",
-        width: "calc(100% - 30px)",
-        backgroundColor: fade(theme.palette.secondary.main, 0.5)
-      }
     },
     content: {
       flexGrow: 1,
@@ -58,12 +48,12 @@ export default (theme) => {
       backgroundImage: `url(${image})`,
       backgroundSize: "cover",
       backgroundPosition: "center center",
-      "&:after": {
+      "&:before": {
+        zIndex: -1,
         position: "absolute",
         width: "100%",
         height: "100%",
         content: `""`,
-        display: "block",
         background: "#000",
         opacity: "0.5"
       }
@@ -72,5 +62,14 @@ export default (theme) => {
       position: "absolute",
       right: 0
     },
+    sidebarMenu: {
+      padding: theme.spacing.unit * 3,
+      flex: 1,
+    },
+    dividerRoot: {
+      backgroundColor: fade(theme.palette.secondary.main, 0.5)
+    }
   });
 };
+
+export default styles;
