@@ -54,6 +54,17 @@ function getImageMetadataStream(url) {
   });
 }
 
+function formatBytes(bytes, decimals) {
+  if (bytes === 0) {
+    return '0 Bytes';
+  }
+  const k = 1024;
+  const dm = decimals <= 0 ? 0 : decimals || 2;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
+
 function getImageMetadata(url) {
   return new Promise(function (resolve, reject) {
     axios({
@@ -72,13 +83,20 @@ function getImageMetadata(url) {
         });
       } else {
         const $ = cheerio.load(response.data);
-        const { 0: width, 2: height, 4: type } = $("#download").attr("title").split(" ");
-        getStaticImageHeaders(url).then(({ "last-modified": lastModified }) => {
+        const { 0: width, 2: height, 4: type, 5: size, 6: unit } = $("#download").attr("title").split(" ");
+        const downloadURL = $("#download").attr("href");
+        // getStaticImageHeaders(url).then(({
+        getStaticImageHeaders(downloadURL).then(({
+          "last-modified": lastModified,
+          "content-length": contentLength
+        }) => {
           resolve({
             lastModified,
             width: parseInt(width),
             height: parseInt(height),
-            type
+            type,
+            postimgSize: `${size} ${unit}`,
+            actualSize: formatBytes(contentLength, 1)
           });
         });
       }
