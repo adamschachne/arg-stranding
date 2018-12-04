@@ -2,16 +2,15 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import { BrowserRouter } from "react-router-dom";
-import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import theme from "./theme";
+import Theme from "./Theme";
 
 ReactDOM.render(
   <BrowserRouter>
-    <MuiThemeProvider theme={theme}>
+    <Theme>
       <App />
-    </MuiThemeProvider>
+    </Theme>
   </BrowserRouter>,
   document.getElementById("root")
 );

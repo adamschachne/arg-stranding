@@ -1,10 +1,20 @@
 import React, { Component } from "react";
 import { hot } from "react-hot-loader";
 import { Route, Switch, Redirect } from "react-router-dom";
+import { withStyles, createStyles } from "@material-ui/core";
 import Network from "./Network/Network";
 import Landing from "./Landing/Landing";
 import Dashboard from "./Dashboard/Dashboard";
 import Loader from "./Loader/Loader";
+
+const styles = createStyles({
+  "@global": {
+    body: {
+      fontFamily: "'Source Sans Pro', sans-serif;",
+      fontWeight: 500
+    },
+  },
+});
 
 class App extends Component {
   constructor(props) {
@@ -81,4 +91,4 @@ class App extends Component {
   }
 }
 
-export default hot(module)(App);
+export default hot(module)(withStyles(styles)(App));

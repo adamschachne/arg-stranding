@@ -22,7 +22,7 @@ const styles = theme => createStyles({
     textAlign: "center",
     margin: "10px",
     minWidth: "200px",
-    fontFamily: "'Source Sans Pro', sans-serif",
+    fontWeight: 300
     // [theme.breakpoints.down('400')]: {
     //   maxWidth: '100px'
     // },

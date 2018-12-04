@@ -108,8 +108,12 @@ class NumberToWord extends Component {
     this.withAnd = `?${numberToWord(number, true)}`;
     this.withoutAnd = `?${numberToWord(number, false)}`;
     return (
-      <Paper className={classNames(classes.root, classes.form, classes.black)} elevation={1}>
-        <Typography color="inherit" variant="h6" component="h3">
+      <Paper
+        square
+        className={classNames(classes.root)}
+        elevation={1}
+      >
+        <Typography variant="h6" component="h3">
           Number to Words Converter
         </Typography>
         <div
@@ -130,7 +134,7 @@ class NumberToWord extends Component {
               shrink: true,
             }}
             InputProps={{
-              className: classes.black,
+              // className: classes.black,
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
@@ -155,7 +159,7 @@ class NumberToWord extends Component {
               margin="normal"
               fullWidth
               InputProps={{
-                className: classes.black,
+                // className: classes.black,
                 readOnly: true,
                 endAdornment: (
                   <InputAdornment position="end">
