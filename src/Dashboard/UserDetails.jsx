@@ -54,9 +54,9 @@ const UserDetails = (props) => {
 UserDetails.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   identity: PropTypes.shape({
-    avatar: PropTypes.string.isRequired,
+    avatar: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     username: PropTypes.string,
-    id: PropTypes.number
   }).isRequired
 };
 

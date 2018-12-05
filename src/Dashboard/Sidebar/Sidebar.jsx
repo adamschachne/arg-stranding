@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  withStyles, SwipeableDrawer, IconButton, Divider
+  withStyles, SwipeableDrawer, IconButton, Divider, List, ListItem, Typography
 } from "@material-ui/core";
 import classNames from "classnames";
 import PropTypes from "prop-types";
@@ -30,7 +30,9 @@ const Sidebar = ({
       }}
     >
       <div className={classes.logo}>
-        ARG Stranding
+        <Typography variant="subtitle1">
+          ARG STRANDING
+        </Typography>
         <IconButton
           className={classes.end}
           onClick={() => toggleDrawer(false)}
@@ -45,7 +47,20 @@ const Sidebar = ({
         variant="middle"
       />
       <div className={classes.sidebarMenu}>
-        stuff goes here
+        <List>
+          <ListItem className={classes.menuButton} button>
+            click me
+          </ListItem>
+          <ListItem className={classes.menuButton} button>
+            click me
+          </ListItem>
+          <ListItem className={classes.menuButton} button>
+            click me
+          </ListItem>
+          <ListItem className={classes.menuButton} button>
+            click me
+          </ListItem>
+        </List>
       </div>
       <Divider
         classes={{

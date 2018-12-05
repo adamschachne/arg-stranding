@@ -52,7 +52,7 @@ const styles = (theme) => {
         zIndex: -1,
         position: "absolute",
         width: "100%",
-        height: "100%",
+        height: "100vh",
         content: `""`,
         background: "#000",
         opacity: "0.5"
@@ -63,11 +63,17 @@ const styles = (theme) => {
       right: 0
     },
     sidebarMenu: {
-      padding: theme.spacing.unit * 3,
+      // padding: theme.spacing.unit * 1.5,
+      paddingLeft: theme.spacing.unit * 2,
+      paddingRight: theme.spacing.unit * 2,
+      paddingTop: theme.spacing.unit - 1, // 1px to account for divider
       flex: 1,
     },
     dividerRoot: {
-      backgroundColor: fade(theme.palette.secondary.main, 0.5)
+      backgroundColor: fade(theme.palette.secondary.main, 0.6)
+    },
+    menuButton: {
+      marginTop: theme.spacing.unit
     }
   });
 };
