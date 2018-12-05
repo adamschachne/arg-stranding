@@ -44,7 +44,7 @@ const UserDetails = (props) => {
       <div className={classes.username}>
         <Typography>{name}</Typography>
       </div>
-      <IconButton color="inherit" aria-label="Settings">
+      <IconButton color="secondary" aria-label="Settings">
         <SettingsIcon />
       </IconButton>
     </div>

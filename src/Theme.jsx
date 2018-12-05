@@ -15,18 +15,18 @@ const theme = createMuiTheme({
   palette: {
     text: {
       primary: grey[400],
+      // primary: purple[800]
     },
     primary: {
       main: grey[800],
-      dark: purple[200]
     },
     secondary: {
-      main: blueGrey[200]
+      main: blueGrey[100]
     },
     type: "dark",
     background: {
       default: "#1b1b1b",
-      // paper: grey[700]
+      paper: grey[800],
     }
   },
   drawerWidth: 260

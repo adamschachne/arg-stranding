@@ -48,18 +48,13 @@ const Sidebar = ({
       />
       <div className={classes.sidebarMenu}>
         <List>
-          <ListItem className={classes.menuButton} button>
-            click me
-          </ListItem>
-          <ListItem className={classes.menuButton} button>
-            click me
-          </ListItem>
-          <ListItem className={classes.menuButton} button>
-            click me
-          </ListItem>
-          <ListItem className={classes.menuButton} button>
-            click me
-          </ListItem>
+          {[1, 2, 3, 4].map(() => (
+            <ListItem className={classes.menuButton} button>
+              <Typography>
+                Click Me
+              </Typography>
+            </ListItem>
+          ))}
         </List>
       </div>
       <Divider
