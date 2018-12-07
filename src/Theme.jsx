@@ -10,7 +10,10 @@ import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
 const theme = createMuiTheme({
   typography: {
     useNextVariants: true,
-    fontFamily: "inherit"
+    fontFamily: "inherit",
+    fontWeightRegular: 600,
+    fontWeightMedium: 600,
+    fontWeightLight: 600,
   },
   palette: {
     text: {

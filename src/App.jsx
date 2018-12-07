@@ -11,7 +11,7 @@ const styles = createStyles({
   "@global": {
     body: {
       fontFamily: "'Source Sans Pro', sans-serif;",
-      fontWeight: 500
+      fontWeight: 600
     },
   },
 });

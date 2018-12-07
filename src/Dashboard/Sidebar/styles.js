@@ -8,7 +8,6 @@ const styles = (theme) => {
     drawer: {
       // width: theme.drawerWidth,
       flexShrink: 0,
-      userSelect: "none"
     },
     drawerPaper: {
       width: theme.drawerWidth,
@@ -74,6 +73,9 @@ const styles = (theme) => {
     },
     menuButton: {
       marginTop: theme.spacing.unit
+    },
+    noSelect: {
+      userSelect: "none"
     }
   });
 };
