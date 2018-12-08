@@ -17,18 +17,27 @@ const styles = theme => createStyles({
     // backgroundColor: fade(theme.palette.common.white, 0.2),
     paddingLeft: theme.spacing.unit * 2,
     paddingRight: theme.spacing.unit * 2,
+    userSelect: "none"
   },
   username: {
     paddingLeft: theme.spacing.unit,
     paddingRight: theme.spacing.unit,
     flex: 1,
   },
-  // avatar: {
-  //   margin: 10,
-  //   width: 60,
-  //   height: 60,
-  // },
+  avatarIcon: {
+    width: "100%",
+    height: "100%",
+    backgroundSize: "cover"
+  }
 });
+
+const AvatarIcon = ({ src, className }) => (
+  <div className={className} style={{ backgroundImage: `url(${src})` }} />
+);
+AvatarIcon.propTypes = {
+  className: PropTypes.string.isRequired,
+  src: PropTypes.string.isRequired
+};
 
 const UserDetails = (props) => {
   const { classes, identity: { avatar, username, id } } = props;
@@ -38,9 +47,12 @@ const UserDetails = (props) => {
   return (
     <div className={classes.root}>
       <Avatar
+        component="div"
         alt="Avatar"
-        src={avatarURL}
-      />
+      >
+        <AvatarIcon className={classes.avatarIcon} src={avatarURL} />
+      </Avatar>
+
       <div className={classes.username}>
         <Typography>{name}</Typography>
       </div>

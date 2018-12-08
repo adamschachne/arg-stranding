@@ -9,7 +9,11 @@ import styles from "./styles";
 import UserDetails from "../UserDetails";
 
 const Sidebar = ({
-  open, classes, toggleDrawer, swipeable, identity
+  open,
+  classes,
+  toggleDrawer,
+  swipeable,
+  identity
 }) => {
   return (
     <SwipeableDrawer
@@ -30,7 +34,7 @@ const Sidebar = ({
       }}
     >
       <div className={classes.logo}>
-        <Typography variant="subtitle1">
+        <Typography className={classes.noSelect} variant="subtitle1">
           ARG STRANDING
         </Typography>
         <IconButton
@@ -48,8 +52,8 @@ const Sidebar = ({
       />
       <div className={classes.sidebarMenu}>
         <List>
-          {[1, 2, 3, 4].map(() => (
-            <ListItem className={classes.menuButton} button>
+          {[1, 2, 3, 4].map(el => (
+            <ListItem key={el} className={classes.menuButton} button>
               <Typography>
                 Click Me
               </Typography>
