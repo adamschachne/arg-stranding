@@ -3,17 +3,19 @@ import Button from "@material-ui/core/Button";
 import { withStyles, createStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
 import PropTypes from "prop-types";
-import purple from "@material-ui/core/colors/purple";
 import Zoom from "@material-ui/core/Zoom";
-
+import { lighten } from "@material-ui/core/styles/colorManipulator";
 import "./Landing.css";
 
+/** @param {import("@material-ui/core").Theme} theme */
 const styles = theme => createStyles({
+  root: {
+    color: theme.palette.getContrastText("#4A2BBC"),
+  },
   button: {
-    color: theme.palette.getContrastText(purple[500]),
     backgroundColor: "#4A2BBC",
     "&:hover": {
-      backgroundColor: purple[300],
+      backgroundColor: lighten("#4A2BBC", 0.1),
     },
     borderRadius: "0px",
     letterSpacing: "10px",
@@ -23,9 +25,6 @@ const styles = theme => createStyles({
     margin: "10px",
     minWidth: "200px",
     fontWeight: 300
-    // [theme.breakpoints.down('400')]: {
-    //   maxWidth: '100px'
-    // },
   },
   stackButtons: {
     position: "absolute",
@@ -59,11 +58,11 @@ class Landing extends Component {
       exit: 200,
     };
     return (
-      <div className="landing-page">
-        <div className="landing-credit">created by Ixenbay</div>
+      <div className={classNames("landing-page", classes.root)}>
+        <div className="landing-credit">CREATED BY IXENBAY</div>
         <div className="landing-header">
           <div>ARG</div>
-          <div>Stranding</div>
+          <div>STRANDING</div>
         </div>
 
         <div className={classes.buttonGroup}>

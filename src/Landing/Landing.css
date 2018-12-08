@@ -1,6 +1,6 @@
 .landing-page {
   width: 100vw;
-  height: 80vh;  
+  height: 100vh;  
   font-family: 'Source Sans Pro', sans-serif;
   display: flex;
   justify-content: center;
@@ -8,11 +8,11 @@
   flex-direction: column;  
   text-transform: uppercase;
   padding-bottom: 20vh;
+  font-weight: 300;
 }
 
 .landing-credit {
-  font-size: 11px;
-  font-weight: 500;
+  font-size: 14px;
 }
 
 .landing-page > div {
@@ -23,14 +23,17 @@
   letter-spacing: 30px;
   text-indent: 30px;
   text-align: center;
-  font-size: 53px;
-  font-weight: 300;
+  font-size: 60px;
 }
 
 /* If the screen size is 600px wide or less, set the font-size of <div> to 30px */
 @media screen and (max-width: 600px) {
+  .landing-credit {
+    font-size: 12px;
+  }
+
   .landing-header {
-    font-size: 30px;
+    font-size: 40px;
     letter-spacing: 20px;
     text-indent: 20px;
   }
@@ -40,14 +43,3 @@
   text-align: center;
   position: relative;
 }
-/* 
-.btn {
-  display: inline-block;
-  background: #4A2BBC;
-  padding: 20px 50px;
-  text-transform: uppercase;
-  letter-spacing: 10px;
-  text-decoration: none;
-  border: none;
-  color: #fff;
-} */
