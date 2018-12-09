@@ -72,6 +72,7 @@ class NumberToWord extends Component {
 
     this.withAnd = "";
     this.withoutAnd = "";
+    this.closeTimer = null;
   }
 
   handleChange = type => (event) => {
@@ -88,10 +89,6 @@ class NumberToWord extends Component {
     this.setState({ number: "" });
   }
 
-  handleTooltipClose = () => {
-    this.setState({ tooltip: "" });
-  }
-
   copyToClipboard = type => () => {
     const number = this[type];
     if (number) {
@@ -99,6 +96,10 @@ class NumberToWord extends Component {
       console.log(this[type]);
     }
     this.setState({ tooltip: type });
+    clearTimeout(this.closeTimer);
+    this.closeTimer = setTimeout(() => {
+      this.setState({ tooltip: "" });
+    }, 1000);
   }
 
   render() {
@@ -165,8 +166,7 @@ class NumberToWord extends Component {
                   <InputAdornment position="end">
                     <IconButton
                       aria-label="Copy to Clipboard"
-                      onMouseLeave={this.handleTooltipClose}
-                      onClick={(this.copyToClipboard(type))}
+                      onClick={this.copyToClipboard(type)}
                     >
                       <Tooltip
                         open={tooltip === type}
