@@ -50,15 +50,18 @@ const styles = theme => createStyles({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing.unit * 3,
-    // paddingRight: theme.spacing.unit * 3,
+    paddingTop: theme.spacing.unit * 3,
+    paddingLeft: theme.spacing.unit * 3,
+    paddingRight: theme.spacing.unit * 3,
     // paddingBottom: theme.spacing.unit * 3,
-    // paddingLeft: theme.spacing.unit * 3,
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
     marginLeft: 0,
+    maxHeight: `calc(100vh - ${theme.spacing.unit * 6}px)`,
+    overflowY: "auto",
+    marginTop: theme.spacing.unit * 6,
   },
   contentShift: {
     transition: theme.transitions.create("margin", {
@@ -66,14 +69,7 @@ const styles = theme => createStyles({
       duration: theme.transitions.duration.enteringScreen,
     }),
     marginLeft: theme.drawerWidth,
-  },
-  drawerHeader: {
-    display: "flex",
-    alignItems: "center",
-    padding: "0 8px",
-    height: theme.spacing.unit * 6,
-    justifyContent: "flex-end",
-  },
+  }
 });
 
 class Dashboard extends React.Component {
@@ -113,7 +109,6 @@ class Dashboard extends React.Component {
             [classes.contentShift]: open && !isSwipeable
           })}
         >
-          <div className={classes.drawerHeader} />
           <NumberToWord />
           <Typography paragraph>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor

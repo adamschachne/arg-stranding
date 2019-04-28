@@ -52,6 +52,11 @@ const Sidebar = ({
       />
       <div className={classes.sidebarMenu}>
         <List>
+          <ListItem className={classes.menuButton} button>
+            <Typography>
+                Number to Words
+            </Typography>
+          </ListItem>
           {[1, 2, 3, 4].map(el => (
             <ListItem key={el} className={classes.menuButton} button>
               <Typography>
