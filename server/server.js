@@ -4,10 +4,11 @@ const configureApp = require("./configureApp");
 const fetchSheetData = require("./fetchSheetData");
 const updateData = require("./updateData");
 
+const isProductionEnv = process.env.NODE_ENV === "production";
 const MongoClient = mongo.MongoClient;
 const mongo_url = process.env.MONGODB_URI;
-const commandCollection = process.env.NODE_ENV === "production" ? "commands" : "test_commands";
-const ss_key = process.env.NODE_ENV === "production" ? "1v2R7KnoheXKbceBzJyj9c5n5m2BM1ELNXg8A7xEY0gg" : process.env.TEST_SHEET_KEY;
+const commandCollection = isProductionEnv ? "commands" : "test_commands";
+const ss_key = process.env.SHEET_ID;
 const PORT = process.env.PORT || 5000;
 const creds = {
   client_email: process.env.CLIENT_EMAIL,
@@ -42,7 +43,8 @@ function authenticateGoogleSheet(cb) {
 
 MongoClient.connect(mongo_url, { useNewUrlParser: true }, (err, client) => {
   if (err) {
-    console.error(err);
+    console.error("Failed to connect to mongodb.\n", err);
+    return;
   }
 
   console.log("connected to mongo database");
@@ -51,7 +53,7 @@ MongoClient.connect(mongo_url, { useNewUrlParser: true }, (err, client) => {
 
   const query = { deleted: { $in: [null, false] } };
   const options = { projection: { '_id': 0, 'deleted': 0 } };
-  _global.db.collection(commandCollection).find(query, options).toArray().then(data => {
+  _global.db.collection(commandCollection).find(query, options).toArray().then((data) => {
     _global.data = {};
     data.forEach(image => {
       _global.data[image.id] = image;
@@ -74,6 +76,8 @@ MongoClient.connect(mongo_url, { useNewUrlParser: true }, (err, client) => {
 process.on("SIGINT", () => {
   console.log("received SIGINT");
   console.log("Closing mongodb connection");
-  _global.client.close();
+  if (_global.client) {
+    _global.client.close();
+  }
   process.exit();
 });
