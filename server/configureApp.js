@@ -9,7 +9,10 @@ const updateData = require('./updateData');
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
-const REDIRECT_URL = encodeURIComponent(process.env.REDIRECT_URL);
+if (!process.env.REDIRECT_URL) {
+  console.error("No REDIRECT_URL set in environment; OAuth2 endpoint will not work.");
+}
+const REDIRECT_URL = process.env.REDIRECT_URL ? encodeURIComponent(process.env.REDIRECT_URL) : null;
 const SCOPES = encodeURIComponent("identify");
 
 function addIpAddress(_global, ip, user, callback) {
