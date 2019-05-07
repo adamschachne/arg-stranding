@@ -1,40 +1,39 @@
 module.exports = {
-  parser: "babel-eslint",
-  env: {
-    browser: true,
-    commonjs: true,
-    node: true,
-    jest: true,
-    es6: true,
-  },
   extends: [
-    "airbnb"
+    "airbnb",
+    "react-app",
+    "plugin:import/typescript"
   ],
-  parserOptions: {
-    ecmaVersion: 2018,
-    sourceType: "module",
-    ecmaFeatures: {
-      jsx: true,
-    },
-  },
+  plugins: [
+    "react",
+  ],
   settings: {
+    "propWrapperFunctions": ["forbidExtraProps"],
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
     "import/resolver": {
       "node": {
         "extensions": [
           ".js",
-          ".jsx"
+          ".jsx",
+          ".ts",
+          ".tsx"
         ]
       }
     },
-    "propWrapperFunctions": ["forbidExtraProps"]
+    "react": {
+      version: "999.999.999"
+    }
   },
   rules: {
     "no-unused-vars": 1,
-    "quotes": [2, "double", { allowTemplateLiterals: true }],
+    "quotes": [2, "double", { "allowTemplateLiterals": true }],
     "complexity": [2, 5],
     "comma-dangle": 0,
-    "indent": [2, 2, { SwitchCase: 1, },],
+    "indent": [2, 2, { "SwitchCase": 1 }],
     "arrow-body-style": 0,
-    "no-console": 0
+    "no-console": 0,
+    "react/jsx-filename-extension": [1, { "extensions": [".jsx", ".tsx"] }]
   }
-};
+}

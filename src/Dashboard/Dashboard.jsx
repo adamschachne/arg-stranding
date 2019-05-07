@@ -13,6 +13,7 @@ import NumberToWord from "./NumberToWord/NumberToWord";
 import Sidebar from "./Sidebar/Sidebar";
 import SearchAppBar from "../SearchAppBar/SearchAppBar";
 import Sizer from "./Sizer";
+import Test from "../Counter";
 
 const styles = theme => createStyles({
   root: {
@@ -134,6 +135,7 @@ class Dashboard extends React.Component {
             viverra maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam
             ultrices sagittis orci a.
           </Typography>
+          <Test />
         </main>
         {/* <div
           className={classes.row}

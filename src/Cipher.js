@@ -77,3 +77,5 @@ ciphertexts.forEach((ciphertext) => {
   console.log(cipher.decipher(ciphertext));
 });
 // console.log(decipher("aiqixwnusgnaqydem", cipher));
+
+export {};

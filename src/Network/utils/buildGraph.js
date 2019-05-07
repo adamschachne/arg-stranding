@@ -1,5 +1,3 @@
-import localForage from "localforage";
-
 export default (items, hidden = false) => {
   console.log("building graph");
   const commandToID = {};
