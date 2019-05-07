@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { hot } from "react-hot-loader";
+import { hot } from "react-hot-loader/root";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { withStyles, createStyles } from "@material-ui/core";
 import Network from "./Network/Network";
@@ -91,4 +91,4 @@ class App extends Component {
   }
 }
 
-export default hot(module)(withStyles(styles)(App));
+export default hot(withStyles(styles)(App));

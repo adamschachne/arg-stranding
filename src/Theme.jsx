@@ -1,9 +1,8 @@
 import React from "react";
+import { hot } from "react-hot-loader/root";
 import PropTypes from "prop-types";
 import blueGrey from "@material-ui/core/colors/blueGrey";
 import grey from "@material-ui/core/colors/grey";
-import purple from "@material-ui/core/colors/purple";
-import { hot } from "react-hot-loader";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
 
@@ -50,4 +49,4 @@ Theme.propTypes = {
   children: PropTypes.element.isRequired
 };
 
-export default hot(module)(Theme);
+export default hot(Theme);
