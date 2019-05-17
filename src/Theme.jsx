@@ -12,15 +12,15 @@ const theme = createMuiTheme({
     fontFamily: "inherit",
     fontWeightRegular: 600,
     fontWeightMedium: 600,
-    fontWeightLight: 600,
+    fontWeightLight: 600
   },
   palette: {
     text: {
-      primary: grey[400],
+      primary: grey[400]
       // primary: purple[800]
     },
     primary: {
-      main: grey[800],
+      main: grey[800]
     },
     secondary: {
       main: blueGrey[100]
@@ -28,7 +28,7 @@ const theme = createMuiTheme({
     type: "dark",
     background: {
       default: "#1b1b1b",
-      paper: grey[800],
+      paper: grey[800]
     }
   },
   drawerWidth: 260

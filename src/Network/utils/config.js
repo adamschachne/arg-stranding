@@ -28,14 +28,14 @@ export const options = {
       updateInterval: 100,
       onlyDynamicEdges: false,
       fit: false
-    },
+    }
   },
   nodes: {
     size: 25,
     borderWidth: 3,
     color: {
       border: "#e6cf00",
-      highlight: "#55befc",
+      highlight: "#55befc"
     },
     shapeProperties: {
       interpolation: false, // 'true' for intensive zooming
@@ -59,7 +59,7 @@ export const options = {
     smooth: false,
     color: {
       color: "white",
-      highlight: "#55befc",
+      highlight: "#55befc"
     },
     length: 100,
     width: 1,
@@ -86,9 +86,7 @@ export const createEvents = ({ unfocusNode, onDrag, onDragEnd }) => ({
   release(event) {
     // console.log(event);
   },
-  stabilized() {
-
-  },
+  stabilized() {},
   deselectNode(deselect) {
     unfocusNode();
     // console.log("deselect: ", deselect);
@@ -97,9 +95,7 @@ export const createEvents = ({ unfocusNode, onDrag, onDragEnd }) => ({
     console.log("dragstart");
     unfocusNode();
   },
-  dragEnd(event) {
-
-  }
+  dragEnd(event) {}
   // afterDrawing: function() {
   //   console.log("done drawing", arguments);
   // }

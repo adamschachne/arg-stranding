@@ -1,20 +1,21 @@
 import React from "react";
 import {
-  withStyles, SwipeableDrawer, IconButton, Divider, List, ListItem, Typography
+  withStyles,
+  SwipeableDrawer,
+  IconButton,
+  Divider,
+  List,
+  ListItem,
+  Typography
 } from "@material-ui/core";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import { Link as RouterLink } from "react-router-dom";
 import styles from "./styles";
 import UserDetails from "../UserDetails";
 
-const Sidebar = ({
-  open,
-  classes,
-  toggleDrawer,
-  swipeable,
-  identity
-}) => {
+const Sidebar = ({ open, classes, toggleDrawer, swipeable, identity }) => {
   return (
     <SwipeableDrawer
       anchor="left"
@@ -37,10 +38,7 @@ const Sidebar = ({
         <Typography className={classes.noSelect} variant="subtitle1">
           ARG STRANDING
         </Typography>
-        <IconButton
-          className={classes.end}
-          onClick={() => toggleDrawer(false)}
-        >
+        <IconButton className={classes.end} onClick={() => toggleDrawer(false)}>
           <ChevronLeftIcon color="secondary" />
         </IconButton>
       </div>
@@ -52,16 +50,18 @@ const Sidebar = ({
       />
       <div className={classes.sidebarMenu}>
         <List>
-          <ListItem className={classes.menuButton} button>
-            <Typography>
-                Number to Words
-            </Typography>
+          <ListItem className={classes.menuButton} button component={RouterLink} to="numbertowords">
+            <Typography>Number to Words</Typography>
           </ListItem>
-          {[1, 2, 3, 4].map(el => (
-            <ListItem key={el} className={classes.menuButton} button>
-              <Typography>
-                Click Me
-              </Typography>
+          {[1, 2, 3, 4].map((el) => (
+            <ListItem
+              key={el}
+              className={classes.menuButton}
+              button
+              component={RouterLink}
+              to={el.toString()}
+            >
+              <Typography>{`click me ${el}`}</Typography>
             </ListItem>
           ))}
         </List>
@@ -84,7 +84,7 @@ Sidebar.propTypes = {
   identity: PropTypes.shape({
     avatar: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    username: PropTypes.string,
+    username: PropTypes.string
   }).isRequired,
   toggleDrawer: PropTypes.func.isRequired
 };

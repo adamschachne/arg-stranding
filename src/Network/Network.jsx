@@ -14,7 +14,9 @@ import GraphSettings from "./GraphSettings";
 class NetworkContainer extends PureComponent {
   constructor(props) {
     super(props);
-    const { style: { width, height } } = this.props;
+    const {
+      style: { width, height }
+    } = this.props;
     this.state = {
       graph: {
         nodes: [],
@@ -54,8 +56,16 @@ class NetworkContainer extends PureComponent {
       },
       doubleClick: (doubleClick) => {
         if (doubleClick && doubleClick.nodes.length > 0) {
-          const { nodes: [firstNode] } = doubleClick;
-          const { graph: { nodes: { [firstNode]: { label } } } } = this.state;
+          const {
+            nodes: [firstNode]
+          } = doubleClick;
+          const {
+            graph: {
+              nodes: {
+                [firstNode]: { label }
+              }
+            }
+          } = this.state;
           const command = label.split("\n")[0];
           console.log("copied: ", command);
           copy(command);
@@ -68,47 +78,50 @@ class NetworkContainer extends PureComponent {
     fetch("/data", {
       credentials: "same-origin",
       redirect: "follow"
-    }).then((value) => {
-      return value.json();
-    }).then(({ items, updated }) => {
-      console.log({ items, updated }, new Date(updated).getTime());
-      this.numItems = items.length;
-      const hideBeforeStabilize = Boolean(this.network);
+    })
+      .then((value) => {
+        return value.json();
+      })
+      .then(({ items, updated }) => {
+        console.log({ items, updated }, new Date(updated).getTime());
+        this.numItems = items.length;
+        const hideBeforeStabilize = Boolean(this.network);
 
-      const buildNewData = () => {
-        this.setState({
-          ...buildGraph(items, hideBeforeStabilize),
-          loading: hideBeforeStabilize
-        });
-        localForage.setItem("updated", updated);
-      };
-
-      localForage.getItem("updated").then((lastUpdated) => {
-        // console.log("last update: ", new Date(lastUpdated).getTime())
-        if (lastUpdated === null || lastUpdated !== updated) {
-          // data has changed, build graph with new data
-          buildNewData();
-        } else {
-          // get data from localforage and use those positions
-          localForage.getItem("positions").then((positions) => {
-            if (positions === null) {
-              buildNewData();
-            } else {
-              console.log("USING EXISTING POSITIONS: ", positions);
-              this.setState({
-                ...buildGraph(
-                  items.map((item, ID) => Object.assign({}, item, positions[ID])),
-                  hideBeforeStabilize
-                ),
-                loading: hideBeforeStabilize
-              });
-            }
+        const buildNewData = () => {
+          this.setState({
+            ...buildGraph(items, hideBeforeStabilize),
+            loading: hideBeforeStabilize
           });
-        }
+          localForage.setItem("updated", updated);
+        };
+
+        localForage.getItem("updated").then((lastUpdated) => {
+          // console.log("last update: ", new Date(lastUpdated).getTime())
+          if (lastUpdated === null || lastUpdated !== updated) {
+            // data has changed, build graph with new data
+            buildNewData();
+          } else {
+            // get data from localforage and use those positions
+            localForage.getItem("positions").then((positions) => {
+              if (positions === null) {
+                buildNewData();
+              } else {
+                console.log("USING EXISTING POSITIONS: ", positions);
+                this.setState({
+                  ...buildGraph(
+                    items.map((item, ID) => Object.assign({}, item, positions[ID])),
+                    hideBeforeStabilize
+                  ),
+                  loading: hideBeforeStabilize
+                });
+              }
+            });
+          }
+        });
+      })
+      .catch((err) => {
+        console.error(err);
       });
-    }).catch((err) => {
-      console.error(err);
-    });
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -136,7 +149,7 @@ class NetworkContainer extends PureComponent {
     localForage.setItem("positions", this.network.getPositions(request));
     // save positions
     console.log("setting positions");
-  }
+  };
 
   createNetwork = (network) => {
     this.network = network;
@@ -145,14 +158,14 @@ class NetworkContainer extends PureComponent {
       this.network.moveTo({
         animation: false,
         position: { x: 0, y: 0 },
-        scale: 0.30, // about the right scale to begin to see labels
+        scale: 0.3, // about the right scale to begin to see labels
         offset: { x: 0, y: 0 }
       });
       console.log("iterations done; total time:", performance.now());
       this.savePositions();
       this.unhideNodes();
     });
-  }
+  };
 
   interactNetwork = (event) => {
     const nodes = event ? event.nodes : null;
@@ -166,13 +179,13 @@ class NetworkContainer extends PureComponent {
       this.setState({ focusNode: null });
     }
     // this.searchRef.current.blur();
-  }
+  };
 
   unhideNodes = () => {
     const { graph, options } = this.state;
     this.setState({
       graph: {
-        nodes: graph.nodes.map(node => ({ ...node, hidden: false })),
+        nodes: graph.nodes.map((node) => ({ ...node, hidden: false })),
         edges: graph.edges
       },
       options: {
@@ -184,37 +197,26 @@ class NetworkContainer extends PureComponent {
       },
       loading: false
     });
-  }
+  };
 
   toggleBruteForce = () => {
     const { graph, showBruteForce, bruteForcedMap } = this.state;
     this.setState({
       showBruteForce: !showBruteForce,
       graph: {
-        nodes: graph.nodes.map(({
-          x, // take out x
-          y, // take out y
-          hidden, // take out hidden
-          ...node // spread remaining properties
-        }) => ({
+        nodes: graph.nodes.map(({ x, y, hidden, ...node }) => ({
+          // take out x // take out y // take out hidden // spread remaining properties
           ...node,
           hidden: bruteForcedMap[node.id] && showBruteForce
         })),
         edges: graph.edges
       }
     });
-  }
+  };
 
   render() {
     const { style } = this.props;
-    const {
-      loading,
-      commandToID,
-      graph,
-      options,
-      showBruteForce,
-      bruteForcedMap
-    } = this.state;
+    const { loading, commandToID, graph, options, showBruteForce, bruteForcedMap } = this.state;
     const { width, height } = style;
     return (
       <div
@@ -240,7 +242,7 @@ class NetworkContainer extends PureComponent {
           getNetwork={this.createNetwork}
           graph={graph}
           options={{
-            ...options,
+            ...options
             // width: `${width}px`,
             // height: `${height}px`,
           }}

@@ -7,41 +7,41 @@ const styles = (theme) => {
   return createStyles({
     drawer: {
       // width: theme.drawerWidth,
-      flexShrink: 0,
+      flexShrink: 0
     },
     drawerPaper: {
       width: theme.drawerWidth,
-      border: "none",
+      border: "none"
     },
     drawerHeader: {
       display: "flex",
       alignItems: "center",
       // padding: "0 8px",
       height: theme.spacing.unit * 6,
-      justifyContent: "flex-end",
+      justifyContent: "flex-end"
     },
     logo: {
       display: "flex",
       position: "relative",
       alignItems: "center",
       justifyContent: "center",
-      height: theme.spacing.unit * 6,
+      height: theme.spacing.unit * 6
     },
     content: {
       flexGrow: 1,
       padding: theme.spacing.unit * 3,
       transition: theme.transitions.create("margin", {
         easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
+        duration: theme.transitions.duration.leavingScreen
       }),
-      marginLeft: -theme.drawerWidth,
+      marginLeft: -theme.drawerWidth
     },
     contentShift: {
       transition: theme.transitions.create("margin", {
         easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
+        duration: theme.transitions.duration.enteringScreen
       }),
-      marginLeft: 0,
+      marginLeft: 0
     },
     background: {
       backgroundImage: `url(${image})`,
@@ -66,7 +66,7 @@ const styles = (theme) => {
       paddingLeft: theme.spacing.unit * 2,
       paddingRight: theme.spacing.unit * 2,
       paddingTop: theme.spacing.unit - 1, // 1px to account for divider
-      flex: 1,
+      flex: 1
     },
     dividerRoot: {
       backgroundColor: fade(theme.palette.secondary.main, 0.6)

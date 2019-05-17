@@ -14,17 +14,17 @@ import copy from "copy-to-clipboard";
 import Tooltip from "@material-ui/core/Tooltip";
 
 /** @param {import("@material-ui/core").Theme} theme */
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     ...theme.mixins.gutters(),
     paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2
   },
   black: {
     color: theme.palette.common.black
   },
   arrowPopper: {
-    "&[x-placement*=\"top\"] $arrowArrow": {
+    "&[x-placement*='top'] $arrowArrow": {
       bottom: 0,
       left: 0,
       marginBottom: "-0.9em",
@@ -32,9 +32,9 @@ const styles = theme => ({
       height: "1em",
       "&::before": {
         borderWidth: "1em 1em 0 1em",
-        borderColor: `${theme.palette.grey[700]} transparent transparent transparent`,
-      },
-    },
+        borderColor: `${theme.palette.grey[700]} transparent transparent transparent`
+      }
+    }
   },
   arrowArrow: {
     position: "absolute",
@@ -42,14 +42,14 @@ const styles = theme => ({
     width: "3em",
     height: "3em",
     "&::before": {
-      content: "\"\"",
+      content: `""`,
       margin: "auto",
       display: "block",
       width: 0,
       height: 0,
-      borderStyle: "solid",
-    },
-  },
+      borderStyle: "solid"
+    }
+  }
 });
 
 function numberToWord(number, withAnd) {
@@ -75,21 +75,21 @@ class NumberToWord extends Component {
     this.closeTimer = null;
   }
 
-  handleChange = type => (event) => {
+  handleChange = (type) => (event) => {
     this.setState({ [type]: event.target.value });
-  }
+  };
 
   handleArrowRef = (node) => {
     this.setState({
-      arrowRef: node,
+      arrowRef: node
     });
   };
 
   clear = () => {
     this.setState({ number: "" });
-  }
+  };
 
-  copyToClipboard = type => () => {
+  copyToClipboard = (type) => () => {
     const number = this[type];
     if (number) {
       copy(this[type]);
@@ -100,7 +100,7 @@ class NumberToWord extends Component {
     this.closeTimer = setTimeout(() => {
       this.setState({ tooltip: "" });
     }, 1000);
-  }
+  };
 
   render() {
     const { classes } = this.props;
@@ -109,18 +109,14 @@ class NumberToWord extends Component {
     this.withAnd = `?${numberToWord(number, true)}`;
     this.withoutAnd = `?${numberToWord(number, false)}`;
     return (
-      <Paper
-        square
-        className={classNames(classes.root)}
-        elevation={1}
-      >
+      <Paper square className={classNames(classes.root)} elevation={1}>
         <Typography variant="h6" component="h3">
           Number to Words Converter
         </Typography>
         <div
           style={{
             display: "flex",
-            flexWrap: "wrap",
+            flexWrap: "wrap"
           }}
         >
           <TextField
@@ -132,16 +128,13 @@ class NumberToWord extends Component {
             type="number"
             margin="normal"
             InputLabelProps={{
-              shrink: true,
+              shrink: true
             }}
             InputProps={{
               // className: classes.black,
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton
-                    aria-label="Clear"
-                    onClick={this.clear}
-                  >
+                  <IconButton aria-label="Clear" onClick={this.clear}>
                     <DeleteTwoToneIcon className={classes.icon} />
                   </IconButton>
                 </InputAdornment>
@@ -150,7 +143,7 @@ class NumberToWord extends Component {
           />
           {[
             { type: `withAnd`, label: `With 'And'` },
-            { type: `withoutAnd`, label: `Without 'And'` },
+            { type: `withoutAnd`, label: `Without 'And'` }
           ].map(({ type, label }) => (
             <TextField
               key={type}
@@ -164,19 +157,16 @@ class NumberToWord extends Component {
                 readOnly: true,
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton
-                      aria-label="Copy to Clipboard"
-                      onClick={this.copyToClipboard(type)}
-                    >
+                    <IconButton aria-label="Copy to Clipboard" onClick={this.copyToClipboard(type)}>
                       <Tooltip
                         open={tooltip === type}
                         placement="top"
-                        title={(
+                        title={
                           <React.Fragment>
                             Copied!
                             <span className={classes.arrowArrow} ref={this.handleArrowRef} />
                           </React.Fragment>
-                        )}
+                        }
                         classes={{ popper: classes.arrowPopper }}
                         PopperProps={{
                           disablePortal: true,
@@ -184,10 +174,10 @@ class NumberToWord extends Component {
                             modifiers: {
                               arrow: {
                                 enabled: Boolean(arrowRef),
-                                element: arrowRef,
-                              },
-                            },
-                          },
+                                element: arrowRef
+                              }
+                            }
+                          }
                         }}
                       >
                         <FileCopy />
@@ -207,7 +197,7 @@ NumberToWord.propTypes = {
   classes: PropTypes.shape({
     arrowPopper: PropTypes.string,
     arrowArrow: PropTypes.string
-  }).isRequired,
+  }).isRequired
 };
 
 export default withStyles(styles)(NumberToWord);

@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { hot } from "react-hot-loader/root";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { withStyles, createStyles } from "@material-ui/core";
-import Network from "./Network/Network";
 import Landing from "./Landing/Landing";
 import Dashboard from "./Dashboard/Dashboard";
 import Loader from "./Loader/Loader";
@@ -12,8 +11,8 @@ const styles = createStyles({
     body: {
       fontFamily: "'Source Sans Pro', sans-serif;",
       fontWeight: 600
-    },
-  },
+    }
+  }
 });
 
 class App extends Component {
@@ -29,15 +28,18 @@ class App extends Component {
     fetch("profile", {
       credentials: "same-origin",
       redirect: "follow"
-    }).then((response) => {
-      return response.json();
-    }).then((identity) => {
-      console.log(identity);
-      this.setState({ identity, loading: false });
-    }).catch((err) => {
-      this.setState({ loading: false });
-      console.log(err);
-    });
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((identity) => {
+        console.log(identity);
+        this.setState({ identity, loading: false });
+      })
+      .catch((err) => {
+        this.setState({ loading: false });
+        console.log(err);
+      });
   }
 
   clickGuest = async () => {
@@ -52,7 +54,7 @@ class App extends Component {
     } catch (err) {
       console.error(err);
     }
-  }
+  };
 
   render() {
     const { identity, loading } = this.state;
@@ -68,24 +70,10 @@ class App extends Component {
     return (
       <Switch>
         <Route
-          path="/graph"
-          render={() => (
-            <Network
-              style={{
-                backgroundColor: "#36393f"
-              }}
-            // renderMenu={this.renderMenu}
-            />
-          )}
-        />
-        <Route
-          exact
           path="/"
-          render={() => <Dashboard identity={identity} />}
+          render={(routeProps) => <Dashboard {...routeProps} identity={identity} />}
         />
-        <Route
-          render={() => <Redirect to="/" />}
-        />
+        <Route render={() => <Redirect to="/" />} />
       </Switch>
     );
   }

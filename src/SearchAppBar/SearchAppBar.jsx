@@ -2,7 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import {
-  AppBar, withStyles, IconButton, Toolbar, Typography, InputBase, Collapse
+  AppBar,
+  withStyles,
+  IconButton,
+  Toolbar,
+  Typography,
+  InputBase,
+  Collapse
 } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -18,20 +24,14 @@ class SearchAppBar extends React.Component {
 
   showToolbar = () => {
     this.setState({ show: true });
-  }
+  };
 
   hideToolbar = () => {
     this.setState({ show: false });
-  }
+  };
 
   render() {
-    const {
-      classes,
-      transparent,
-      clickMenu,
-      sidebarOpen,
-      isSwipeable
-    } = this.props;
+    const { classes, transparent, clickMenu, sidebarOpen, isSwipeable } = this.props;
     const { show } = this.state;
 
     return (
@@ -44,10 +44,7 @@ class SearchAppBar extends React.Component {
         position="absolute"
       >
         {/* <Collapse in={show}> */}
-        <Toolbar
-          className={classes.fixedGutter}
-          variant="dense"
-        >
+        <Toolbar className={classes.fixedGutter} variant="dense">
           <IconButton
             className={classNames(
               { [classes.hide]: sidebarOpen && !isSwipeable },
@@ -69,7 +66,7 @@ class SearchAppBar extends React.Component {
               placeholder="Search…"
               classes={{
                 root: classes.inputRoot,
-                input: classes.inputInput,
+                input: classes.inputInput
               }}
             />
           </div>

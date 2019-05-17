@@ -1,35 +1,34 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {
-  createStyles, withStyles, Avatar, IconButton, Typography
-} from "@material-ui/core";
+import { createStyles, withStyles, Avatar, IconButton, Typography } from "@material-ui/core";
 import SettingsIcon from "@material-ui/icons/Settings";
 import classNames from "classnames";
 
 const BASE_URL = "https://cdn.discordapp.com/";
 
 /** @param {import("@material-ui/core").Theme} theme */
-const styles = theme => createStyles({
-  root: {
-    display: "flex",
-    alignItems: "center",
-    height: theme.spacing.unit * 7,
-    // backgroundColor: fade(theme.palette.common.white, 0.2),
-    paddingLeft: theme.spacing.unit * 2,
-    paddingRight: theme.spacing.unit * 2,
-    userSelect: "none"
-  },
-  username: {
-    paddingLeft: theme.spacing.unit,
-    paddingRight: theme.spacing.unit,
-    flex: 1,
-  },
-  avatarIcon: {
-    width: "100%",
-    height: "100%",
-    backgroundSize: "cover"
-  }
-});
+const styles = (theme) =>
+  createStyles({
+    root: {
+      display: "flex",
+      alignItems: "center",
+      height: theme.spacing.unit * 7,
+      // backgroundColor: fade(theme.palette.common.white, 0.2),
+      paddingLeft: theme.spacing.unit * 2,
+      paddingRight: theme.spacing.unit * 2,
+      userSelect: "none"
+    },
+    username: {
+      paddingLeft: theme.spacing.unit,
+      paddingRight: theme.spacing.unit,
+      flex: 1
+    },
+    avatarIcon: {
+      width: "100%",
+      height: "100%",
+      backgroundSize: "cover"
+    }
+  });
 
 const AvatarIcon = ({ src, className }) => (
   <div className={className} style={{ backgroundImage: `url(${src})` }} />
@@ -40,16 +39,17 @@ AvatarIcon.propTypes = {
 };
 
 const UserDetails = (props) => {
-  const { classes, identity: { avatar, username, id } } = props;
+  const {
+    classes,
+    identity: { avatar, username, id }
+  } = props;
   const isGuest = !username;
-  const avatarURL = BASE_URL + (isGuest ? `embed/avatars/${avatar}.png` : `avatars/${id}/${avatar}.png`);
+  const avatarURL =
+    BASE_URL + (isGuest ? `embed/avatars/${avatar}.png` : `avatars/${id}/${avatar}.png`);
   const name = isGuest ? "Guest" : username;
   return (
     <div className={classes.root}>
-      <Avatar
-        component="div"
-        alt="Avatar"
-      >
+      <Avatar component="div" alt="Avatar">
         <AvatarIcon className={classes.avatarIcon} src={avatarURL} />
       </Avatar>
 
@@ -68,7 +68,7 @@ UserDetails.propTypes = {
   identity: PropTypes.shape({
     avatar: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    username: PropTypes.string,
+    username: PropTypes.string
   }).isRequired
 };
 

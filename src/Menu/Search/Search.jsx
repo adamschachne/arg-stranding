@@ -12,9 +12,7 @@ import "./Search.css";
 
 // import InfoBox from '../Info/InfoBox';
 
-const styles = createStyles({
-
-});
+const styles = createStyles({});
 const PLACEHOLDER = "start typing to search...";
 
 function getDataIndex(target) {
@@ -31,12 +29,14 @@ function isPrintableKeycode(event) {
   if (event.ctrlKey || event.altKey) {
     return false;
   }
-  return (code > 47 && code < 58) // number keys
-    || code === 32 // spacebar
-    || (code > 64 && code < 91) // letter keys
-    || (code > 95 && code < 112) // numpad keys
-    || (code > 185 && code < 193) // ;=,-./` (in order)
-    || (code > 218 && code < 223); // [\]' (in order)
+  return (
+    (code > 47 && code < 58) || // number keys
+    code === 32 || // spacebar
+    (code > 64 && code < 91) || // letter keys
+    (code > 95 && code < 112) || // numpad keys
+    (code > 185 && code < 193) || // ;=,-./` (in order)
+    (code > 218 && code < 223)
+  ); // [\]' (in order)
 }
 
 class Search extends Component {
@@ -52,7 +52,7 @@ class Search extends Component {
     this.commandsArray = [];
     this.commandsArrayLowerCase = [];
     this.lowerToUpper = {};
-    this.usingEdgeOrIE = (document.documentMode || /Edge/.test(navigator.userAgent));
+    this.usingEdgeOrIE = document.documentMode || /Edge/.test(navigator.userAgent);
 
     // memo search filter
     this.lastValue = "";
@@ -87,7 +87,9 @@ class Search extends Component {
         this.closeSearch();
       },
       tab: (event) => {
-        const { searchRef: { current } } = this.props;
+        const {
+          searchRef: { current }
+        } = this.props;
         event.preventDefault();
         current.blur();
       }
@@ -121,15 +123,20 @@ class Search extends Component {
 
   rebuildSearch = (prevProps) => {
     const { commandToID, bruteForcedMap, showBruteForce } = this.props;
-    if (showBruteForce !== prevProps.showBruteForce
-      || prevProps.commandToID !== commandToID
-      || prevProps.bruteForcedMap !== bruteForcedMap) {
-      this.commandsArray = showBruteForce
-        ? Object.keys(commandToID).sort()
-        : Object.keys(commandToID)
-          .filter(key => !bruteForcedMap[commandToID[key]])
+    if (
+      showBruteForce !== prevProps.showBruteForce ||
+      prevProps.commandToID !== commandToID ||
+      prevProps.bruteForcedMap !== bruteForcedMap
+    ) {
+      if (showBruteForce === true) {
+        this.commandsArray = Object.keys(commandToID).sort();
+      } else {
+        this.commandsArray = Object.keys(commandToID)
+          .filter((key) => !bruteForcedMap[commandToID[key]])
           .sort();
-      this.commandsArrayLowerCase = this.commandsArray.map(command => command.toLowerCase());
+      }
+
+      this.commandsArrayLowerCase = this.commandsArray.map((command) => command.toLowerCase());
       this.lowerToUpper = this.commandsArrayLowerCase.reduce((result, item, index) => {
         result[item] = this.commandsArray[index]; // eslint-disable-line no-param-reassign
         return result;
@@ -139,11 +146,13 @@ class Search extends Component {
       this.lastValue = null;
       this.forceUpdate();
     }
-  }
+  };
 
   onWindowKeydown = (event) => {
     const { keyCode } = event;
-    const { searchRef: { current } } = this.props;
+    const {
+      searchRef: { current }
+    } = this.props;
     const key = keycode(event);
 
     if (this.hasFocus === false && isPrintableKeycode(event)) {
@@ -152,16 +161,19 @@ class Search extends Component {
 
     const func = this.handleKey[key];
     if (func) func(event);
-  }
+  };
 
   clickItem = ({ target = null }) => {
     // get label from target
     const label = target ? this.filteredMemo[getDataIndex(target)] : null;
     this.closeSearch(label);
-  }
+  };
 
   closeSearch = (label = null) => {
-    const { focusNode, searchRef: { current } } = this.props;
+    const {
+      focusNode,
+      searchRef: { current }
+    } = this.props;
     this.setState(() => {
       current.blur();
       current.value = "";
@@ -172,44 +184,36 @@ class Search extends Component {
         size: PLACEHOLDER.length
       };
     });
-  }
+  };
 
   hoverItem = (index) => {
     // console.log(index);
     this.setState({ selected: index });
-  }
+  };
 
   getFilteredCommandsMemo = (value) => {
     if (value !== this.lastValue) {
       this.lastValue = value;
-      this.filteredMemo = value === "" ? [] : this.commandsArrayLowerCase
-        .filter(cmd => cmd.indexOf(value.toLowerCase()) !== -1)
-        .map(cmd => this.lowerToUpper[cmd]);
+      if (value === "") {
+        this.filteredMemo = [];
+      } else {
+        this.filteredMemo = this.commandsArrayLowerCase
+          .filter((cmd) => cmd.indexOf(value.toLowerCase()) !== -1)
+          .map((cmd) => this.lowerToUpper[cmd]);
+      }
     }
     return this.filteredMemo;
-  }
+  };
 
   render() {
-    const {
-      value,
-      size,
-      selected
-    } = this.state;
-    const {
-      loading,
-      searchRef,
-    } = this.props;
+    const { value, size, selected } = this.state;
+    const { loading, searchRef } = this.props;
     const filteredCommands = this.getFilteredCommandsMemo(value);
 
     return (
       <div className="search-component">
         <InputAdornment position="end">
-          <IconButton
-            aria-label="Clear"
-            component={Link}
-            to="/"
-            color="inherit"
-          >
+          <IconButton aria-label="Clear" component={Link} to="/" color="inherit">
             <Home />
           </IconButton>
         </InputAdornment>
@@ -222,11 +226,15 @@ class Search extends Component {
             size,
             autoCapitalize: "off",
             spellCheck: "false",
-            onFocus: () => { this.hasFocus = true; },
-            onBlur: () => { this.hasFocus = false; },
+            onFocus: () => {
+              this.hasFocus = true;
+            },
+            onBlur: () => {
+              this.hasFocus = false;
+            },
             onChange: ({ target: { value: newValue } }) => {
               // TODO use old selected value
-              this.setState(oldState => ({
+              this.setState((oldState) => ({
                 size: PLACEHOLDER.length < newValue.length ? newValue.length : PLACEHOLDER.length,
                 value: newValue,
                 selected: 0
@@ -262,10 +270,8 @@ Search.propTypes = {
   }).isRequired,
   focusNode: PropTypes.func.isRequired,
   showBruteForce: PropTypes.bool.isRequired,
-  bruteForcedMap: PropTypes.oneOfType([
-    PropTypes.objectOf(PropTypes.bool),
-    PropTypes.object
-  ]).isRequired
+  bruteForcedMap: PropTypes.oneOfType([PropTypes.objectOf(PropTypes.bool), PropTypes.object])
+    .isRequired
 };
 
 export default withStyles(styles)(Search);

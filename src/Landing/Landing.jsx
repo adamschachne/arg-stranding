@@ -8,39 +8,40 @@ import { lighten } from "@material-ui/core/styles/colorManipulator";
 import "./Landing.css";
 
 /** @param {import("@material-ui/core").Theme} theme */
-const styles = theme => createStyles({
-  root: {
-    color: theme.palette.getContrastText("#4A2BBC"),
-  },
-  button: {
-    backgroundColor: "#4A2BBC",
-    "&:hover": {
-      backgroundColor: lighten("#4A2BBC", 0.1),
+const styles = (theme) =>
+  createStyles({
+    root: {
+      color: theme.palette.getContrastText("#4A2BBC")
     },
-    borderRadius: "0px",
-    letterSpacing: "10px",
-    textIndent: "10px",
-    textDecoration: "none",
-    textAlign: "center",
-    margin: "10px",
-    minWidth: "200px",
-    fontWeight: 300
-  },
-  stackButtons: {
-    position: "absolute",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    flexWrap: "wrap",
-    flexDirection: "row"
-  },
-  buttonGroup: {
-    width: "100vw",
-    display: "flex",
-    justifyContent: "center",
-    flexDirection: "row",
-  }
-});
+    button: {
+      backgroundColor: "#4A2BBC",
+      "&:hover": {
+        backgroundColor: lighten("#4A2BBC", 0.1)
+      },
+      borderRadius: "0px",
+      letterSpacing: "10px",
+      textIndent: "10px",
+      textDecoration: "none",
+      textAlign: "center",
+      margin: "10px",
+      minWidth: "200px",
+      fontWeight: 300
+    },
+    stackButtons: {
+      position: "absolute",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      flexWrap: "wrap",
+      flexDirection: "row"
+    },
+    buttonGroup: {
+      width: "100vw",
+      display: "flex",
+      justifyContent: "center",
+      flexDirection: "row"
+    }
+  });
 
 class Landing extends Component {
   constructor(props) {
@@ -55,7 +56,7 @@ class Landing extends Component {
     const { clicked } = this.state;
     const transitionDuration = {
       enter: 200,
-      exit: 200,
+      exit: 200
     };
     return (
       <div className={classNames("landing-page", classes.root)}>
@@ -85,26 +86,20 @@ class Landing extends Component {
             </Zoom>
           </div>
           <div className={classes.stackButtons}>
-            <Zoom
-              in={clicked}
-              timeout={transitionDuration}
-              style={{ zIndex: clicked ? 1 : -1 }}
-            >
+            <Zoom in={clicked} timeout={transitionDuration} style={{ zIndex: clicked ? 1 : -1 }}>
               <Button
                 variant="contained"
                 color="primary"
                 className={classNames(classes.button)}
                 size="large"
-                onClick={() => { window.location.href = "/auth"; }}
+                onClick={() => {
+                  window.location.href = "/auth";
+                }}
               >
                 discord
               </Button>
             </Zoom>
-            <Zoom
-              in={clicked}
-              timeout={transitionDuration}
-              style={{ zIndex: clicked ? 1 : -1 }}
-            >
+            <Zoom in={clicked} timeout={transitionDuration} style={{ zIndex: clicked ? 1 : -1 }}>
               <Button
                 variant="contained"
                 color="primary"

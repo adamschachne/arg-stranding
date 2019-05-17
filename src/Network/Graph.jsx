@@ -2,22 +2,20 @@ import React, { Component } from "react";
 import isEqual from "lodash/isEqual";
 import differenceWith from "lodash/differenceWith";
 import vis from "vis";
-import uuid from "uuid";
+import uuidv4 from "uuid/v4";
 import PropTypes from "prop-types";
 
 class Graph extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      identifier: uuid.v4()
+      identifier: uuidv4()
     };
   }
 
   componentDidMount() {
     const { identifier } = this.state;
-    const {
-      graph, options, events, getNetwork
-    } = this.props;
+    const { graph, options, events, getNetwork } = this.props;
 
     this.edges = new vis.DataSet();
     this.nodes = new vis.DataSet();
@@ -52,7 +50,11 @@ class Graph extends Component {
 
   // eslint-disable-next-line complexity
   shouldComponentUpdate(nextProps) {
-    const { options, events, graph: { nodes, edges } } = this.props;
+    const {
+      options,
+      events,
+      graph: { nodes, edges }
+    } = this.props;
     const {
       options: nextOptions,
       events: nextEvents,
@@ -71,20 +73,14 @@ class Graph extends Component {
       const idIsEqual = (n1, n2) => n1.id === n2.id;
       nodesRemoved = differenceWith(nodes, nextNodes, idIsEqual);
       nodesAdded = differenceWith(nextNodes, nodes, idIsEqual);
-      nodesChanged = differenceWith(
-        differenceWith(nextNodes, nodes, isEqual),
-        nodesAdded
-      );
+      nodesChanged = differenceWith(differenceWith(nextNodes, nodes, isEqual), nodesAdded);
       this.patchNodes({ nodesRemoved, nodesAdded, nodesChanged });
     }
 
     if (edgesChange) {
       const edgesRemoved = differenceWith(edges, nextEdges, isEqual);
       const edgesAdded = differenceWith(nextEdges, edges, isEqual);
-      const edgesChanged = differenceWith(
-        differenceWith(nextEdges, edges, isEqual),
-        edgesAdded
-      );
+      const edgesChanged = differenceWith(differenceWith(nextEdges, edges, isEqual), edgesAdded);
       this.patchEdges({ edgesRemoved, edgesAdded, edgesChanged });
     }
 

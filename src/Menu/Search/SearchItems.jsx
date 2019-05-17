@@ -25,7 +25,7 @@ const styles = createStyles({
     width: "100vw",
     height: "calc(100vh - 35px)",
     background: "rgba(0,0,0,.5)",
-    display: "inline-block",
+    display: "inline-block"
   },
   searchResults: {
     width: 700,
@@ -39,17 +39,11 @@ const styles = createStyles({
 
 const NO_RESULTS = "No Results";
 
-const Item = ({
-  label,
-  className,
-  onHover,
-  index,
-  selected
-}) => {
-  const style = selected ? {
+const Item = ({ label, className, onHover, index, selected }) => {
+  const selectedBackgroundColor = {
     backgroundColor: "#bfc1c1"
-  } : undefined;
-
+  };
+  const style = selected ? selectedBackgroundColor : undefined;
   return (
     <div
       className={className}
@@ -73,11 +67,7 @@ Item.propTypes = {
 
 const SearchItems = ({
   filteredCommands,
-  classes: {
-    searchItem,
-    searchItems,
-    searchResults,
-  },
+  classes: { searchItem, searchItems, searchResults },
   selectItem,
   hoverItem,
   selected,
@@ -85,15 +75,8 @@ const SearchItems = ({
 }) => {
   const commands = filteredCommands.length === 0 ? [NO_RESULTS] : filteredCommands;
   return (
-    <div
-      role="presentation"
-      onClick={selectItem}
-      className={searchItems}
-    >
-      <div
-        className={searchResults}
-        ref={itemsRef}
-      >
+    <div role="presentation" onClick={selectItem} className={searchItems}>
+      <div className={searchResults} ref={itemsRef}>
         {commands.map((label, index) => (
           <Item
             key={label}
@@ -117,16 +100,14 @@ SearchItems.propTypes = {
   classes: PropTypes.shape({
     searchItem: PropTypes.string.isRequired,
     searchItems: PropTypes.string.isRequired,
-    searchResults: PropTypes.string.isRequired,
+    searchResults: PropTypes.string.isRequired
   }).isRequired,
   filteredCommands: PropTypes.arrayOf(PropTypes.string).isRequired,
   selected: PropTypes.number,
   selectItem: PropTypes.func.isRequired,
   hoverItem: PropTypes.func.isRequired,
-  itemsRef: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.any })
-  ]).isRequired
+  itemsRef: PropTypes.oneOfType([PropTypes.func, PropTypes.shape({ current: PropTypes.any })])
+    .isRequired
 };
 
 export default withStyles(styles)(SearchItems);

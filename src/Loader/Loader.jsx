@@ -14,10 +14,7 @@ const styles = createStyles({
 
 const Loader = ({ loading, classes }) => (
   <div className={classes.centered}>
-    <HashLoader
-      loading={loading}
-      color="#eeeeee"
-    />
+    <HashLoader loading={loading} color="#eeeeee" />
   </div>
 );
 

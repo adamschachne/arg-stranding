@@ -2,10 +2,12 @@ module.exports = {
   extends: [
     "airbnb",
     "react-app",
-    "plugin:import/typescript"
+    "plugin:import/typescript",
+    "prettier"
   ],
   plugins: [
     "react",
+    "prettier"
   ],
   settings: {
     "propWrapperFunctions": ["forbidExtraProps"],
@@ -34,6 +36,11 @@ module.exports = {
     "indent": [2, 2, { "SwitchCase": 1 }],
     "arrow-body-style": 0,
     "no-console": 0,
-    "react/jsx-filename-extension": [1, { "extensions": [".jsx", ".tsx"] }]
+    "react/jsx-filename-extension": [1, { "extensions": [".jsx", ".tsx"] }],
+    "react/jsx-wrap-multilines": ["error", {"declaration": false, "assignment": false}],
+    "prettier/prettier": [2, {
+      "printWidth": 100,
+      "arrowParens": "always"
+    }]
   }
 }

@@ -24,7 +24,10 @@ class Cipher {
 
     this.offset = 97;
     this.cipher = uniqueKey + alphabet.replace(regex, "");
-    this.inverseCipher = alphabet.split("").map(char => String.fromCharCode(this.cipher.indexOf(char) + this.offset)).join("");
+    this.inverseCipher = alphabet
+      .split("")
+      .map((char) => String.fromCharCode(this.cipher.indexOf(char) + this.offset))
+      .join("");
   }
 
   /**

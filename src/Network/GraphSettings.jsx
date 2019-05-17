@@ -5,17 +5,18 @@ import { IconButton, withStyles, createStyles } from "@material-ui/core";
 import classNames from "classnames";
 
 /** @param {import("@material-ui/core").Theme} theme */
-const styles = theme => createStyles({
-  bottomLeft: {
-    bottom: 0,
-    left: theme.spacing.unit,
-    position: "absolute",
-    zIndex: 100
-  },
-  white: {
-    color: "white"
-  }
-});
+const styles = (theme) =>
+  createStyles({
+    bottomLeft: {
+      bottom: 0,
+      left: theme.spacing.unit,
+      position: "absolute",
+      zIndex: 100
+    },
+    white: {
+      color: "white"
+    }
+  });
 
 class GraphSettings extends React.Component {
   constructor(props) {
