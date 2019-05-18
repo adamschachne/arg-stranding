@@ -40,6 +40,10 @@ const styles = (theme) =>
       display: "flex",
       justifyContent: "center",
       flexDirection: "row"
+    },
+    wrapper: {
+      margin: theme.spacing.unit,
+      position: "relative"
     }
   });
 
@@ -100,15 +104,18 @@ class Landing extends Component {
               </Button>
             </Zoom>
             <Zoom in={clicked} timeout={transitionDuration} style={{ zIndex: clicked ? 1 : -1 }}>
-              <Button
-                variant="contained"
-                color="primary"
-                className={classNames(classes.button)}
-                size="large"
-                onClick={clickGuest}
-              >
-                guest
-              </Button>
+              <div className={classes.wrapper}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className={classNames(classes.button)}
+                  size="large"
+                  onClick={clickGuest}
+                >
+                  guest
+                </Button>
+                {/* {loading && <CircularProgress size={24} className={classes.buttonProgress} />} */}
+              </div>
             </Zoom>
           </div>
         </div>

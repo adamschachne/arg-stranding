@@ -48,9 +48,10 @@ class App extends Component {
         method: "POST",
         credentials: "same-origin"
       });
+      this.setState({ loading: true });
       const identity = await guestResponse.json();
       console.log(identity);
-      this.setState({ identity: identity.guest });
+      this.setState({ identity: identity.guest, loading: false });
     } catch (err) {
       console.error(err);
     }

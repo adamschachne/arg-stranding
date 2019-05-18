@@ -6,7 +6,7 @@ function startNgrok() {
     ngrok.connect({
       addr: process.env.PORT || 5000, // port or network address, defaults to 80
     }).then(ngrokUrl => {
-      const redirect = url.resolve(ngrokUrl, "/discord");
+      const redirect = url.resolve(ngrokUrl, "/discord/code");
       console.log("OAuth2 Redirect URL: ", redirect);
       resolve(redirect);
     }).catch(err => {

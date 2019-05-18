@@ -135,7 +135,6 @@ module.exports = function configureApp(_global, fetchSheetData) {
 
   // AJAX request for guest account
   app.post('/guest', function (req, res) {
-
     if (req.session.identity && req.session.identity.guest) {
       return res.send({ guest: req.session.identity });
     }
@@ -157,12 +156,12 @@ module.exports = function configureApp(_global, fetchSheetData) {
       });
     } catch (err) {
       console.error(err);
-      res.redirect("/");
+      return res.redirect("/");
     }
   });
 
   app.get('/auth', function (req, res) {
-    res.redirect(`https://discordapp.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URL}&response_type=code&scope=${SCOPES}`);
+    return res.redirect(`https://discordapp.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URL}&response_type=code&scope=${SCOPES}`);
   });
 
   // Answer API requests.
@@ -210,7 +209,7 @@ module.exports = function configureApp(_global, fetchSheetData) {
 
   // All remaining requests return the React app, so it can handle routing.
   app.get('*', function (request, response) {
-    response.sendFile(path.resolve(paths.appBuild, 'index.html'));
+    return response.sendFile(path.resolve(paths.appBuild, 'index.html'));
   });
 
   return app;

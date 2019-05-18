@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import { withStyles, createStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
 import PropTypes from "prop-types";
@@ -71,12 +71,13 @@ const styles = (theme) =>
     }
   });
 
+const isSwipeable = (width) => !isWidthUp("sm", width);
+
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
-    props.history.push("/");
     this.state = {
-      open: isWidthUp("md", props.width)
+      open: !isSwipeable(props.width)
     };
   }
 
@@ -85,53 +86,49 @@ class Dashboard extends React.Component {
   };
 
   render() {
-    const { identity, classes, width } = this.props;
+    const { identity, classes, width, location } = this.props;
     const { open } = this.state;
-    const isSwipeable = !isWidthUp("sm", width);
+
+    console.log(location);
 
     return (
       <div className={classes.root}>
         <SearchAppBar
           sidebarOpen={open}
-          isSwipeable={isSwipeable}
+          isSwipeable={isSwipeable(width)}
           transparent={false}
           clickMenu={() => this.toggleDrawer(true)}
         />
         <Sidebar
-          swipeable={isSwipeable}
+          swipeable={isSwipeable(width)}
           open={open}
           toggleDrawer={this.toggleDrawer}
           identity={identity}
         />
         <main
           className={classNames(classes.content, {
-            [classes.contentShift]: open && !isSwipeable
+            [classes.contentShift]: open && isSwipeable
           })}
         >
-          <TransitionGroup>
-            {/* no different than other usage of
-                CSSTransition, just make sure to pass
-                `location` to `Switch` so it can match
-                the old location as it animates out
-            */}
-            <CSSTransition key={window.location.key} classNames="fade" timeout={300}>
-              <Switch location={window.location}>
-                <Route exact path="/numbertowords" component={NumberToWord} />
-                <Route
-                  path="/graph"
-                  render={() => (
-                    <Network
-                      style={{
-                        backgroundColor: "#36393f"
-                      }}
-                      // renderMenu={this.renderMenu}
-                    />
-                  )}
+          <Switch location={location}>
+            <Route exact path="/numbers" component={NumberToWord} />
+            <Route
+              path="/graph"
+              render={() => (
+                <Network
+                  style={{
+                    backgroundColor: "#36393f"
+                  }}
+                  // renderMenu={this.renderMenu}
                 />
-                <Route render={({ location }) => <Typography>nothing here</Typography>} />
-              </Switch>
-            </CSSTransition>
-          </TransitionGroup>
+              )}
+            />
+            <Route exact path="/1" render={() => <Typography>1</Typography>} />
+            <Route exact path="/2" render={() => <Typography>2</Typography>} />
+            <Route exact path="/3" render={() => <Typography>3</Typography>} />
+            <Route exact path="/" render={() => <Typography>home</Typography>} />
+            <Route render={() => <Redirect to="/" />} />
+          </Switch>
           {/* <NumberToWord />
           <div
             className={classes.row}
@@ -165,6 +162,9 @@ Dashboard.propTypes = {
   }).isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired
+  }).isRequired,
+  location: PropTypes.shape({
+    pathname: PropTypes.string
   }).isRequired,
   identity: PropTypes.shape({
     avatar: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

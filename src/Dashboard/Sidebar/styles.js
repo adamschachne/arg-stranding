@@ -75,7 +75,8 @@ const styles = (theme) => {
       marginTop: theme.spacing.unit
     },
     noSelect: {
-      userSelect: "none"
+      userSelect: "none",
+      "-webkit-user-drag": "none"
     }
   });
 };

@@ -11,7 +11,7 @@ import {
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import { Link as RouterLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styles from "./styles";
 import UserDetails from "../UserDetails";
 
@@ -35,9 +35,7 @@ const Sidebar = ({ open, classes, toggleDrawer, swipeable, identity }) => {
       }}
     >
       <div className={classes.logo}>
-        <Typography className={classes.noSelect} variant="subtitle1">
-          ARG STRANDING
-        </Typography>
+        <Typography variant="subtitle1">ARG STRANDING</Typography>
         <IconButton className={classes.end} onClick={() => toggleDrawer(false)}>
           <ChevronLeftIcon color="secondary" />
         </IconButton>
@@ -50,18 +48,22 @@ const Sidebar = ({ open, classes, toggleDrawer, swipeable, identity }) => {
       />
       <div className={classes.sidebarMenu}>
         <List>
-          <ListItem className={classes.menuButton} button component={RouterLink} to="numbertowords">
-            <Typography>Number to Words</Typography>
-          </ListItem>
-          {[1, 2, 3, 4].map((el) => (
+          {[
+            { to: "numbers", text: "Number to Words" },
+            { to: "graph", text: "Graph" },
+            { to: "1", text: "Click Me 1" },
+            { to: "2", text: "Click Me 2" },
+            { to: "3", text: "Click Me 3" }
+          ].map(({ to, text }) => (
             <ListItem
-              key={el}
+              key={to}
+              draggable={false}
               className={classes.menuButton}
               button
-              component={RouterLink}
-              to={el.toString()}
+              component={Link}
+              to={to}
             >
-              <Typography>{`click me ${el}`}</Typography>
+              <Typography>{text}</Typography>
             </ListItem>
           ))}
         </List>
