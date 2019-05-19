@@ -42,5 +42,13 @@ module.exports = {
       "printWidth": 100,
       "arrowParens": "always"
     }]
-  }
+  },
+  overrides: [
+    {
+      "files": ["**/*.tsx"],
+      "rules": {
+          "react/prop-types": "off"
+      }
+    }
+  ]
 }
