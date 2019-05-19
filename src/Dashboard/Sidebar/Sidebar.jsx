@@ -13,7 +13,7 @@ import PropTypes from "prop-types";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { Link } from "react-router-dom";
 import styles from "./styles";
-import UserDetails from "../UserDetails";
+import UserDetails from "./UserDetails";
 
 const Sidebar = ({ open, classes, toggleDrawer, swipeable, identity }) => {
   return (
@@ -49,6 +49,7 @@ const Sidebar = ({ open, classes, toggleDrawer, swipeable, identity }) => {
       <div className={classes.sidebarMenu}>
         <List>
           {[
+            { to: "", text: "Home" },
             { to: "numbers", text: "Number to Words" },
             { to: "graph", text: "Graph" },
             { to: "1", text: "Click Me 1" },

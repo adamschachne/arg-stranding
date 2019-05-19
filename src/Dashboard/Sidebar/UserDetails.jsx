@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { createStyles, withStyles, Avatar, IconButton, Typography } from "@material-ui/core";
 import SettingsIcon from "@material-ui/icons/Settings";
-import classNames from "classnames";
+import { SettingsConsumer } from "../../Settings/SettingsContext";
 
 const BASE_URL = "https://cdn.discordapp.com/";
 
@@ -48,18 +48,23 @@ const UserDetails = (props) => {
     BASE_URL + (isGuest ? `embed/avatars/${avatar}.png` : `avatars/${id}/${avatar}.png`);
   const name = isGuest ? "Guest" : username;
   return (
-    <div className={classes.root}>
-      <Avatar component="div" alt="Avatar">
-        <AvatarIcon className={classes.avatarIcon} src={avatarURL} />
-      </Avatar>
-
-      <div className={classes.username}>
-        <Typography>{name}</Typography>
-      </div>
-      <IconButton color="secondary" aria-label="Settings">
-        <SettingsIcon />
-      </IconButton>
-    </div>
+    <SettingsConsumer>
+      {({ openSettings }) => {
+        return (
+          <div className={classes.root}>
+            <Avatar component="div" alt="Avatar">
+              <AvatarIcon className={classes.avatarIcon} src={avatarURL} />
+            </Avatar>
+            <div className={classes.username}>
+              <Typography>{name}</Typography>
+            </div>
+            <IconButton color="secondary" aria-label="Settings" onClick={openSettings}>
+              <SettingsIcon />
+            </IconButton>
+          </div>
+        );
+      }}
+    </SettingsConsumer>
   );
 };
 

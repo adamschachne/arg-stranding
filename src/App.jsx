@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { hot } from "react-hot-loader/root";
-import { Route, Switch, Redirect } from "react-router-dom";
 import { withStyles, createStyles } from "@material-ui/core";
+import { SettingsProvider } from "./Settings/SettingsContext";
 import Landing from "./Landing/Landing";
 import Dashboard from "./Dashboard/Dashboard";
 import Loader from "./Loader/Loader";
@@ -71,13 +71,9 @@ class App extends Component {
     }
 
     return (
-      <Switch>
-        <Route
-          path="/"
-          render={(routeProps) => <Dashboard {...routeProps} identity={identity} />}
-        />
-        <Route render={() => <Redirect to="/" />} />
-      </Switch>
+      <SettingsProvider>
+        <Dashboard identity={identity} />
+      </SettingsProvider>
     );
   }
 }

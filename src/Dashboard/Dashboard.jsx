@@ -3,8 +3,8 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import { withStyles, createStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
 import PropTypes from "prop-types";
-import { Zoom, Button, withTheme, Typography } from "@material-ui/core";
-import { TransitionGroup, CSSTransition } from "react-transition-group";
+import { Typography } from "@material-ui/core";
+// import { TransitionGroup, CSSTransition } from "react-transition-group";
 import purple from "@material-ui/core/colors/purple";
 import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
 import NumberToWord from "./NumberToWord/NumberToWord";
@@ -86,11 +86,9 @@ class Dashboard extends React.Component {
   };
 
   render() {
-    const { identity, classes, width, location } = this.props;
+    const { identity, classes, width } = this.props;
     const { open } = this.state;
-
-    console.log(location);
-
+    console.log("dashboard render");
     return (
       <div className={classes.root}>
         <SearchAppBar
@@ -110,18 +108,11 @@ class Dashboard extends React.Component {
             [classes.contentShift]: open && isSwipeable
           })}
         >
-          <Switch location={location}>
+          <Switch>
             <Route exact path="/numbers" component={NumberToWord} />
             <Route
               path="/graph"
-              render={() => (
-                <Network
-                  style={{
-                    backgroundColor: "#36393f"
-                  }}
-                  // renderMenu={this.renderMenu}
-                />
-              )}
+              render={() => <Network style={{ backgroundColor: "#36393f" }} />}
             />
             <Route exact path="/1" render={() => <Typography>1</Typography>} />
             <Route exact path="/2" render={() => <Typography>2</Typography>} />
@@ -129,26 +120,6 @@ class Dashboard extends React.Component {
             <Route exact path="/" render={() => <Typography>home</Typography>} />
             <Route render={() => <Redirect to="/" />} />
           </Switch>
-          {/* <NumberToWord />
-          <div
-            className={classes.row}
-            style={{ flex: "0.5 0 auto" }}
-          >
-            <div>
-              <Zoom in>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  className={classNames(classes.button)}
-                  component={Link}
-                  to="/graph"
-                  size="large"
-                >
-                  Graph
-                </Button>
-              </Zoom>
-            </div>
-          </div> */}
         </main>
       </div>
     );
@@ -159,12 +130,6 @@ Dashboard.propTypes = {
   classes: PropTypes.shape({
     avatar: PropTypes.string,
     bigAvatar: PropTypes.string
-  }).isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired
-  }).isRequired,
-  location: PropTypes.shape({
-    pathname: PropTypes.string
   }).isRequired,
   identity: PropTypes.shape({
     avatar: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
