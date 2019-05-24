@@ -5,12 +5,15 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import Theme from "./Theme";
+import { SettingsProvider } from "./Settings/SettingsContext";
 
 ReactDOM.render(
   <BrowserRouter>
-    <Theme>
-      <App />
-    </Theme>
+    <SettingsProvider>
+      <Theme>
+        <App />
+      </Theme>
+    </SettingsProvider>
   </BrowserRouter>,
   document.getElementById("root")
 );

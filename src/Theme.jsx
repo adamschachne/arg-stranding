@@ -6,9 +6,10 @@ import grey from "@material-ui/core/colors/grey";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core/styles";
+import { SettingsConsumer } from "./Settings/SettingsContext";
 
-// this needs to be exported so react-hot-loader can persist it
-export const theme = createMuiTheme({
+/** @type {import("@material-ui/core/styles/createMuiTheme").ThemeOptions} */
+const themeDefaults = {
   typography: {
     useNextVariants: true,
     fontFamily: "inherit",
@@ -17,38 +18,60 @@ export const theme = createMuiTheme({
     fontWeightLight: 600
   },
   palette: {
-    text: {
-      primary: grey[400]
-      // primary: purple[800]
-    },
+    // text: {
+    //   primary: grey[400]
+    //   // primary: purple[800]
+    // },
     primary: {
       main: grey[800]
     },
     secondary: {
       main: blueGrey[100]
     },
-    type: "dark",
-    background: {
-      default: "#1b1b1b",
-      paper: grey[800]
-    }
+    type: "dark"
+    // background: {
+    //   default: "#1b1b1b",
+    //   paper: grey[800]
+    // }
   },
   drawerWidth: 260
-});
+};
 
-console.log(theme);
-
-const Theme = ({ children }) => (
-  <ThemeProvider theme={theme}>
-    <>
-      <CssBaseline />
-      {children}
-    </>
-  </ThemeProvider>
-);
+// providing a new theme is expensive, so this should not be rendered often
+class Theme extends React.PureComponent {
+  render() {
+    const { themeType, children } = this.props;
+    const theme = createMuiTheme(
+      Object.assign({}, themeDefaults, {
+        palette: { ...themeDefaults.palette, type: themeType }
+      })
+    );
+    console.log("theme render", theme);
+    return (
+      <ThemeProvider theme={theme}>
+        <>
+          <CssBaseline />
+          {children}
+        </>
+      </ThemeProvider>
+    );
+  }
+}
 
 Theme.propTypes = {
+  themeType: PropTypes.oneOf(["dark", "light"]).isRequired,
   children: PropTypes.element.isRequired
 };
 
-export default hot(Theme);
+const ThemeContainer = ({ children }) => (
+  <SettingsConsumer>
+    {/* extract theme related options from settings */}
+    {({ themeType }) => <Theme themeType={themeType}>{children}</Theme>}
+  </SettingsConsumer>
+);
+
+ThemeContainer.propTypes = {
+  children: PropTypes.element.isRequired
+};
+
+export default hot(ThemeContainer);

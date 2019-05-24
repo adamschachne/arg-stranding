@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { hot } from "react-hot-loader/root";
 import { withStyles, createStyles } from "@material-ui/core";
-import { SettingsProvider } from "./Settings/SettingsContext";
 import Landing from "./Landing/Landing";
 import Dashboard from "./Dashboard/Dashboard";
 import Loader from "./Loader/Loader";
+import SettingsPage from "./Settings/SettingsPage";
 
 const styles = createStyles({
   "@global": {
@@ -71,9 +71,10 @@ class App extends Component {
     }
 
     return (
-      <SettingsProvider>
+      <>
         <Dashboard identity={identity} />
-      </SettingsProvider>
+        <SettingsPage />
+      </>
     );
   }
 }

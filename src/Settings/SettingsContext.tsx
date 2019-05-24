@@ -1,46 +1,44 @@
 import React, { Component } from "react";
 
-interface ISettingsContext {
-  openSettings: () => void;
-  closeSettings: () => void;
-  isOpen: boolean;
-}
-
-const defaultContext: ISettingsContext = {
-  openSettings: () => undefined,
-  closeSettings: () => undefined,
-  isOpen: false
+const initialState = {
+  isOpen: false,
+  themeType: "light" as "dark" | "light"
 };
 
-const { Provider, Consumer } = React.createContext<ISettingsContext>(defaultContext);
+const initialContext = Object.assign(
+  {
+    openSettings: () => {},
+    closeSettings: () => {},
+    switchThemeType: () => {}
+  },
+  initialState
+);
+
+type State = typeof initialState;
+type Context = typeof initialContext;
+const { Provider, Consumer } = React.createContext<Context>(initialContext);
 
 export class SettingsProvider extends Component {
-  state = {
-    isOpen: false
-  };
+  readonly state: State = initialState;
 
-  openSettings = () => {
-    this.setState({ isOpen: true });
-  };
+  openSettings = () => this.setState({ isOpen: true });
 
   closeSettings = () => this.setState({ isOpen: false });
 
+  switchThemeType = () =>
+    this.setState(({ themeType: oldType }: State) => {
+      return { themeType: oldType === "dark" ? "light" : "dark" };
+    });
+
   render() {
     const { children } = this.props;
-    const { isOpen } = this.state;
-    console.log(isOpen ? "settings open" : "settings closed");
-    return (
-      <Provider
-        value={{
-          openSettings: this.openSettings,
-          closeSettings: this.closeSettings,
-          isOpen
-        }}
-      >
-        {children}
-        {/* <Settings /> */}
-      </Provider>
-    );
+    const value: Context = {
+      ...this.state,
+      openSettings: this.openSettings,
+      closeSettings: this.closeSettings,
+      switchThemeType: this.switchThemeType
+    };
+    return <Provider value={value}>{children}</Provider>;
   }
 }
 
