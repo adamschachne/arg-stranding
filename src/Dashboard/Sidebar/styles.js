@@ -77,6 +77,9 @@ const styles = (theme) => {
     noSelect: {
       userSelect: "none",
       "-webkit-user-drag": "none"
+    },
+    bold: {
+      fontWeight: 600
     }
   });
 };

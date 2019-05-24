@@ -6,15 +6,6 @@ import Dashboard from "./Dashboard/Dashboard";
 import Loader from "./Loader/Loader";
 import SettingsPage from "./Settings/SettingsPage";
 
-const styles = createStyles({
-  "@global": {
-    body: {
-      fontFamily: "'Source Sans Pro', sans-serif;",
-      fontWeight: 600
-    }
-  }
-});
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -79,4 +70,4 @@ class App extends Component {
   }
 }
 
-export default hot(withStyles(styles)(App));
+export default hot(App);

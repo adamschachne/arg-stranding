@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 const initialState = {
   isOpen: false,
-  themeType: "light" as "dark" | "light"
+  themeType: "dark" as "dark" | "light"
 };
 
 const initialContext = Object.assign(

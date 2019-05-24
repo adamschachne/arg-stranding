@@ -64,7 +64,7 @@ const Sidebar = ({ open, classes, toggleDrawer, swipeable, identity }) => {
               component={Link}
               to={to}
             >
-              <Typography>{text}</Typography>
+              <Typography className={classes.bold}>{text}</Typography>
             </ListItem>
           ))}
         </List>

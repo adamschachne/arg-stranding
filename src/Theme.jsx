@@ -11,11 +11,10 @@ import { SettingsConsumer } from "./Settings/SettingsContext";
 /** @type {import("@material-ui/core/styles/createMuiTheme").ThemeOptions} */
 const themeDefaults = {
   typography: {
-    useNextVariants: true,
-    fontFamily: "inherit",
-    fontWeightRegular: 600,
-    fontWeightMedium: 600,
-    fontWeightLight: 600
+    fontFamily: "'Source Sans Pro', sans-serif;",
+    fontWeightRegular: 400,
+    fontWeightMedium: 400,
+    fontWeightLight: 400
   },
   palette: {
     // text: {
