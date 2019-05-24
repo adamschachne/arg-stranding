@@ -17,7 +17,7 @@ const styles = (theme) => {
       display: "flex",
       alignItems: "center",
       // padding: "0 8px",
-      height: theme.spacing.unit * 6,
+      height: theme.spacing(6),
       justifyContent: "flex-end"
     },
     logo: {
@@ -25,11 +25,11 @@ const styles = (theme) => {
       position: "relative",
       alignItems: "center",
       justifyContent: "center",
-      height: theme.spacing.unit * 6
+      height: theme.spacing(6)
     },
     content: {
       flexGrow: 1,
-      padding: theme.spacing.unit * 3,
+      padding: theme.spacing(3),
       transition: theme.transitions.create("margin", {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen
@@ -62,17 +62,17 @@ const styles = (theme) => {
       right: 0
     },
     sidebarMenu: {
-      // padding: theme.spacing.unit * 1.5,
-      paddingLeft: theme.spacing.unit * 2,
-      paddingRight: theme.spacing.unit * 2,
-      paddingTop: theme.spacing.unit - 1, // 1px to account for divider
+      // padding: theme.spacing(1.5),
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(2),
+      paddingTop: theme.spacing(1) - 1, // 1px to account for divider
       flex: 1
     },
     dividerRoot: {
       backgroundColor: fade(theme.palette.secondary.main, 0.6)
     },
     menuButton: {
-      marginTop: theme.spacing.unit
+      marginTop: theme.spacing(1)
     },
     noSelect: {
       userSelect: "none",

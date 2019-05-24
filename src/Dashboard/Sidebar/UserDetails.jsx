@@ -12,15 +12,15 @@ const styles = (theme) =>
     root: {
       display: "flex",
       alignItems: "center",
-      height: theme.spacing.unit * 7,
+      height: theme.spacing(7),
       // backgroundColor: fade(theme.palette.common.white, 0.2),
-      paddingLeft: theme.spacing.unit * 2,
-      paddingRight: theme.spacing.unit * 2,
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(2),
       userSelect: "none"
     },
     username: {
-      paddingLeft: theme.spacing.unit,
-      paddingRight: theme.spacing.unit,
+      paddingLeft: theme.spacing(1),
+      paddingRight: theme.spacing(1),
       flex: 1
     },
     avatarIcon: {

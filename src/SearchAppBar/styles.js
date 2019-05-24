@@ -10,8 +10,8 @@ const styles = (theme) =>
       pointerEvents: "none"
     },
     fixedGutter: {
-      paddingLeft: theme.spacing.unit * 2,
-      paddingRight: theme.spacing.unit * 2
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(2)
     },
     allPointerEvents: {
       pointerEvents: "all"
@@ -41,7 +41,7 @@ const styles = (theme) =>
       marginLeft: 0
     },
     searchIcon: {
-      width: theme.spacing.unit * 6,
+      width: theme.spacing(6),
       height: "100%",
       position: "absolute",
       pointerEvents: "none",
@@ -54,10 +54,10 @@ const styles = (theme) =>
       width: "100%"
     },
     inputInput: {
-      paddingTop: theme.spacing.unit,
-      // paddingRight: theme.spacing.unit,
-      paddingBottom: theme.spacing.unit,
-      paddingLeft: theme.spacing.unit * 6,
+      paddingTop: theme.spacing(1),
+      // paddingRight: theme.spacing(1),
+      paddingBottom: theme.spacing(1),
+      paddingLeft: theme.spacing(6),
       transition: `${theme.transitions.create("background", {
         duration: "500ms"
       })}, ${theme.transitions.create("width", {
@@ -67,7 +67,7 @@ const styles = (theme) =>
         backgroundColor: fade(theme.palette.common.white, 0.15)
       },
       borderRadius: "4px",
-      width: `calc(100vw - ${theme.spacing.unit * 16}px)`,
+      width: `calc(100vw - ${theme.spacing(16)}px)`,
       [theme.breakpoints.up("sm")]: {
         // transition: `${theme.transitions.create("background", {
         //   duration: "500ms",

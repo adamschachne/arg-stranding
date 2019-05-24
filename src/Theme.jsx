@@ -4,9 +4,11 @@ import PropTypes from "prop-types";
 import blueGrey from "@material-ui/core/colors/blueGrey";
 import grey from "@material-ui/core/colors/grey";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
+import { ThemeProvider } from "@material-ui/styles";
+import { createMuiTheme } from "@material-ui/core/styles";
 
-const theme = createMuiTheme({
+// this needs to be exported so react-hot-loader can persist it
+export const theme = createMuiTheme({
   typography: {
     useNextVariants: true,
     fontFamily: "inherit",
@@ -37,12 +39,12 @@ const theme = createMuiTheme({
 console.log(theme);
 
 const Theme = ({ children }) => (
-  <MuiThemeProvider theme={theme}>
+  <ThemeProvider theme={theme}>
     <>
       <CssBaseline />
       {children}
     </>
-  </MuiThemeProvider>
+  </ThemeProvider>
 );
 
 Theme.propTypes = {

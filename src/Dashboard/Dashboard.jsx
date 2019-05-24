@@ -49,18 +49,18 @@ const styles = (theme) =>
     },
     content: {
       flexGrow: 1,
-      paddingTop: theme.spacing.unit * 3,
-      paddingLeft: theme.spacing.unit * 3,
-      paddingRight: theme.spacing.unit * 3,
-      // paddingBottom: theme.spacing.unit * 3,
+      paddingTop: theme.spacing(3),
+      paddingLeft: theme.spacing(3),
+      paddingRight: theme.spacing(3),
+      // paddingBottom: theme.spacing(3),
       transition: theme.transitions.create("margin", {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen
       }),
       marginLeft: 0,
-      maxHeight: `calc(100vh - ${theme.spacing.unit * 6}px)`,
+      maxHeight: `calc(100vh - ${theme.spacing(6)}px)`,
       overflowY: "auto",
-      marginTop: theme.spacing.unit * 6
+      marginTop: theme.spacing(6)
     },
     contentShift: {
       transition: theme.transitions.create("margin", {

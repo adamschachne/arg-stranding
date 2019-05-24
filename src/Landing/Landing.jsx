@@ -42,7 +42,7 @@ const styles = (theme) =>
       flexDirection: "row"
     },
     wrapper: {
-      margin: theme.spacing.unit,
+      margin: theme.spacing(1),
       position: "relative"
     }
   });

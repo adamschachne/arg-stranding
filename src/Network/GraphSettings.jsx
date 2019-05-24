@@ -9,7 +9,7 @@ const styles = (theme) =>
   createStyles({
     bottomLeft: {
       bottom: 0,
-      left: theme.spacing.unit,
+      left: theme.spacing(1),
       position: "absolute",
       zIndex: 100
     },
