@@ -52,13 +52,13 @@ const styles = (theme) =>
       paddingTop: theme.spacing(3),
       paddingLeft: theme.spacing(3),
       paddingRight: theme.spacing(3),
-      // paddingBottom: theme.spacing(3),
+      paddingBottom: theme.spacing(3),
       transition: theme.transitions.create("margin", {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen
       }),
       marginLeft: 0,
-      maxHeight: `calc(100vh - ${theme.spacing(6)}px)`,
+      height: `calc(100vh - ${theme.spacing(6)}px)`,
       overflowY: "auto",
       marginTop: theme.spacing(6)
     },
@@ -88,24 +88,24 @@ class Dashboard extends React.Component {
   render() {
     const { identity, classes, width } = this.props;
     const { open } = this.state;
-    console.log("dashboard render");
+    const swipeable = isSwipeable(width);
     return (
       <div className={classes.root}>
         <SearchAppBar
           sidebarOpen={open}
-          isSwipeable={isSwipeable(width)}
+          isSwipeable={swipeable}
           transparent={false}
           clickMenu={() => this.toggleDrawer(true)}
         />
         <Sidebar
-          swipeable={isSwipeable(width)}
+          swipeable={swipeable}
           open={open}
           toggleDrawer={this.toggleDrawer}
           identity={identity}
         />
         <main
           className={classNames(classes.content, {
-            [classes.contentShift]: open && isSwipeable
+            [classes.contentShift]: open && !swipeable
           })}
         >
           <Switch>
