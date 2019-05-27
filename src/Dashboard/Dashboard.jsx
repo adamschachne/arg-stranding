@@ -16,7 +16,6 @@ const styles = (theme) =>
   createStyles({
     root: {
       display: "flex"
-      // fontFamily: "'Source Sans Pro', sans-serif",
     },
     flexCenter: {
       display: "flex",
@@ -26,7 +25,6 @@ const styles = (theme) =>
     dashboard: {
       top: 0,
       height: "100vh"
-      // fontFamily: "'Source Sans Pro', sans-serif",
     },
     row: {
       display: "flex",
@@ -49,18 +47,19 @@ const styles = (theme) =>
     },
     content: {
       flexGrow: 1,
-      paddingTop: theme.spacing(3),
-      paddingLeft: theme.spacing(3),
-      paddingRight: theme.spacing(3),
-      paddingBottom: theme.spacing(3),
+      paddingTop: theme.spacing(1),
+      paddingLeft: theme.spacing(1),
+      paddingRight: theme.spacing(1),
+      paddingBottom: theme.spacing(1),
       transition: theme.transitions.create("margin", {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen
       }),
       marginLeft: 0,
+      // height and margin-top need to be 6 units because of the search bar
+      marginTop: theme.spacing(6),
       height: `calc(100vh - ${theme.spacing(6)}px)`,
-      overflowY: "auto",
-      marginTop: theme.spacing(6)
+      overflowY: "auto"
     },
     contentShift: {
       transition: theme.transitions.create("margin", {
@@ -68,6 +67,9 @@ const styles = (theme) =>
         duration: theme.transitions.duration.enteringScreen
       }),
       marginLeft: theme.drawerWidth
+    },
+    graphWidth: {
+      width: `calc(100vw - ${theme.spacing(2)}px)`
     }
   });
 
@@ -112,7 +114,17 @@ class Dashboard extends React.Component {
             <Route exact path="/numbers" component={NumberToWord} />
             <Route
               path="/graph"
-              render={() => <Network style={{ backgroundColor: "#36393f" }} />}
+              render={() => (
+                <div
+                  style={{
+                    height: "100%",
+                    // graph width is larger than page, hide overflow
+                    overflowX: "hidden"
+                  }}
+                >
+                  <Network className={classes.graphWidth} />
+                </div>
+              )}
             />
             <Route exact path="/1" render={() => <Typography>1</Typography>} />
             <Route exact path="/2" render={() => <Typography>2</Typography>} />

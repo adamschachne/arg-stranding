@@ -6,17 +6,14 @@ import Graph from "./Graph";
 import { options as initialOptions } from "./utils/config";
 import buildGraph from "./utils/buildGraph";
 import Loader from "../Loader/Loader";
-import Search from "../Menu/Search/Search";
-import SearchAppBar from "../SearchAppBar/SearchAppBar";
-import GraphSettings from "./GraphSettings";
+// import Search from "../Menu/Search/Search";
+// import SearchAppBar from "../SearchAppBar/SearchAppBar";
+// import GraphSettings from "./GraphSettings";
 // import InfoBox from "../Info/InfoBox";
 
 class NetworkContainer extends PureComponent {
   constructor(props) {
     super(props);
-    const {
-      style: { width, height }
-    } = this.props;
     this.state = {
       graph: {
         nodes: [],
@@ -215,19 +212,18 @@ class NetworkContainer extends PureComponent {
   };
 
   render() {
-    const { style } = this.props;
     const { loading, commandToID, graph, options, showBruteForce, bruteForcedMap } = this.state;
-    const { width, height } = style;
+    const { className } = this.props;
     return (
       <div
+        className={className}
         style={{
-          ...style,
-          width: "100vw",
-          height: "100vh"
+          backgroundColor: "#36393f",
+          height: "100%",
+          position: "relative"
         }}
       >
         {loading && <Loader loading={loading} />}
-        <SearchAppBar />
         {/* MENU */}
         {/* <Search
           loading={loading}
@@ -253,10 +249,12 @@ class NetworkContainer extends PureComponent {
   }
 }
 
+NetworkContainer.defaultProps = {
+  className: ""
+};
+
 NetworkContainer.propTypes = {
-  style: PropTypes.shape({
-    backgroundColor: PropTypes.string.isRequired
-  }).isRequired
+  className: PropTypes.string
 };
 
 export default NetworkContainer;
