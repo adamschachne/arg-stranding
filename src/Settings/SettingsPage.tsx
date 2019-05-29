@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import { withStyles, createStyles, Theme, WithStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Modal from "@material-ui/core/Modal";
-import Button from "@material-ui/core/Button";
+// import Button from "@material-ui/core/Button";
 import { FormControl, FormLabel, RadioGroup, Radio, FormControlLabel } from "@material-ui/core";
 import { SettingsConsumer } from "./SettingsContext";
 

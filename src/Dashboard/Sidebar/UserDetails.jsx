@@ -49,21 +49,19 @@ const UserDetails = (props) => {
   const name = isGuest ? "Guest" : username;
   return (
     <SettingsConsumer>
-      {({ openSettings }) => {
-        return (
-          <div className={classes.root}>
-            <Avatar component="div" alt="Avatar">
-              <AvatarIcon className={classes.avatarIcon} src={avatarURL} />
-            </Avatar>
-            <div className={classes.username}>
-              <Typography>{name}</Typography>
-            </div>
-            <IconButton color="secondary" aria-label="Settings" onClick={openSettings}>
-              <SettingsIcon />
-            </IconButton>
+      {({ openSettings }) => (
+        <div className={classes.root}>
+          <Avatar component="div" alt="Avatar">
+            <AvatarIcon className={classes.avatarIcon} src={avatarURL} />
+          </Avatar>
+          <div className={classes.username}>
+            <Typography>{name}</Typography>
           </div>
-        );
-      }}
+          <IconButton color="secondary" aria-label="Settings" onClick={openSettings}>
+            <SettingsIcon />
+          </IconButton>
+        </div>
+      )}
     </SettingsConsumer>
   );
 };
