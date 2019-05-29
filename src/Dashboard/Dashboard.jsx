@@ -7,6 +7,7 @@ import { Typography } from "@material-ui/core";
 // import { TransitionGroup, CSSTransition } from "react-transition-group";
 import purple from "@material-ui/core/colors/purple";
 import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
+import { withTheme } from "@material-ui/styles";
 import NumberToWord from "./NumberToWord/NumberToWord";
 import Sidebar from "./Sidebar/Sidebar";
 import SearchAppBar from "../SearchAppBar/SearchAppBar";
@@ -47,10 +48,10 @@ const styles = (theme) =>
     },
     content: {
       flexGrow: 1,
-      paddingTop: theme.spacing(1),
-      paddingLeft: theme.spacing(1),
-      paddingRight: theme.spacing(1),
-      paddingBottom: theme.spacing(1),
+      // paddingTop: theme.spacing(1),
+      // paddingLeft: theme.spacing(1),
+      // paddingRight: theme.spacing(1),
+      // paddingBottom: theme.spacing(1),
       transition: theme.transitions.create("margin", {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen
@@ -67,10 +68,10 @@ const styles = (theme) =>
         duration: theme.transitions.duration.enteringScreen
       }),
       marginLeft: theme.drawerWidth
-    },
-    graphWidth: {
-      width: `calc(100vw - ${theme.spacing(2)}px)`
     }
+    // graphWidth: {
+    //   width: `calc(100vw - ${theme.spacing(2)}px)`
+    // }
   });
 
 const isSwipeable = (width) => !isWidthUp("sm", width);
@@ -88,9 +89,11 @@ class Dashboard extends React.Component {
   };
 
   render() {
-    const { identity, classes, width } = this.props;
+    const { identity, classes, width, theme } = this.props;
     const { open } = this.state;
+    const { drawerWidth } = theme;
     const swipeable = isSwipeable(width);
+    const sidebarOpen = open && !swipeable;
     return (
       <div className={classes.root}>
         <SearchAppBar
@@ -107,7 +110,7 @@ class Dashboard extends React.Component {
         />
         <main
           className={classNames(classes.content, {
-            [classes.contentShift]: open && !swipeable
+            [classes.contentShift]: sidebarOpen
           })}
         >
           <Switch>
@@ -115,20 +118,12 @@ class Dashboard extends React.Component {
             <Route
               path="/graph"
               render={() => (
-                <div
-                  style={{
-                    height: "100%",
-                    // graph width is larger than page, hide overflow
-                    overflowX: "hidden"
-                  }}
-                >
-                  <Network className={classes.graphWidth} />
-                </div>
+                <Network
+                  offsetX={sidebarOpen ? drawerWidth / 2 : 0}
+                  className={classes.graphWidth}
+                />
               )}
             />
-            <Route exact path="/1" render={() => <Typography>1</Typography>} />
-            <Route exact path="/2" render={() => <Typography>2</Typography>} />
-            <Route exact path="/3" render={() => <Typography>3</Typography>} />
             <Route exact path="/" render={() => <Typography>home</Typography>} />
             <Route render={() => <Redirect to="/" />} />
           </Switch>
@@ -143,6 +138,9 @@ Dashboard.propTypes = {
     avatar: PropTypes.string,
     bigAvatar: PropTypes.string
   }).isRequired,
+  theme: PropTypes.shape({
+    drawerWidth: PropTypes.number
+  }).isRequired,
   identity: PropTypes.shape({
     avatar: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -151,4 +149,4 @@ Dashboard.propTypes = {
   width: PropTypes.string.isRequired
 };
 
-export default withStyles(styles)(withWidth()(Dashboard));
+export default withStyles(styles)(withWidth()(withTheme(Dashboard)));

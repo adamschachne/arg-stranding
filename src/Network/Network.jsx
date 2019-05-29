@@ -121,19 +121,42 @@ class NetworkContainer extends PureComponent {
       });
   }
 
+  // eslint-disable-next-line complexity
   componentDidUpdate(prevProps, prevState) {
     console.log("NETWORK UPDATE");
     const { focusNode } = this.state;
-    if (focusNode && prevState.focusNode !== focusNode && this.network) {
+    const { offsetX: x, offsetY: y } = this.props;
+    const { offsetX: prevX, offsetY: prevY } = prevProps;
+    const offsetChanged = x !== prevX || y !== prevY;
+    if (this.network === null) {
+      return;
+    }
+    if (focusNode !== null && (prevState.focusNode !== focusNode || offsetChanged)) {
       this.network.selectNodes([focusNode]);
       this.network.once("animationFinished", () => {
-        //
         console.log("animation finished");
       });
       this.network.focus(focusNode, {
         scale: this.network.getScale(),
         locked: false,
-        animation: true
+        animation: {
+          duration: offsetChanged ? 500 : 1000,
+          easingFunction: "easeOutCubic"
+        },
+        offset: { x, y }
+      });
+    } else if (offsetChanged) {
+      this.network.moveTo({
+        animation: {
+          duration: offsetChanged ? 500 : 1000,
+          easingFunction: "easeOutCubic"
+        },
+        position: this.network.getViewPosition(),
+        scale: this.network.getScale(),
+        offset: {
+          x: x - prevX,
+          y: y - prevY
+        }
       });
     }
   }
@@ -150,13 +173,14 @@ class NetworkContainer extends PureComponent {
 
   createNetwork = (network) => {
     this.network = network;
+    const { offsetX: x, offsetY: y } = this.props;
     console.log(network);
     this.network.once("stabilizationIterationsDone", () => {
       this.network.moveTo({
         animation: false,
         position: { x: 0, y: 0 },
         scale: 0.3, // about the right scale to begin to see labels
-        offset: { x: 0, y: 0 }
+        offset: { x, y }
       });
       console.log("iterations done; total time:", performance.now());
       this.savePositions();
@@ -213,26 +237,48 @@ class NetworkContainer extends PureComponent {
 
   render() {
     const { loading, commandToID, graph, options, showBruteForce, bruteForcedMap } = this.state;
-    const { className } = this.props;
+    const { className, offsetX, offsetY } = this.props;
     return (
+      // <div
+      //   style={{
+      //     height: "100%",
+      //     // graph width is larger than page, hide overflow
+      //     overflowX: "hidden"
+      //   }}
+      // >
       <div
         className={className}
         style={{
           backgroundColor: "#36393f",
           height: "100%",
-          position: "relative"
+          width: "100vw",
+          position: "absolute",
+          top: 0,
+          left: 0
         }}
       >
-        {loading && <Loader loading={loading} />}
+        {loading && (
+          <div
+            style={{
+              left: offsetX,
+              top: offsetY,
+              position: "absolute",
+              height: "100%",
+              width: "100%"
+            }}
+          >
+            <Loader />
+          </div>
+        )}
         {/* MENU */}
         {/* <Search
-          loading={loading}
-          searchRef={this.searchRef}
-          commandToID={commandToID}
-          showBruteForce={showBruteForce}
-          bruteForcedMap={bruteForcedMap}
-          focusNode={cmd => this.setState({ focusNode: commandToID[cmd] })}
-        /> */}
+            loading={loading}
+            searchRef={this.searchRef}
+            commandToID={commandToID}
+            showBruteForce={showBruteForce}
+            bruteForcedMap={bruteForcedMap}
+            focusNode={cmd => this.setState({ focusNode: commandToID[cmd] })}
+          /> */}
         {/* <InfoBox /> */}
         <Graph
           getNetwork={this.createNetwork}
@@ -245,16 +291,21 @@ class NetworkContainer extends PureComponent {
           events={this.events}
         />
       </div>
+      // </div>
     );
   }
 }
 
 NetworkContainer.defaultProps = {
-  className: ""
+  className: "",
+  offsetX: 0,
+  offsetY: 0
 };
 
 NetworkContainer.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
+  offsetX: PropTypes.number,
+  offsetY: PropTypes.number
 };
 
 export default NetworkContainer;

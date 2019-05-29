@@ -35,7 +35,7 @@ const Sidebar = ({ open, classes, toggleDrawer, swipeable, identity }) => {
       }}
     >
       <div className={classes.logo}>
-        <Typography variant="subtitle1">ARG STRANDING</Typography>
+        <Typography>ARG STRANDING</Typography>
         <IconButton className={classes.end} onClick={() => toggleDrawer(false)}>
           <ChevronLeftIcon color="secondary" />
         </IconButton>
@@ -49,12 +49,9 @@ const Sidebar = ({ open, classes, toggleDrawer, swipeable, identity }) => {
       <div className={classes.sidebarMenu}>
         <List>
           {[
-            { to: "", text: "Home" },
-            { to: "numbers", text: "Number to Words" },
-            { to: "graph", text: "Graph" },
-            { to: "1", text: "Click Me 1" },
-            { to: "2", text: "Click Me 2" },
-            { to: "3", text: "Click Me 3" }
+            { to: "", text: "HOME" },
+            { to: "numbers", text: "NUMBER TO WORDS" },
+            { to: "graph", text: "GRAPH" }
           ].map(({ to, text }) => (
             <ListItem
               key={to}
@@ -64,7 +61,7 @@ const Sidebar = ({ open, classes, toggleDrawer, swipeable, identity }) => {
               component={Link}
               to={to}
             >
-              <Typography className={classes.bold}>{text}</Typography>
+              <Typography variant="button">{text}</Typography>
             </ListItem>
           ))}
         </List>
