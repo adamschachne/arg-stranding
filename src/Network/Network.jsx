@@ -124,13 +124,18 @@ class NetworkContainer extends PureComponent {
   // eslint-disable-next-line complexity
   componentDidUpdate(prevProps, prevState) {
     console.log("NETWORK UPDATE");
+    if (this.network === null) {
+      return;
+    }
     const { focusNode } = this.state;
     const { offsetX: x, offsetY: y } = this.props;
     const { offsetX: prevX, offsetY: prevY } = prevProps;
     const offsetChanged = x !== prevX || y !== prevY;
-    if (this.network === null) {
-      return;
-    }
+    const animation = {
+      duration: offsetChanged ? 300 : 1000,
+      easingFunction: "easeOutCubic"
+    };
+
     if (focusNode !== null && (prevState.focusNode !== focusNode || offsetChanged)) {
       this.network.selectNodes([focusNode]);
       this.network.once("animationFinished", () => {
@@ -139,18 +144,12 @@ class NetworkContainer extends PureComponent {
       this.network.focus(focusNode, {
         scale: this.network.getScale(),
         locked: false,
-        animation: {
-          duration: offsetChanged ? 500 : 1000,
-          easingFunction: "easeOutCubic"
-        },
+        animation,
         offset: { x, y }
       });
     } else if (offsetChanged) {
       this.network.moveTo({
-        animation: {
-          duration: offsetChanged ? 500 : 1000,
-          easingFunction: "easeOutCubic"
-        },
+        animation,
         position: this.network.getViewPosition(),
         scale: this.network.getScale(),
         offset: {
