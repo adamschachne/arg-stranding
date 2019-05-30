@@ -11,11 +11,18 @@ import {
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import styles from "./styles";
 import UserDetails from "./UserDetails";
 
-const Sidebar = ({ open, classes, toggleDrawer, swipeable, identity }) => {
+const pages = [
+  { to: "", text: "HOME" },
+  { to: "numbers", text: "NUMBER TO WORDS" },
+  { to: "graph", text: "GRAPH" }
+];
+
+const Sidebar = ({ open, classes, toggleDrawer, swipeable, identity, location: { pathname } }) => {
+  const pathnameNoSlash = pathname.substring(1);
   return (
     <SwipeableDrawer
       anchor="left"
@@ -48,11 +55,7 @@ const Sidebar = ({ open, classes, toggleDrawer, swipeable, identity }) => {
       />
       <div className={classes.sidebarMenu}>
         <List>
-          {[
-            { to: "", text: "HOME" },
-            { to: "numbers", text: "NUMBER TO WORDS" },
-            { to: "graph", text: "GRAPH" }
-          ].map(({ to, text }) => (
+          {pages.map(({ to, text }) => (
             <ListItem
               key={to}
               draggable={false}
@@ -60,6 +63,7 @@ const Sidebar = ({ open, classes, toggleDrawer, swipeable, identity }) => {
               button
               component={Link}
               to={to}
+              selected={to === pathnameNoSlash}
             >
               <Typography variant="button">{text}</Typography>
             </ListItem>
@@ -79,6 +83,9 @@ const Sidebar = ({ open, classes, toggleDrawer, swipeable, identity }) => {
 
 Sidebar.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  location: PropTypes.shape({
+    pathname: PropTypes.string
+  }).isRequired,
   open: PropTypes.bool.isRequired,
   swipeable: PropTypes.bool.isRequired,
   identity: PropTypes.shape({
@@ -89,4 +96,4 @@ Sidebar.propTypes = {
   toggleDrawer: PropTypes.func.isRequired
 };
 
-export default withStyles(styles)(Sidebar);
+export default withStyles(styles)(withRouter(Sidebar));
