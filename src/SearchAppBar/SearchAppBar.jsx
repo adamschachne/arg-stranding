@@ -14,49 +14,27 @@ import SearchIcon from "@material-ui/icons/Search";
 import MenuIcon from "@material-ui/icons/Menu";
 import styles from "./styles";
 
-class SearchAppBar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      show: false
-    };
-  }
-
-  showToolbar = () => {
-    this.setState({ show: true });
-  };
-
-  hideToolbar = () => {
-    this.setState({ show: false });
-  };
-
+class SearchAppBar extends React.PureComponent {
   render() {
-    const { classes, transparent, clickMenu, sidebarOpen, isSwipeable } = this.props;
-    const { show } = this.state;
+    const { classes, transparent, clickMenu, sidebarOpen } = this.props;
 
     return (
       <AppBar
-        className={classNames(
-          classes.appBar,
-          { [classes.transparentBar]: transparent },
-          { [classes.appBarShift]: sidebarOpen && !isSwipeable }
-        )}
+        className={classNames(classes.appBar, { [classes.transparentBar]: transparent })}
         position="absolute"
       >
-        {/* <Collapse in={show}> */}
         <Toolbar className={classes.fixedGutter} variant="dense">
           <IconButton
-            className={classNames(
-              { [classes.hide]: sidebarOpen && !isSwipeable },
-              classes.allPointerEvents
-            )}
-            // className={classNames(classes.menuButton, open && classes.hide)}
+            className={classNames(classes.allPointerEvents)}
             color="inherit"
             aria-label="Open drawer"
+            disabled={sidebarOpen}
             onClick={clickMenu}
           >
             <MenuIcon />
           </IconButton>
+          <div className={sidebarOpen ? classes.spacerDrawerOpen : classes.spacerDrawerClosed} />
+          <Typography component="h6">Title</Typography>
           <div className={classes.grow} />
           <div className={classNames(classes.allPointerEvents, classes.search)}>
             <div className={classes.searchIcon}>
@@ -80,7 +58,6 @@ class SearchAppBar extends React.Component {
 SearchAppBar.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   sidebarOpen: PropTypes.bool.isRequired,
-  isSwipeable: PropTypes.bool.isRequired,
   transparent: PropTypes.bool.isRequired,
   clickMenu: PropTypes.func.isRequired
 };

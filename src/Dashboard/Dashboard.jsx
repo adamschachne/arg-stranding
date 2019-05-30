@@ -97,8 +97,7 @@ class Dashboard extends React.Component {
     return (
       <div className={classes.root}>
         <SearchAppBar
-          sidebarOpen={open}
-          isSwipeable={swipeable}
+          sidebarOpen={sidebarOpen}
           transparent={false}
           clickMenu={() => this.toggleDrawer(true)}
         />

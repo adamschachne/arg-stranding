@@ -16,9 +16,6 @@ const styles = (theme) =>
     allPointerEvents: {
       pointerEvents: "all"
     },
-    root: {
-      width: "100%"
-    },
     grow: {
       flexGrow: 0,
       transition: theme.transitions.create("flex-grow", {
@@ -26,12 +23,6 @@ const styles = (theme) =>
       }),
       [theme.breakpoints.up("sm")]: {
         flexGrow: 1
-      }
-    },
-    title: {
-      display: "none",
-      [theme.breakpoints.up("sm")]: {
-        display: "block"
       }
     },
     search: {
@@ -81,21 +72,21 @@ const styles = (theme) =>
       }
     },
     appBar: {
-      transition: theme.transitions.create(["margin", "width"], {
+      width: "100%"
+    },
+    spacerDrawerOpen: {
+      width: theme.drawerWidth - theme.spacing(6),
+      transition: theme.transitions.create("width", {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen
       })
     },
-    appBarShift: {
-      width: `calc(100% - ${theme.drawerWidth}px)`,
-      marginLeft: theme.drawerWidth,
-      transition: theme.transitions.create(["margin", "width"], {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen
+    spacerDrawerClosed: {
+      width: "0px",
+      transition: theme.transitions.create("width", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen
       })
-    },
-    hide: {
-      display: "none"
     }
   });
 
