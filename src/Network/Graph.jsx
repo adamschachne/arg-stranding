@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import isEqual from "lodash/isEqual";
 import differenceWith from "lodash/differenceWith";
-import vis from "vis";
 import uuidv4 from "uuid/v4";
 import PropTypes from "prop-types";
 
@@ -15,7 +14,7 @@ class Graph extends Component {
 
   componentDidMount() {
     const { identifier } = this.state;
-    const { graph, options, events, getNetwork } = this.props;
+    const { graph, options, events, getNetwork, vis } = this.props;
 
     this.edges = new vis.DataSet();
     this.nodes = new vis.DataSet();
@@ -33,11 +32,9 @@ class Graph extends Component {
       options
     );
 
-    /* eslint-disable */
-    for (let eventName of Object.keys(events)) {
+    for (const eventName of Object.keys(events)) {
       this.Network.on(eventName, events[eventName]);
     }
-    /* eslint-enable */
 
     // Object.keys(events).forEach((eventName) => {
     //   this.Network.on(eventName, events[eventName]);
@@ -141,6 +138,10 @@ Graph.defaultProps = {
 };
 
 Graph.propTypes = {
+  vis: PropTypes.shape({
+    DataSet: PropTypes.any,
+    Network: PropTypes.any
+  }).isRequired,
   options: PropTypes.shape({
     width: PropTypes.string,
     height: PropTypes.string

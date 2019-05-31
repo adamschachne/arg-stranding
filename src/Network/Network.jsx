@@ -11,6 +11,8 @@ import Loader from "../Loader/Loader";
 // import GraphSettings from "./GraphSettings";
 // import InfoBox from "../Info/InfoBox";
 
+let vis;
+
 class NetworkContainer extends PureComponent {
   constructor(props) {
     super(props);
@@ -69,6 +71,12 @@ class NetworkContainer extends PureComponent {
         }
       }
     };
+    if (vis === undefined) {
+      import("vis").then((vismodule) => {
+        vis = vismodule;
+        this.forceUpdate();
+      });
+    }
   }
 
   componentDidMount() {
@@ -238,13 +246,6 @@ class NetworkContainer extends PureComponent {
     const { loading, commandToID, graph, options, showBruteForce, bruteForcedMap } = this.state;
     const { className, offsetX, offsetY } = this.props;
     return (
-      // <div
-      //   style={{
-      //     height: "100%",
-      //     // graph width is larger than page, hide overflow
-      //     overflowX: "hidden"
-      //   }}
-      // >
       <div
         className={className}
         style={{
@@ -279,18 +280,20 @@ class NetworkContainer extends PureComponent {
             focusNode={cmd => this.setState({ focusNode: commandToID[cmd] })}
           /> */}
         {/* <InfoBox /> */}
-        <Graph
-          getNetwork={this.createNetwork}
-          graph={graph}
-          options={{
-            ...options
-            // width: `${width}px`,
-            // height: `${height}px`,
-          }}
-          events={this.events}
-        />
+        {vis !== undefined && (
+          <Graph
+            vis={vis}
+            getNetwork={this.createNetwork}
+            graph={graph}
+            options={{
+              ...options
+              // width: `${width}px`,
+              // height: `${height}px`,
+            }}
+            events={this.events}
+          />
+        )}
       </div>
-      // </div>
     );
   }
 }

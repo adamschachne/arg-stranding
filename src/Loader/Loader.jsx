@@ -1,5 +1,5 @@
 import React from "react";
-import { HashLoader } from "react-spinners";
+import HashLoader from "react-spinners/HashLoader";
 import PropTypes from "prop-types";
 import { createStyles, withStyles } from "@material-ui/core";
 
