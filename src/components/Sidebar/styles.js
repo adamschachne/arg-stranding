@@ -1,6 +1,6 @@
 import { createStyles } from "@material-ui/core";
 import { fade } from "@material-ui/core/styles/colorManipulator";
-import image from "../../assets/sidebar.png";
+import image from "../../assets/sidebar-1.png";
 
 /** @param {import("@material-ui/core").Theme} theme */
 const styles = (theme) => {
@@ -51,7 +51,7 @@ const styles = (theme) => {
         zIndex: -1,
         position: "absolute",
         width: "100%",
-        height: "100vh",
+        height: "100%",
         content: `""`,
         background: "#000",
         opacity: "0.5"
