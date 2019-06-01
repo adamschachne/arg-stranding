@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { hot } from "react-hot-loader/root";
-import { withStyles, createStyles } from "@material-ui/core";
 import Landing from "./Landing/Landing";
 import Dashboard from "./Dashboard/Dashboard";
 import Loader from "./Loader/Loader";

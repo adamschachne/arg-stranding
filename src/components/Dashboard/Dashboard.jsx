@@ -8,8 +8,8 @@ import { Typography } from "@material-ui/core";
 import purple from "@material-ui/core/colors/purple";
 import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
 import { withTheme } from "@material-ui/styles";
-import NumberToWord from "./NumberToWord/NumberToWord";
-import Sidebar from "./Sidebar/Sidebar";
+import NumberToWord from "../NumberToWord/NumberToWord";
+import Sidebar from "../Sidebar/Sidebar";
 import SearchAppBar from "../SearchAppBar/SearchAppBar";
 import Network from "../Network/Network";
 

@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { createStyles, withStyles, Avatar, IconButton, Typography } from "@material-ui/core";
 import SettingsIcon from "@material-ui/icons/Settings";
-import { SettingsConsumer } from "../../Settings/SettingsContext";
+import { SettingsConsumer } from "../Settings/SettingsContext";
 
 const BASE_URL = "https://cdn.discordapp.com/";
 

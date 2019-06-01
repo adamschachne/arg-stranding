@@ -2,10 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import { BrowserRouter } from "react-router-dom";
-import App from "./App";
+import App from "./components/App";
 import * as serviceWorker from "./serviceWorker";
-import Theme from "./Theme";
-import { SettingsProvider } from "./Settings/SettingsContext";
+import Theme from "./components/Theme";
+import { SettingsProvider } from "./components/Settings/SettingsContext";
 
 ReactDOM.render(
   <BrowserRouter>
