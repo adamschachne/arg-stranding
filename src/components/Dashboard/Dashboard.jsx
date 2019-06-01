@@ -5,7 +5,6 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import { Typography } from "@material-ui/core";
 // import { TransitionGroup, CSSTransition } from "react-transition-group";
-import purple from "@material-ui/core/colors/purple";
 import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
 import { withTheme } from "@material-ui/styles";
 import NumberToWord from "../NumberToWord/NumberToWord";
@@ -13,38 +12,23 @@ import Sidebar from "../Sidebar/Sidebar";
 import SearchAppBar from "../SearchAppBar/SearchAppBar";
 import Network from "../Network/Network";
 
+const resize = () => {
+  // We execute the same script as before
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty("--vh", `${vh}px`);
+  // console.log("resize");
+};
+
+window.addEventListener("resize", resize);
+
+resize();
+
 const styles = (theme) =>
   createStyles({
     root: {
-      display: "flex"
-    },
-    flexCenter: {
       display: "flex",
-      flexDirection: "column",
-      alignItems: "center"
-    },
-    dashboard: {
-      top: 0,
-      height: "100vh"
-    },
-    row: {
-      display: "flex",
-      alignItems: "center"
-    },
-    button: {
-      color: theme.palette.getContrastText(purple[500]),
-      backgroundColor: "#4A2BBC",
-      "&:hover": {
-        backgroundColor: purple[300]
-      },
-      borderRadius: "0px",
-      letterSpacing: "10px",
-      textIndent: "10px",
-      textDecoration: "none",
-      textAlign: "center",
-      margin: "10px"
-      // minWidth: "200px",
-      // fontFamily: "'Source Sans Pro', sans-serif",
+      maxHeight: "100vh",
+      height: "calc(var(--vh, 1vh) * 100)"
     },
     content: {
       flexGrow: 1,
@@ -57,9 +41,7 @@ const styles = (theme) =>
         duration: theme.transitions.duration.leavingScreen
       }),
       marginLeft: 0,
-      // height and margin-top need to be 6 units because of the search bar
       marginTop: theme.spacing(6),
-      height: `calc(100vh - ${theme.spacing(6)}px)`,
       overflowY: "auto"
     },
     contentShift: {
@@ -123,7 +105,61 @@ class Dashboard extends React.Component {
                 />
               )}
             />
-            <Route exact path="/" render={() => <Typography>home</Typography>} />
+            <Route
+              exact
+              path="/"
+              render={() => (
+                <>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>home</Typography>
+                  <Typography>hom3e</Typography>
+                  <Typography>ho3me</Typography>
+                  <Typography>hom3e</Typography>
+                  <Typography>hom123e</Typography>
+                </>
+              )}
+            />
             <Route render={() => <Redirect to="/" />} />
           </Switch>
         </main>
