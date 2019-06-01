@@ -56,7 +56,8 @@ const styles = (theme) =>
       "&:focus": {
         backgroundColor: fade(theme.palette.common.white, 0.15),
         paddingLeft: theme.spacing(6),
-        width: `calc(100vw - ${theme.spacing(12) + 12}px)`
+        // 14.5 units accounts for the padding around the input and the drawer button
+        width: `calc(100vw - ${theme.spacing(14.5)}px)`
       },
       borderRadius: "4px",
       width: "0vw",
