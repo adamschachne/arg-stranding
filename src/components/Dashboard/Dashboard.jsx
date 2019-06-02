@@ -3,14 +3,12 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import { withStyles, createStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
 import PropTypes from "prop-types";
-import { Typography } from "@material-ui/core";
 // import { TransitionGroup, CSSTransition } from "react-transition-group";
 import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
-import { withTheme } from "@material-ui/styles";
-import NumberToWord from "../NumberToWord/NumberToWord";
+import Scrollbars from "react-custom-scrollbars";
 import Sidebar from "../Sidebar/Sidebar";
 import SearchAppBar from "../SearchAppBar/SearchAppBar";
-import Network from "../Network/Network";
+import routes from "./routes";
 
 const resize = () => {
   // We execute the same script as before
@@ -51,9 +49,6 @@ const styles = (theme) =>
       }),
       marginLeft: theme.drawerWidth
     }
-    // graphWidth: {
-    //   width: `calc(100vw - ${theme.spacing(2)}px)`
-    // }
   });
 
 const isSwipeable = (width) => !isWidthUp("sm", width);
@@ -71,9 +66,8 @@ class Dashboard extends React.Component {
   };
 
   render() {
-    const { identity, classes, width, theme } = this.props;
+    const { identity, classes, width } = this.props;
     const { open } = this.state;
-    const { drawerWidth } = theme;
     const swipeable = isSwipeable(width);
     const sidebarOpen = open && !swipeable;
     return (
@@ -89,77 +83,29 @@ class Dashboard extends React.Component {
           toggleDrawer={this.toggleDrawer}
           identity={identity}
         />
+
         <main
           className={classNames(classes.content, {
             [classes.contentShift]: sidebarOpen
           })}
         >
           <Switch>
-            <Route exact path="/numbers" component={NumberToWord} />
-            <Route
-              path="/graph"
-              render={() => (
-                <Network
-                  offsetX={sidebarOpen ? drawerWidth / 2 : 0}
-                  className={classes.graphWidth}
-                />
-              )}
-            />
-            <Route
-              exact
-              path="/"
-              render={() => (
-                <>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>home</Typography>
-                  <Typography>hom3e</Typography>
-                  <Typography>ho3me</Typography>
-                  <Typography>hom3e</Typography>
-                  <Typography>hom123e</Typography>
-                </>
-              )}
-            />
+            {routes.map(({ page, Component, usesScrollbar = true }) => (
+              <Route
+                key={page}
+                exact
+                path={`/${page}`}
+                render={() =>
+                  usesScrollbar ? (
+                    <Scrollbars>
+                      <Component sidebarOpen={sidebarOpen} />
+                    </Scrollbars>
+                  ) : (
+                    <Component sidebarOpen={sidebarOpen} />
+                  )
+                }
+              />
+            ))}
             <Route render={() => <Redirect to="/" />} />
           </Switch>
         </main>
@@ -173,9 +119,6 @@ Dashboard.propTypes = {
     avatar: PropTypes.string,
     bigAvatar: PropTypes.string
   }).isRequired,
-  theme: PropTypes.shape({
-    drawerWidth: PropTypes.number
-  }).isRequired,
   identity: PropTypes.shape({
     avatar: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -184,4 +127,4 @@ Dashboard.propTypes = {
   width: PropTypes.string.isRequired
 };
 
-export default withStyles(styles)(withWidth()(withTheme(Dashboard)));
+export default withStyles(styles)(withWidth()(Dashboard));

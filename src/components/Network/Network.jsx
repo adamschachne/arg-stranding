@@ -2,6 +2,7 @@ import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import localForage from "localforage";
 import copy from "copy-to-clipboard";
+import { withStyles, withTheme } from "@material-ui/styles";
 import Graph from "./Graph";
 import { options as initialOptions } from "./utils/config";
 import buildGraph from "./utils/buildGraph";
@@ -33,6 +34,11 @@ class NetworkContainer extends PureComponent {
     this.dragging = false;
     /** @type {vis.Network} */
     this.network = null;
+    // focus/moveTo offset
+    this.offset = {
+      x: props.sidebarOpen ? props.theme.drawerWidth / 2 : 0,
+      y: 0
+    };
     this.events = {
       dragStart: (evt) => {
         // console.log("dragging");
@@ -136,9 +142,18 @@ class NetworkContainer extends PureComponent {
       return;
     }
     const { focusNode } = this.state;
-    const { offsetX: x, offsetY: y } = this.props;
-    const { offsetX: prevX, offsetY: prevY } = prevProps;
-    const offsetChanged = x !== prevX || y !== prevY;
+    const {
+      sidebarOpen,
+      theme: { drawerWidth }
+    } = this.props;
+    const offsetChanged = sidebarOpen !== prevProps.sidebarOpen;
+    const prevOffset = this.offset;
+    if (offsetChanged === true) {
+      this.offset = {
+        x: sidebarOpen ? drawerWidth / 2 : 0,
+        y: 0
+      };
+    }
     const animation = {
       duration: offsetChanged ? 300 : 1000,
       easingFunction: "easeOutCubic"
@@ -153,7 +168,7 @@ class NetworkContainer extends PureComponent {
         scale: this.network.getScale(),
         locked: false,
         animation,
-        offset: { x, y }
+        offset: this.offset
       });
     } else if (offsetChanged) {
       this.network.moveTo({
@@ -161,8 +176,8 @@ class NetworkContainer extends PureComponent {
         position: this.network.getViewPosition(),
         scale: this.network.getScale(),
         offset: {
-          x: x - prevX,
-          y: y - prevY
+          x: this.offset.x - prevOffset.x,
+          y: this.offset.y - prevOffset.y
         }
       });
     }
@@ -180,14 +195,13 @@ class NetworkContainer extends PureComponent {
 
   createNetwork = (network) => {
     this.network = network;
-    const { offsetX: x, offsetY: y } = this.props;
     console.log(network);
     this.network.once("stabilizationIterationsDone", () => {
       this.network.moveTo({
         animation: false,
         position: { x: 0, y: 0 },
         scale: 0.3, // about the right scale to begin to see labels
-        offset: { x, y }
+        offset: this.offset
       });
       console.log("iterations done; total time:", performance.now());
       this.savePositions();
@@ -244,10 +258,8 @@ class NetworkContainer extends PureComponent {
 
   render() {
     const { loading, commandToID, graph, options, showBruteForce, bruteForcedMap } = this.state;
-    const { className, offsetX, offsetY } = this.props;
     return (
       <div
-        className={className}
         style={{
           backgroundColor: "#36393f",
           height: "100%",
@@ -260,9 +272,9 @@ class NetworkContainer extends PureComponent {
         {loading && (
           <div
             style={{
-              left: offsetX,
-              top: offsetY,
-              position: "absolute",
+              top: this.offset.y,
+              left: this.offset.x,
+              position: "relative",
               height: "100%",
               width: "100%"
             }}
@@ -298,16 +310,11 @@ class NetworkContainer extends PureComponent {
   }
 }
 
-NetworkContainer.defaultProps = {
-  className: "",
-  offsetX: 0,
-  offsetY: 0
-};
-
 NetworkContainer.propTypes = {
-  className: PropTypes.string,
-  offsetX: PropTypes.number,
-  offsetY: PropTypes.number
+  theme: PropTypes.shape({
+    drawerWidth: PropTypes.number
+  }).isRequired,
+  sidebarOpen: PropTypes.bool.isRequired
 };
 
-export default NetworkContainer;
+export default withTheme(NetworkContainer);

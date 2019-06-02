@@ -46,7 +46,7 @@ class SearchAppBar extends React.PureComponent {
             style={{ flex: "auto" }}
             component="h6"
           >
-            Titledwwddwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+            Title
           </Typography>
           <div className={classes.grow} />
           <div className={classNames(classes.allPointerEvents, classes.search)}>

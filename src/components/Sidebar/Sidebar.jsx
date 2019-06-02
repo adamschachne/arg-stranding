@@ -12,14 +12,10 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { Link, withRouter } from "react-router-dom";
+import { Scrollbars } from "react-custom-scrollbars";
 import styles from "./styles";
 import UserDetails from "./UserDetails";
-
-const pages = [
-  { to: "", text: "HOME" },
-  { to: "numbers", text: "NUMBER TO WORDS" },
-  { to: "graph", text: "GRAPH" }
-];
+import routes from "../Dashboard/routes";
 
 const Sidebar = ({ open, classes, toggleDrawer, swipeable, identity, location: { pathname } }) => {
   const pathnameNoSlash = pathname.substring(1);
@@ -53,23 +49,25 @@ const Sidebar = ({ open, classes, toggleDrawer, swipeable, identity, location: {
         }}
         variant="middle"
       />
-      <div className={classes.sidebarMenu}>
-        <List>
-          {pages.map(({ to, text }) => (
-            <ListItem
-              key={to}
-              draggable={false}
-              className={classes.menuButton}
-              button
-              component={Link}
-              to={to}
-              selected={to === pathnameNoSlash}
-            >
-              <Typography variant="button">{text}</Typography>
-            </ListItem>
-          ))}
-        </List>
-      </div>
+      <Scrollbars style={{ height: "calc(100% + 1px)" }}>
+        <div className={classes.sidebarMenu}>
+          <List>
+            {routes.map(({ page, text }) => (
+              <ListItem
+                key={page}
+                draggable={false}
+                className={classes.menuButton}
+                button
+                component={Link}
+                to={page}
+                selected={page === pathnameNoSlash}
+              >
+                <Typography variant="button">{text}</Typography>
+              </ListItem>
+            ))}
+          </List>
+        </div>
+      </Scrollbars>
       <Divider
         classes={{
           root: classes.dividerRoot
