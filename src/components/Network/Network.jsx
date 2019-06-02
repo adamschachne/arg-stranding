@@ -209,9 +209,14 @@ class NetworkContainer extends PureComponent {
     });
   };
 
+  // eslint-disable-next-line complexity
   interactNetwork = (event) => {
     const nodes = event ? event.nodes : null;
     const { focus } = this.state;
+    const { activeElement } = document;
+    if (activeElement && activeElement.blur) {
+      activeElement.blur();
+    }
     console.log("NETWORK CLICKED");
     if (nodes && nodes.length === 1) {
       if (focus !== nodes[0]) {

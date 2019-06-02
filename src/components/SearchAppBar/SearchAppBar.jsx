@@ -20,7 +20,6 @@ class SearchAppBar extends React.PureComponent {
   render() {
     const {
       classes,
-      transparent,
       clickMenu,
       sidebarOpen,
       location: { pathname }
@@ -29,6 +28,7 @@ class SearchAppBar extends React.PureComponent {
     const pathNoSlash = pathname.substring(1);
     const route = routes.find((rt) => rt.path === pathNoSlash);
     const title = route ? route.title : "";
+    const { transparentToolbar: transparent = false } = route || { transparent: false };
 
     return (
       <AppBar
@@ -49,9 +49,11 @@ class SearchAppBar extends React.PureComponent {
             className={sidebarOpen ? classes.spacerDrawerOpen : classes.spacerDrawerClosed}
             style={{ flex: "auto", width: 0 }}
           >
-            <Typography className={classes.title} noWrap component="h6">
-              {title}
-            </Typography>
+            {transparent === false && (
+              <Typography className={classes.title} noWrap component="h6">
+                {title}
+              </Typography>
+            )}
           </div>
           <div className={classNames(classes.allPointerEvents, classes.search)}>
             <div className={classes.searchIcon}>
@@ -78,7 +80,6 @@ SearchAppBar.propTypes = {
     pathname: PropTypes.string
   }).isRequired,
   sidebarOpen: PropTypes.bool.isRequired,
-  transparent: PropTypes.bool.isRequired,
   clickMenu: PropTypes.func.isRequired
 };
 

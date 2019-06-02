@@ -9,6 +9,7 @@ interface Route {
   button: string;
   Component: any;
   usesScrollbar?: boolean;
+  transparentToolbar?: boolean;
 }
 
 const routes: Array<Route> = [
@@ -61,7 +62,8 @@ const routes: Array<Route> = [
     title: "Graph",
     button: "Graph",
     Component: Network,
-    usesScrollbar: false
+    usesScrollbar: false,
+    transparentToolbar: true
   },
   ...Array(10)
     .fill(1)
