@@ -14,6 +14,7 @@ import { withRouter } from "react-router-dom";
 import SearchIcon from "@material-ui/icons/Search";
 import MenuIcon from "@material-ui/icons/Menu";
 import styles from "./styles";
+import routes from "../Dashboard/routes";
 
 class SearchAppBar extends React.PureComponent {
   render() {
@@ -24,6 +25,10 @@ class SearchAppBar extends React.PureComponent {
       sidebarOpen,
       location: { pathname }
     } = this.props;
+
+    const pathNoSlash = pathname.substring(1);
+    const route = routes.find((rt) => rt.path === pathNoSlash);
+    const title = route ? route.title : "";
 
     return (
       <AppBar
@@ -40,15 +45,14 @@ class SearchAppBar extends React.PureComponent {
           >
             <MenuIcon />
           </IconButton>
-          <Typography
+          <div
             className={sidebarOpen ? classes.spacerDrawerOpen : classes.spacerDrawerClosed}
-            noWrap
-            style={{ flex: "auto" }}
-            component="h6"
+            style={{ flex: "auto", width: 0 }}
           >
-            Title
-          </Typography>
-          <div className={classes.grow} />
+            <Typography className={classes.title} noWrap component="h6">
+              {title}
+            </Typography>
+          </div>
           <div className={classNames(classes.allPointerEvents, classes.search)}>
             <div className={classes.searchIcon}>
               <SearchIcon />

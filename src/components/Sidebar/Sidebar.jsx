@@ -38,7 +38,7 @@ const Sidebar = ({ open, classes, toggleDrawer, swipeable, identity, location: {
       }}
     >
       <div className={classes.logo}>
-        <Typography>ARG STRANDING</Typography>
+        <Typography style={{ fontWeight: 600 }}>ARG STRANDING</Typography>
         <IconButton className={classes.end} onClick={() => toggleDrawer(false)}>
           <ChevronLeftIcon color="secondary" />
         </IconButton>
@@ -49,20 +49,20 @@ const Sidebar = ({ open, classes, toggleDrawer, swipeable, identity, location: {
         }}
         variant="middle"
       />
-      <Scrollbars style={{ height: "calc(100% + 1px)" }}>
+      <Scrollbars style={{ flex: 1, height: "auto" }}>
         <div className={classes.sidebarMenu}>
           <List>
-            {routes.map(({ page, text }) => (
+            {routes.map(({ path, button }, index) => (
               <ListItem
-                key={page}
+                key={path}
                 draggable={false}
-                className={classes.menuButton}
+                className={index > 0 && classes.menuButton}
                 button
                 component={Link}
-                to={page}
-                selected={page === pathnameNoSlash}
+                to={path}
+                selected={path === pathnameNoSlash}
               >
-                <Typography variant="button">{text}</Typography>
+                <Typography variant="button">{button}</Typography>
               </ListItem>
             ))}
           </List>

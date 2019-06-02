@@ -101,6 +101,9 @@ const styles = (theme) =>
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen
       })
+    },
+    title: {
+      paddingLeft: theme.spacing(1)
     }
   });
 

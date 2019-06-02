@@ -64,9 +64,8 @@ const styles = (theme) => {
     sidebarMenu: {
       // padding: theme.spacing(1.5),
       paddingLeft: theme.spacing(2),
-      paddingRight: theme.spacing(2),
-      paddingTop: theme.spacing(1) - 1, // 1px to account for divider
-      flex: 1
+      paddingRight: theme.spacing(2)
+      // paddingTop: theme.spacing(1) - 1 // 1px to account for divider
     },
     dividerRoot: {
       backgroundColor: fade(theme.palette.secondary.main, 0.6)

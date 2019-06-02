@@ -90,11 +90,11 @@ class Dashboard extends React.Component {
           })}
         >
           <Switch>
-            {routes.map(({ page, Component, usesScrollbar = true }) => (
+            {routes.map(({ path, Component, usesScrollbar = true }) => (
               <Route
-                key={page}
+                key={path}
                 exact
-                path={`/${page}`}
+                path={`/${path}`}
                 render={() =>
                   usesScrollbar ? (
                     <Scrollbars>

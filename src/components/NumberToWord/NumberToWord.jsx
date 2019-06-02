@@ -110,9 +110,6 @@ class NumberToWord extends Component {
     this.withoutAnd = `?${numberToWord(number, false)}`;
     return (
       <Paper square className={classNames(classes.root)} elevation={1}>
-        <Typography variant="h6" component="h3">
-          Number to Words Converter
-        </Typography>
         <div
           style={{
             display: "flex",
