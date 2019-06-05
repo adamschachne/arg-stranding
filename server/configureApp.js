@@ -47,7 +47,6 @@ function authenticate(token) {
 }
 
 module.exports = function configureApp(_global, fetchSheetData) {
-
   async function authMiddleware(req, res, next) {
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     console.log(ip);
@@ -110,7 +109,6 @@ module.exports = function configureApp(_global, fetchSheetData) {
   app.get('/data', authMiddleware, async function (req, res) {
     // console.log("RECEIVED REQUEST");
     res.set('Content-Type', 'application/json');
-    // res.setHeader('Cache-Control', 'public, max-age=31557600'); // one year
     try {
       const rows = await fetchSheetData(_global);
 

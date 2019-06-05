@@ -8,6 +8,7 @@ module.exports = function fetchSheetData(_global) {
         _global.doc.getInfo(function (err, info) {
           // console.log('Loaded doc: ' + info.title + ' by ' + info.author.email + " last updated: " + info.updated);
           if (_global.lastUpdated == info.updated) {
+            // step with error
             step('already up to date');
           } else {
             _global.lastUpdated = info.updated;
