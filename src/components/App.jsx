@@ -10,27 +10,35 @@ class App extends Component {
     super(props);
     this.state = {
       loading: true,
-      identity: null
+      identity: null,
+      items: []
     };
   }
 
-  componentDidMount() {
-    fetch("profile", {
-      credentials: "same-origin",
-      redirect: "follow"
-    })
-      .then((response) => {
-        return response.json();
-      })
-      .then((identity) => {
-        console.log(identity);
-        this.setState({ identity, loading: false });
-      })
-      .catch((err) => {
-        this.setState({ loading: false });
-        console.log(err);
+  async componentDidMount() {
+    try {
+      const profileResponse = await fetch("profile", {
+        credentials: "same-origin",
+        redirect: "follow"
       });
+      const profile = await profileResponse.json();
+      this.loadData(profile);
+    } catch (err) {
+      this.setState({ loading: false });
+      console.log(err);
+    }
   }
+
+  loadData = async (identity) => {
+    try {
+      const dataResponse = await fetch("data");
+      const data = await dataResponse.json();
+      this.setState({ identity, items: data.items, loading: false });
+    } catch (err) {
+      console.error(err);
+      this.setState({ identity, loading: false });
+    }
+  };
 
   clickGuest = () => {
     this.setState({ loading: true }, async () => {
@@ -41,7 +49,7 @@ class App extends Component {
         });
         const identity = await guestResponse.json();
         console.log(identity);
-        this.setState({ identity: identity.guest, loading: false });
+        this.loadData(identity);
       } catch (err) {
         console.error(err);
         this.setState({ loading: false });
@@ -50,7 +58,7 @@ class App extends Component {
   };
 
   render() {
-    const { identity, loading } = this.state;
+    const { identity, loading, items } = this.state;
 
     if (loading) {
       return <Loader />;
@@ -62,7 +70,7 @@ class App extends Component {
 
     return (
       <>
-        <Dashboard identity={identity} />
+        <Dashboard identity={identity} items={items} />
         <SettingsPage />
       </>
     );
