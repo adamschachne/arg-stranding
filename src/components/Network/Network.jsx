@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import localForage from "localforage";
 import copy from "copy-to-clipboard";
-import { withStyles, withTheme } from "@material-ui/styles";
+import { withTheme } from "@material-ui/styles";
 import Graph from "./Graph";
 import { options as initialOptions } from "./utils/config";
 import buildGraph from "./utils/buildGraph";

@@ -1,15 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
-import {
-  AppBar,
-  withStyles,
-  IconButton,
-  Toolbar,
-  Typography,
-  InputBase,
-  Collapse
-} from "@material-ui/core";
+import { AppBar, withStyles, IconButton, Toolbar, Typography, InputBase } from "@material-ui/core";
 import { withRouter } from "react-router-dom";
 import SearchIcon from "@material-ui/icons/Search";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -68,7 +60,6 @@ class SearchAppBar extends React.PureComponent {
             />
           </div>
         </Toolbar>
-        {/* </Collapse> */}
       </AppBar>
     );
   }

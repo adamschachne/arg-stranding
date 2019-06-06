@@ -56,7 +56,7 @@ const Sidebar = ({ open, classes, toggleDrawer, swipeable, identity, location: {
               <ListItem
                 key={path}
                 draggable={false}
-                className={index > 0 && classes.menuButton}
+                className={index > 0 ? classes.menuButton : ""}
                 button
                 component={Link}
                 to={path}
