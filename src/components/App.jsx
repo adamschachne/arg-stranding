@@ -4,6 +4,7 @@ import Landing from "./Landing/Landing";
 import Dashboard from "./Dashboard/Dashboard";
 import Loader from "./Loader/Loader";
 import SettingsPage from "./Settings/SettingsPage";
+import { StateProvider } from "./State";
 
 class App extends Component {
   constructor(props) {
@@ -11,7 +12,7 @@ class App extends Component {
     this.state = {
       loading: true,
       identity: null,
-      items: []
+      updated: ""
     };
   }
 
@@ -21,24 +22,13 @@ class App extends Component {
         credentials: "same-origin",
         redirect: "follow"
       });
-      const profile = await profileResponse.json();
-      this.loadData(profile);
+      const identity = await profileResponse.json();
+      this.setState({ identity, loading: false });
     } catch (err) {
       this.setState({ loading: false });
       console.log(err);
     }
   }
-
-  loadData = async (identity) => {
-    try {
-      const dataResponse = await fetch("data");
-      const data = await dataResponse.json();
-      this.setState({ identity, items: data.items, loading: false });
-    } catch (err) {
-      console.error(err);
-      this.setState({ identity, loading: false });
-    }
-  };
 
   clickGuest = () => {
     this.setState({ loading: true }, async () => {
@@ -49,7 +39,7 @@ class App extends Component {
         });
         const identity = await guestResponse.json();
         console.log(identity);
-        this.loadData(identity);
+        this.setState({ identity, loading: false });
       } catch (err) {
         console.error(err);
         this.setState({ loading: false });
@@ -58,7 +48,7 @@ class App extends Component {
   };
 
   render() {
-    const { identity, loading, items } = this.state;
+    const { identity, loading, updated } = this.state;
 
     if (loading) {
       return <Loader />;
@@ -69,10 +59,10 @@ class App extends Component {
     }
 
     return (
-      <>
-        <Dashboard identity={identity} items={items} />
+      <StateProvider>
+        <Dashboard identity={identity} updated={updated} />
         <SettingsPage />
-      </>
+      </StateProvider>
     );
   }
 }

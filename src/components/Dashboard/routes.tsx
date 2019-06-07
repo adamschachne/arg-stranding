@@ -2,14 +2,20 @@ import React from "react";
 import { Typography } from "@material-ui/core";
 import Network from "../Network/Network";
 import NumberToWord from "../NumberToWord/NumberToWord";
+import CommandsContainer from "../Commands/CommandsContainer";
+import { StateConsumer } from "../State";
 
 interface Route {
   path: string;
   title: string;
   button: string;
-  Component: any;
+  Component: React.FC<DashboardRouteProps>;
   usesScrollbar?: boolean;
   transparentToolbar?: boolean;
+}
+
+interface DashboardRouteProps {
+  sidebarOpen: boolean;
 }
 
 const routes: Array<Route> = [
@@ -61,18 +67,22 @@ const routes: Array<Route> = [
     path: "graph",
     title: "Graph",
     button: "Graph",
-    Component: Network,
+    Component: ({ sidebarOpen }: DashboardRouteProps) => (
+      <StateConsumer>
+        {({ items, updated }) => (
+          <Network items={items} updated={updated} sidebarOpen={sidebarOpen} />
+        )}
+      </StateConsumer>
+    ),
     usesScrollbar: false,
     transparentToolbar: true
   },
-  ...Array(10)
-    .fill(1)
-    .map((e, i) => ({
-      path: i.toString(),
-      title: `item ${i}`,
-      button: `item ${i}`,
-      Component: () => <Typography>{i}</Typography>
-    }))
+  {
+    path: "commands",
+    title: "Commands",
+    button: "Commands",
+    Component: CommandsContainer
+  }
 ];
 
 export default routes;

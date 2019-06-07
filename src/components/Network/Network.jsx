@@ -86,58 +86,21 @@ class NetworkContainer extends PureComponent {
   }
 
   componentDidMount() {
-    fetch("/data", {
-      credentials: "same-origin",
-      redirect: "follow"
-    })
-      .then((value) => {
-        return value.json();
-      })
-      .then(({ items, updated }) => {
-        console.log({ items, updated }, new Date(updated).getTime());
-        this.numItems = items.length;
-        const hideBeforeStabilize = Boolean(this.network);
-
-        const buildNewData = () => {
-          this.setState({
-            ...buildGraph(items, hideBeforeStabilize),
-            loading: hideBeforeStabilize
-          });
-          localForage.setItem("updated", updated);
-        };
-
-        localForage.getItem("updated").then((lastUpdated) => {
-          // console.log("last update: ", new Date(lastUpdated).getTime())
-          if (lastUpdated === null || lastUpdated !== updated) {
-            // data has changed, build graph with new data
-            buildNewData();
-          } else {
-            // get data from localforage and use those positions
-            localForage.getItem("positions").then((positions) => {
-              if (positions === null) {
-                buildNewData();
-              } else {
-                console.log("USING EXISTING POSITIONS: ", positions);
-                this.setState({
-                  ...buildGraph(
-                    items.map((item, ID) => Object.assign({}, item, positions[ID])),
-                    hideBeforeStabilize
-                  ),
-                  loading: hideBeforeStabilize
-                });
-              }
-            });
-          }
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    const { items, updated } = this.props;
+    this.updateGraph(items, updated);
   }
 
   // eslint-disable-next-line complexity
   componentDidUpdate(prevProps, prevState) {
     console.log("NETWORK UPDATE");
+
+    // check if items changed
+    const { items, updated } = this.props;
+    const { items: prevItems, updated: prevUpdated } = prevProps;
+    if (items !== prevItems || updated !== prevUpdated) {
+      this.updateGraph(items, updated);
+    }
+
     if (this.network === null) {
       return;
     }
@@ -154,10 +117,7 @@ class NetworkContainer extends PureComponent {
         y: 0
       };
     }
-    const animation = {
-      duration: offsetChanged ? 300 : 1000,
-      easingFunction: "easeOutCubic"
-    };
+    const animation = { duration: offsetChanged ? 300 : 1000, easingFunction: "easeOutCubic" };
 
     if (focusNode !== null && (prevState.focusNode !== focusNode || offsetChanged)) {
       this.network.selectNodes([focusNode]);
@@ -182,6 +142,44 @@ class NetworkContainer extends PureComponent {
       });
     }
   }
+
+  updateGraph = (items, updated) => {
+    console.log(items, updated, new Date(updated).getTime());
+    this.numItems = items.length;
+    const hideBeforeStabilize = Boolean(this.network);
+
+    const buildNewData = () => {
+      this.setState({
+        ...buildGraph(items, hideBeforeStabilize),
+        loading: hideBeforeStabilize
+      });
+      localForage.setItem("updated", updated);
+    };
+
+    localForage.getItem("updated").then((lastUpdated) => {
+      // console.log("last update: ", new Date(lastUpdated).getTime())
+      if (lastUpdated === null || lastUpdated !== updated) {
+        // data has changed, build graph with new data
+        buildNewData();
+      } else {
+        // get data from localforage and use those positions
+        localForage.getItem("positions").then((positions) => {
+          if (positions === null) {
+            buildNewData();
+          } else {
+            console.log("USING EXISTING POSITIONS: ", positions);
+            this.setState({
+              ...buildGraph(
+                items.map((item, ID) => Object.assign({}, item, positions[ID])),
+                hideBeforeStabilize
+              ),
+              loading: hideBeforeStabilize
+            });
+          }
+        });
+      }
+    });
+  };
 
   savePositions = () => {
     if (this.dragging === true) {
@@ -316,6 +314,15 @@ class NetworkContainer extends PureComponent {
 }
 
 NetworkContainer.propTypes = {
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      command: PropTypes.arrayOf(PropTypes.string),
+      leadsto: PropTypes.arrayOf(PropTypes.string),
+      url: PropTypes.string,
+      bruteforce: PropTypes.bool
+    })
+  ).isRequired,
+  updated: PropTypes.string.isRequired,
   theme: PropTypes.shape({
     drawerWidth: PropTypes.number
   }).isRequired,
