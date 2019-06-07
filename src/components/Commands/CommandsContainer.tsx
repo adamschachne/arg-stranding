@@ -1,12 +1,41 @@
 import React from "react";
+import { createStyles, WithStyles, withStyles } from "@material-ui/styles";
+import { Theme } from "@material-ui/core";
+import { StateConsumer } from "../State";
+import Command from "./Command";
+
+const styles = (theme: Theme) =>
+  createStyles({
+    root: {
+      padding: theme.spacing(1)
+    },
+    spaceBefore: {
+      marginTop: theme.spacing(1)
+    }
+  });
+
+interface Props extends WithStyles<typeof styles> {}
 
 // container for all commands
-class CommandsContainer extends React.Component {
+class CommandsContainer extends React.Component<Props> {
   state = {};
 
   render() {
-    return <div>Commands will go here</div>;
+    const { classes } = this.props;
+    return (
+      <div className={classes.root}>
+        <StateConsumer>
+          {({ items }) =>
+            items.map((item, index) => (
+              <div className={index > 0 ? classes.spaceBefore : ""}>
+                <Command key={item.id} item={item} />
+              </div>
+            ))
+          }
+        </StateConsumer>
+      </div>
+    );
   }
 }
 
-export default CommandsContainer;
+export default withStyles(styles)(CommandsContainer);

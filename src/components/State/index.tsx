@@ -4,7 +4,22 @@ import React, { Component } from "react";
 //   : string;
 // }
 
-interface Item {}
+export interface Item {
+  actualSize: string;
+  bruteforce: boolean;
+  command: Array<string>;
+  fannames: Array<string>;
+  filename: string;
+  height: number;
+  id: string;
+  lastModified: string;
+  lastModifiedUnix: number;
+  leadsto: Array<string>;
+  postimgSize: string;
+  type: string;
+  url: string;
+  width: number;
+}
 
 const initialState = {
   items: [] as Array<Item>,

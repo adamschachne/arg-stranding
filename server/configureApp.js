@@ -149,7 +149,7 @@ module.exports = function configureApp(_global, fetchSheetData) {
         req.session.save(function (err) {
           if (err) throw new Error(err);
 
-          return res.send({ guest: req.session.identity });
+          return res.send(req.session.identity);
         })
       });
     } catch (err) {
