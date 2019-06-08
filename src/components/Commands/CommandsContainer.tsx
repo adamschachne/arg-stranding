@@ -27,8 +27,8 @@ class CommandsContainer extends React.Component<Props> {
         <StateConsumer>
           {({ items }) =>
             items.map((item, index) => (
-              <div className={index > 0 ? classes.spaceBefore : ""}>
-                <Command key={item.id} item={item} />
+              <div key={item.id} className={index > 0 ? classes.spaceBefore : ""}>
+                <Command item={item} />
               </div>
             ))
           }
