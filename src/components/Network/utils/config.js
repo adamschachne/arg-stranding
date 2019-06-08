@@ -46,7 +46,7 @@ export const options = {
   },
   layout: {
     randomSeed: 1, // constant seed
-    improvedLayout: true
+    improvedLayout: false
   },
   edges: {
     arrowStrikethrough: true,
