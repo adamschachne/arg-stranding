@@ -8,7 +8,7 @@ import FlexSearch from "flexsearch";
 export interface Item {
   actualSize: string;
   bruteforce: boolean;
-  command: any;
+  command: Array<string>;
   fannames: Array<string>;
   filename: string;
   height: number;
@@ -21,7 +21,13 @@ export interface Item {
   url: string;
   width: number;
   description?: string;
-  flexId?: number;
+}
+
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+
+interface FlexItem extends Omit<Item, "command"> {
+  flexId: number;
+  command: string;
 }
 
 const initialState = {
@@ -64,7 +70,7 @@ export class StateProvider extends Component {
   //   }
   // });
 
-  flex = new FlexSearch<Item>({
+  flex = new FlexSearch<FlexItem>({
     doc: {
       id: "flexId",
       field: ["command", "description"]

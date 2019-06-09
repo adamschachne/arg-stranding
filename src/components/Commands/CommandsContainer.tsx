@@ -7,7 +7,7 @@ import Command from "./Command";
 const styles = (theme: Theme) =>
   createStyles({
     root: {
-      padding: theme.spacing(1)
+      padding: theme.spacing(2)
     },
     spaceBefore: {
       marginTop: theme.spacing(1)
