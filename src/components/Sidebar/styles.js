@@ -1,6 +1,6 @@
 import { createStyles } from "@material-ui/core";
 import { fade } from "@material-ui/core/styles/colorManipulator";
-import image from "../../assets/sidebar-1.png";
+import image from "../../assets/sidebar-1.jpg";
 
 /** @param {import("@material-ui/core").Theme} theme */
 const styles = (theme) => {
