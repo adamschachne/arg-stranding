@@ -22,9 +22,6 @@ export interface Item {
   width: number;
   description?: string;
 }
-
-type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
-
 interface FlexItem extends Omit<Item, "command"> {
   flexId: number;
   command: string;

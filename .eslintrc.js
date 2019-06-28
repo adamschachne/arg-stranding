@@ -25,7 +25,7 @@ module.exports = {
       }
     },
     "react": {
-      version: "999.999.999"
+      "version": "999.999.999"
     }
   },
   rules: {
