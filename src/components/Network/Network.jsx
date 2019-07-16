@@ -14,6 +14,15 @@ import Loader from "../Loader/Loader";
 
 let vis;
 
+function zoomOutMobile() {
+  const viewport = document.querySelector(`meta[name="viewport"]`);
+
+  if (viewport) {
+    viewport.content = "initial-scale=1";
+    viewport.content = "width=device-width";
+  }
+}
+
 class NetworkContainer extends PureComponent {
   constructor(props) {
     super(props);
@@ -215,6 +224,9 @@ class NetworkContainer extends PureComponent {
     if (activeElement && activeElement.blur) {
       activeElement.blur();
     }
+
+    zoomOutMobile();
+
     console.log("NETWORK CLICKED");
     if (nodes && nodes.length === 1) {
       if (focus !== nodes[0]) {
