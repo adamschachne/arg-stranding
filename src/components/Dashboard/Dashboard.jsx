@@ -97,9 +97,8 @@ class Dashboard extends React.Component {
                 path={`/${path}`}
                 render={() =>
                   usesScrollbar ? (
-                    <Scrollbars>
-                      <Component sidebarOpen={sidebarOpen} />
-                    </Scrollbars>
+                    // <Scrollbars></Scrollbars>
+                    <Component sidebarOpen={sidebarOpen} />
                   ) : (
                     <Component sidebarOpen={sidebarOpen} />
                   )

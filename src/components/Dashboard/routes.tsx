@@ -9,7 +9,7 @@ interface Route {
   path: string;
   title: string;
   button: string;
-  Component: React.FC<DashboardRouteProps>;
+  Component: React.ElementType;
   usesScrollbar?: boolean;
   transparentToolbar?: boolean;
 }
@@ -81,6 +81,7 @@ const routes: Array<Route> = [
     path: "commands",
     title: "Commands",
     button: "Commands",
+    usesScrollbar: false, // virtual list for this one
     Component: CommandsContainer
   }
 ];

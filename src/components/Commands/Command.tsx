@@ -6,7 +6,8 @@ import { Item } from "../State";
 const styles = (theme: Theme) =>
   createStyles({
     root: {
-      padding: theme.spacing(2)
+      width: "100%",
+      height: "100%"
     }
   });
 
@@ -26,7 +27,16 @@ const Command: React.SFC<CommandProps> = ({ item, classes: { root } }) => {
           />
         </Grid>
         <Grid item xs={8}>
-          {item.command[0]}
+          {item.command.map((cmd) => (
+            <div key={cmd}>{item.command[0]}</div>
+          ))}
+          <div>{item.filename}</div>
+          <div>
+            <a style={{ color: "white" }} href={item.url}>
+              {item.url}
+            </a>
+          </div>
+          <div>{`${item.width}x${item.height}`}</div>
         </Grid>
       </Grid>
     </Paper>
