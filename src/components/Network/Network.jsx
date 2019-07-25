@@ -110,9 +110,7 @@ class NetworkContainer extends PureComponent {
       this.updateGraph(items, updated);
     }
 
-    if (this.network === null) {
-      return;
-    }
+    if (this.network === null) return;
     const { focusNode } = this.state;
     const {
       sidebarOpen,
