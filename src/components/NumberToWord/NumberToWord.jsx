@@ -191,6 +191,8 @@ class NumberToWord extends Component {
 }
 NumberToWord.propTypes = {
   classes: PropTypes.shape({
+    root: PropTypes.string,
+    icon: PropTypes.string,
     arrowPopper: PropTypes.string,
     arrowArrow: PropTypes.string
   }).isRequired

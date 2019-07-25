@@ -125,7 +125,13 @@ class Landing extends Component {
 }
 
 Landing.propTypes = {
-  classes: PropTypes.shape({ button: PropTypes.string }).isRequired,
+  classes: PropTypes.shape({
+    root: PropTypes.string,
+    button: PropTypes.string,
+    buttonGroup: PropTypes.string,
+    stackButtons: PropTypes.string,
+    wrapper: PropTypes.string
+  }).isRequired,
   clickGuest: PropTypes.func.isRequired
 };
 

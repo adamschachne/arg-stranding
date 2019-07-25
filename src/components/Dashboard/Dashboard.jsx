@@ -115,6 +115,9 @@ class Dashboard extends React.Component {
 
 Dashboard.propTypes = {
   classes: PropTypes.shape({
+    root: PropTypes.string,
+    content: PropTypes.string,
+    contentShift: PropTypes.string,
     avatar: PropTypes.string,
     bigAvatar: PropTypes.string
   }).isRequired,
