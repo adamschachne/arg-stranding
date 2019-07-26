@@ -1,5 +1,5 @@
-import React from "react";
 import { hot } from "react-hot-loader/root";
+import React from "react";
 import PropTypes from "prop-types";
 import blueGrey from "@material-ui/core/colors/blueGrey";
 import grey from "@material-ui/core/colors/grey";

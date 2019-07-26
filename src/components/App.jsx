@@ -1,5 +1,5 @@
-import React, { Component } from "react";
 import { hot } from "react-hot-loader/root";
+import React, { Component } from "react";
 import Landing from "./Landing/Landing";
 import Dashboard from "./Dashboard/Dashboard";
 import Loader from "./Loader/Loader";

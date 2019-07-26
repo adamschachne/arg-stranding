@@ -47,7 +47,8 @@ class NetworkContainer extends PureComponent {
       bruteForcedMap: {},
       showBruteForce: true
     };
-    this.unmounted = false;
+    this.isAnimating = false;
+    this.mounted = false;
     this.numItems = 0;
     this.searchRef = React.createRef();
     this.dragging = false;
@@ -61,7 +62,7 @@ class NetworkContainer extends PureComponent {
     };
     this.events = {
       dragStart: (evt) => {
-        // console.log("dragging");
+        console.log("dragstart");
         this.dragging = true;
         // this.props.unfocus();
         if (evt.nodes.length === 0) {
@@ -77,6 +78,7 @@ class NetworkContainer extends PureComponent {
         this.savePositions();
       },
       click: (evt) => {
+        console.log("click");
         this.interactNetwork(evt);
       },
       doubleClick: (doubleClick) => {
@@ -95,17 +97,28 @@ class NetworkContainer extends PureComponent {
           console.log("copied: ", command);
           copy(command);
         }
+      },
+      animationFinished: () => {
+        this.isAnimating = false;
+        console.log("animation finished");
+      },
+      zoom: () => {
+        console.log("zoom");
+        this.stopAnimations();
       }
     };
     if (vis === undefined) {
       import("vis").then((vismodule) => {
         vis = vismodule;
-        this.forceUpdate();
+        if (this.mounted === true) {
+          this.forceUpdate();
+        }
       });
     }
   }
 
   componentDidMount() {
+    this.mounted = true;
     const { items, updated } = this.props;
     this.updateGraph(items, updated);
   }
@@ -136,37 +149,46 @@ class NetworkContainer extends PureComponent {
     }
     const animation = { duration: offsetChanged ? 300 : 1000, easingFunction: "easeOutCubic" };
 
-    if (focusNode !== null && (prevState.focusNode !== focusNode || offsetChanged)) {
-      this.network.selectNodes([focusNode]);
-      this.network.once("animationFinished", () => {
-        console.log("animation finished");
-      });
-      this.network.focus(focusNode, {
-        scale: this.network.getScale(),
-        locked: false,
-        animation,
-        offset: this.offset
-      });
-    } else if (offsetChanged) {
+    // user opened the sidebar
+    if (offsetChanged) {
+      this.isAnimating = true;
       this.network.moveTo({
-        animation,
         position: this.network.getViewPosition(),
-        scale: this.network.getScale(),
+        animation,
         offset: {
           x: this.offset.x - prevOffset.x,
           y: this.offset.y - prevOffset.y
         }
       });
+    } else if (focusNode !== null && prevState.focusNode !== focusNode) {
+      // user selected a new node
+      this.network.selectNodes([focusNode]);
+      this.isAnimating = true;
+      // moveTo and focus seem to do the same things
+      this.network.moveTo({
+        position: this.network.getPositions(focusNode)[focusNode],
+        animation,
+        offset: this.offset
+      });
     }
   }
 
   componentWillUnmount() {
-    this.unmounted = true;
+    this.mounted = false;
     if (this.network) {
       this.network.destroy();
       this.network = null;
     }
   }
+
+  stopAnimations = () => {
+    if (!this.network) return;
+
+    this.isAnimating = false;
+    this.network.moveTo({
+      position: this.network.getViewPosition()
+    });
+  };
 
   updateGraph = async (items, updated) => {
     console.log(items, updated, new Date(updated).getTime());
@@ -174,7 +196,7 @@ class NetworkContainer extends PureComponent {
     // const hideBeforeStabilize = Boolean(this.network);
 
     const buildNewData = () => {
-      if (this.unmounted === true) return;
+      if (this.mounted === false) return;
 
       this.setState({
         ...buildGraph(items),
@@ -241,6 +263,8 @@ class NetworkContainer extends PureComponent {
     if (activeElement && activeElement.blur) {
       activeElement.blur();
     }
+
+    this.stopAnimations();
 
     zoomOutMobile();
 
