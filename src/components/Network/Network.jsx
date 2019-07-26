@@ -12,7 +12,16 @@ import Loader from "../Loader/Loader";
 // import GraphSettings from "./GraphSettings";
 // import InfoBox from "../Info/InfoBox";
 
+/** @type {import("vis")} */
 let vis;
+
+localForage.dropInstance({
+  name: "localforage"
+});
+
+localForage.config({
+  name: "death stranding"
+});
 
 function zoomOutMobile() {
   const viewport = document.querySelector(`meta[name="viewport"]`);
@@ -38,11 +47,13 @@ class NetworkContainer extends PureComponent {
       bruteForcedMap: {},
       showBruteForce: true
     };
+    this.unmounted = false;
     this.numItems = 0;
     this.searchRef = React.createRef();
     this.dragging = false;
-    /** @type {vis.Network} */
+    /** @type {import("vis").Network} network */
     this.network = null;
+
     // focus/moveTo offset
     this.offset = {
       x: props.sidebarOpen ? props.theme.drawerWidth / 2 : 0,
@@ -149,12 +160,22 @@ class NetworkContainer extends PureComponent {
     }
   }
 
-  updateGraph = (items, updated) => {
+  componentWillUnmount() {
+    this.unmounted = true;
+    if (this.network) {
+      this.network.destroy();
+      this.network = null;
+    }
+  }
+
+  updateGraph = async (items, updated) => {
     console.log(items, updated, new Date(updated).getTime());
     this.numItems = items.length;
     // const hideBeforeStabilize = Boolean(this.network);
 
     const buildNewData = () => {
+      if (this.unmounted === true) return;
+
       this.setState({
         ...buildGraph(items),
         loading: true
@@ -162,27 +183,27 @@ class NetworkContainer extends PureComponent {
       localForage.setItem("updated", updated);
     };
 
-    localForage.getItem("updated").then((lastUpdated) => {
-      // console.log("last update: ", new Date(lastUpdated).getTime())
-      if (lastUpdated === null || lastUpdated !== updated) {
-        // data has changed, build graph with new data
-        console.log("no data. buildiung new data");
+    const lastUpdated = await localForage.getItem("updated");
+    // console.log("last update: ", new Date(lastUpdated).getTime())
+    if (lastUpdated === null || lastUpdated !== updated) {
+      // data has changed, build graph with new data
+      console.log("no data. buildiung new data");
+      buildNewData();
+    } else {
+      // get data from localforage and use those positions
+      const positions = await localForage.getItem("positions");
+      if (positions === null) {
         buildNewData();
       } else {
-        // get data from localforage and use those positions
-        localForage.getItem("positions").then((positions) => {
-          if (positions === null) {
-            buildNewData();
-          } else {
-            console.log("USING EXISTING POSITIONS: ", positions);
-            this.setState({
-              ...buildGraph(items.map((item, ID) => Object.assign({}, item, positions[ID]))),
-              loading: true
-            });
-          }
+        if (this.unmounted === true) return;
+
+        console.log("USING EXISTING POSITIONS: ", positions);
+        this.setState({
+          ...buildGraph(items.map((item, ID) => Object.assign({}, item, positions[ID]))),
+          loading: true
         });
       }
-    });
+    }
   };
 
   savePositions = () => {
@@ -195,6 +216,7 @@ class NetworkContainer extends PureComponent {
     console.log("setting positions");
   };
 
+  /** @param {import("vis").Network} network */
   createNetwork = (network) => {
     this.network = network;
     console.log(network);
