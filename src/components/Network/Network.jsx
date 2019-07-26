@@ -101,11 +101,10 @@ class NetworkContainer extends PureComponent {
 
   // eslint-disable-next-line complexity
   componentDidUpdate(prevProps, prevState) {
-    console.log("NETWORK UPDATE");
-
     // check if items changed
     const { items, updated } = this.props;
     const { items: prevItems, updated: prevUpdated } = prevProps;
+    console.log("NETWORK UPDATE");
     if (items !== prevItems || updated !== prevUpdated) {
       this.updateGraph(items, updated);
     }
@@ -153,12 +152,12 @@ class NetworkContainer extends PureComponent {
   updateGraph = (items, updated) => {
     console.log(items, updated, new Date(updated).getTime());
     this.numItems = items.length;
-    const hideBeforeStabilize = Boolean(this.network);
+    // const hideBeforeStabilize = Boolean(this.network);
 
     const buildNewData = () => {
       this.setState({
-        ...buildGraph(items, hideBeforeStabilize),
-        loading: hideBeforeStabilize
+        ...buildGraph(items),
+        loading: true
       });
       localForage.setItem("updated", updated);
     };
@@ -167,6 +166,7 @@ class NetworkContainer extends PureComponent {
       // console.log("last update: ", new Date(lastUpdated).getTime())
       if (lastUpdated === null || lastUpdated !== updated) {
         // data has changed, build graph with new data
+        console.log("no data. buildiung new data");
         buildNewData();
       } else {
         // get data from localforage and use those positions
@@ -176,11 +176,8 @@ class NetworkContainer extends PureComponent {
           } else {
             console.log("USING EXISTING POSITIONS: ", positions);
             this.setState({
-              ...buildGraph(
-                items.map((item, ID) => Object.assign({}, item, positions[ID])),
-                hideBeforeStabilize
-              ),
-              loading: hideBeforeStabilize
+              ...buildGraph(items.map((item, ID) => Object.assign({}, item, positions[ID]))),
+              loading: true
             });
           }
         });

@@ -1,4 +1,4 @@
-export default (items, hidden = false) => {
+export default (items, hidden) => {
   console.log("building graph");
   const commandToID = {};
   const nodes = [];

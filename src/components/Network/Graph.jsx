@@ -36,13 +36,12 @@ class Graph extends Component {
       this.Network.on(eventName, events[eventName]);
     }
 
-    // Object.keys(events).forEach((eventName) => {
-    //   this.Network.on(eventName, events[eventName]);
-    // });
-
     if (getNetwork) {
       getNetwork(this.Network);
     }
+
+    console.log("stabilizing");
+    this.Network.stabilize();
   }
 
   // eslint-disable-next-line complexity
