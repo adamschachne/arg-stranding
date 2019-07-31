@@ -55,7 +55,7 @@ class Search extends React.Component<Props, State> {
               if (inputRef.current !== null) {
                 inputRef.current.blur();
               }
-              return { ...state, ...changes };
+              return { ...state, ...changes, selectedItem: state.selectedItem };
             default:
               return { ...state, ...changes };
           }
