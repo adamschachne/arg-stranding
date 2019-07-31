@@ -3,12 +3,57 @@ import PropTypes from "prop-types";
 import classNames from "classnames";
 import { AppBar, withStyles, IconButton, Toolbar, Typography, InputBase } from "@material-ui/core";
 import { withRouter } from "react-router-dom";
-import SearchIcon from "@material-ui/icons/Search";
 import MenuIcon from "@material-ui/icons/Menu";
 import styles from "./styles";
 import routes from "../Dashboard/routes";
+import Search from "./Search";
+
+function isPrintable(event) {
+  // tab or space
+  if (event.keyCode === 32 || event.keyCode === 9) {
+    return false;
+  }
+
+  // pressed key is a char
+  if (String.fromCharCode(event.keyCode).match(/(\w|\s)/g)) {
+    return true;
+  }
+
+  return false;
+}
 
 class SearchAppBar extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    // this.hasFocus = false;
+    this.inputRef = React.createRef();
+  }
+
+  componentDidMount() {
+    window.addEventListener("keydown", this.onWindowKeydown);
+    window.addEventListener("blur", this.onWindowBlur);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("keydown", this.onWindowKeydown);
+    window.removeEventListener("blur", this.onWindowBlur);
+  }
+
+  onWindowBlur = (event) => {
+    console.log("window blur");
+    // event.preventDefault();
+    console.log(document.activeElement);
+  };
+
+  onWindowKeydown = (event) => {
+    const { current } = this.inputRef;
+    const { activeElement } = document;
+    if (activeElement !== current && isPrintable(event)) {
+      if (current) current.focus();
+    }
+  };
+
+  // eslint-disable-next-line complexity
   render() {
     const {
       classes,
@@ -47,18 +92,7 @@ class SearchAppBar extends React.PureComponent {
               </Typography>
             )}
           </div>
-          <div className={classNames(classes.allPointerEvents, classes.search)}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput
-              }}
-            />
-          </div>
+          <Search inputRef={this.inputRef} classes={classes} />
         </Toolbar>
       </AppBar>
     );

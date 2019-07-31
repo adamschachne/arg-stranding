@@ -217,7 +217,7 @@ class NetworkContainer extends PureComponent {
       if (positions === null) {
         buildNewData();
       } else {
-        if (this.unmounted === true) return;
+        if (this.mounted === false) return;
 
         console.log("USING EXISTING POSITIONS: ", positions);
         this.setState({

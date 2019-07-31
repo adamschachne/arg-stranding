@@ -53,36 +53,17 @@ const styles = (theme) =>
       transition: `${theme.transitions.create(["background", "padding-left", "width"], {
         duration: "300ms"
       })}`,
-      "&:focus": {
-        backgroundColor: fade(theme.palette.common.white, 0.15),
-        paddingLeft: theme.spacing(6),
-        // 14.5 units accounts for the padding around the input and the drawer button
-        width: `calc(100vw - ${theme.spacing(14.5)}px)`
-      },
       borderRadius: "4px",
-      width: "0vw",
+      width: "0vw"
+    },
+    inputInputFocused: {
+      backgroundColor: fade(theme.palette.common.white, 0.15),
+      paddingLeft: theme.spacing(6),
+      // 14.5 units accounts for the padding around the input and the drawer button
+      width: `calc(100vw - ${theme.spacing(14.5)}px)`,
       [theme.breakpoints.up("sm")]: {
-        // transition: `${theme.transitions.create("background", {
-        //   duration: "500ms",
-        // })}, ${theme.transitions.create("width", {
-        //   duration: "500ms",
-        // })}`,
-        "&:focus": {
-          width: 200
-        }
+        width: 200
       }
-      // width: `calc(100vw - ${theme.spacing(16)}px)`,
-      // [theme.breakpoints.up("sm")]: {
-      //   // transition: `${theme.transitions.create("background", {
-      //   //   duration: "500ms",
-      //   // })}, ${theme.transitions.create("width", {
-      //   //   duration: "500ms",
-      //   // })}`,
-      //   width: "0vw",
-      //   "&:focus": {
-      //     width: 200
-      //   }
-      // }
     },
     appBar: {
       width: "100%",
