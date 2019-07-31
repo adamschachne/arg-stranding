@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import FlexSearch from "flexsearch";
+import FlexSearch, { Index } from "flexsearch";
 
 // interface Identity {
 //   : string;
@@ -36,6 +36,7 @@ const initialState = {
 const initialContext = Object.assign(
   {
     // setIdentity: (identity: Identity) => {}
+    flex: {} as Index<FlexItem>
   },
   initialState
 );
@@ -66,13 +67,32 @@ export class StateProvider extends Component {
   //     }
   //   }
   // });
-
-  flex = new FlexSearch<FlexItem>({
+  flex = FlexSearch.create<FlexItem>({
     doc: {
-      id: "flexId",
-      field: ["command", "description"]
+      id: "flexId", // the property containing this object's id
+      field: ["command", "description"] // the properties to index this object by
     }
   });
+
+  // index = new FlexSearch({
+  //   doc: {
+  //     id: "id",
+  //     field: {
+  //       title: {
+  //         encode: "extra",
+  //         tokenize: "reverse",
+  //         threshold: 7
+  //       },
+  //       cat: {
+  //         encode: false,
+  //         tokenize(val) {
+  //           return [val];
+  //         }
+  //       },
+  //       content: "memory"
+  //     }
+  //   }
+  // });
 
   componentDidMount = async () => {
     try {
@@ -80,14 +100,12 @@ export class StateProvider extends Component {
       const dataResponse = await fetch("data");
       const data: { items: Array<Item>; updated: string } = await dataResponse.json();
       data.items.forEach((item, index) => {
-        // replace command with a single string joined by spaces
         this.flex.add({
           ...item,
           flexId: index,
-          command: item.command.join(" "),
-          description: "this is a description"
+          command: item.command.join(" "), // combine all commands into one string so any can be searched
+          description: "this is a description" // adding in the description
         });
-        // this.flex.add(index, item.command.join(" "));
       });
       console.log(this.flex);
       this.setState({ items: data.items, updated: data.updated });
@@ -102,7 +120,8 @@ export class StateProvider extends Component {
   render() {
     const { children } = this.props;
     const value: Context = {
-      ...this.state
+      ...this.state,
+      flex: this.flex
       // setIdentity: this.setIdentity
     };
     return <Provider value={value}>{children}</Provider>;
