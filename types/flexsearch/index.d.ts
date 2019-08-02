@@ -12,14 +12,14 @@ declare module "flexsearch" {
     add(os: T[]);
     search(query: string, options: number | SearchOptions, callback: (results: SearchResults<T>) => void): void;
     search(query: string, options?: number | SearchOptions): Promise<SearchResults<T>>;
-    search(options: SearchOptions & {query: string}, callback: (results: SearchResults<T>) => void): void;
+    search(options: SearchOptions & {query: string}, callback: (results: Array<T>) => void): void;
     search(options: SearchOptions & {query: string}): Promise<SearchResults<T>>;
     update(id: number, o: T);
     remove(id: number);
     clear();
     destroy();
     addMatcher(matcher: Matcher);
-    where(whereFn: (o: T) => boolean): SearchResult<T>[];
+    where(whereFn: (o: T) => boolean): SearchResults<T>[];
     where(whereObj: {[key: string]: string});
     encode(str: string): string;
     export(): string;
@@ -86,9 +86,3 @@ declare module "flexsearch" {
     static encode(name: string, str: string);
   }
 }
-
-// FlexSearch.create(<options>)
-// FlexSearch.registerMatcher({KEY: VALUE})
-// FlexSearch.registerEncoder(name, encoder)
-// FlexSearch.registerLanguage(lang, {stemmer:{}, filter:[]})
-// FlexSearch.encode(name, string)

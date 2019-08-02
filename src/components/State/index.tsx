@@ -1,10 +1,6 @@
 import React, { Component } from "react";
 import FlexSearch, { Index } from "flexsearch";
 
-// interface Identity {
-//   : string;
-// }
-
 export interface Item {
   actualSize: string;
   bruteforce: boolean;
@@ -22,7 +18,7 @@ export interface Item {
   width: number;
   description?: string;
 }
-interface FlexItem extends Omit<Item, "command"> {
+export interface FlexItem extends Omit<Item, "command"> {
   flexId: number;
   command: string;
 }
@@ -73,26 +69,6 @@ export class StateProvider extends Component {
       field: ["command", "description"] // the properties to index this object by
     }
   });
-
-  // index = new FlexSearch({
-  //   doc: {
-  //     id: "id",
-  //     field: {
-  //       title: {
-  //         encode: "extra",
-  //         tokenize: "reverse",
-  //         threshold: 7
-  //       },
-  //       cat: {
-  //         encode: false,
-  //         tokenize(val) {
-  //           return [val];
-  //         }
-  //       },
-  //       content: "memory"
-  //     }
-  //   }
-  // });
 
   componentDidMount = async () => {
     try {

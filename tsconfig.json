@@ -17,9 +17,16 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "flexsearch": [
+        "types/flexsearch/index.d.ts"
+      ]
+    }
   },
   "include": [
-    "src"
+    "src", 
+    "types"
   ]
 }

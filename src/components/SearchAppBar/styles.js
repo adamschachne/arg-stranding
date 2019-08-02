@@ -1,7 +1,7 @@
 import { createStyles } from "@material-ui/core";
 import { fade } from "@material-ui/core/styles/colorManipulator";
 
-/** @param {import("@material-ui/core").Theme} theme */
+/** @1ram {import("@material-ui/core").Theme} theme */
 const styles = (theme) =>
   createStyles({
     transparentBar: {
@@ -85,6 +85,13 @@ const styles = (theme) =>
     },
     title: {
       paddingLeft: theme.spacing(1)
+    },
+    paper: {
+      position: "absolute",
+      zIndex: 1,
+      marginTop: theme.spacing(1),
+      left: 0,
+      right: 0
     }
   });
 

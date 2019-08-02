@@ -5,6 +5,8 @@ import { WithStyles } from "@material-ui/styles";
 import SearchIcon from "@material-ui/icons/Search";
 import { InputBase } from "@material-ui/core";
 import styles from "./styles";
+import SearchMenu from "./SearchMenu";
+import { StateConsumer } from "../State";
 
 interface Props extends WithStyles<typeof styles> {
   inputRef: RefObject<HTMLInputElement>;
@@ -13,14 +15,6 @@ interface Props extends WithStyles<typeof styles> {
 interface State {
   focused: Boolean;
 }
-
-const items = [
-  { value: "apple" },
-  { value: "pear" },
-  { value: "orange" },
-  { value: "grape" },
-  { value: "banana" }
-];
 
 class Search extends React.Component<Props, State> {
   state = {
@@ -33,6 +27,7 @@ class Search extends React.Component<Props, State> {
 
     return (
       <Downshift
+        isOpen={focused}
         onChange={(selection) => {
           console.log(`You selected ${selection ? selection.value : ""}`);
           const { current } = inputRef;
@@ -102,27 +97,18 @@ class Search extends React.Component<Props, State> {
                   ref: undefined
                 })}
               />
-              <div {...getMenuProps({ style: { position: "fixed" } })}>
-                {isOpen &&
-                  items
-                    .filter((item) => !inputValue || item.value.includes(inputValue))
-                    .map((item, index) => (
-                      <div
-                        {...getItemProps({
-                          key: item.value,
-                          index,
-                          item,
-                          style: {
-                            color: "black",
-                            backgroundColor: highlightedIndex === index ? "lightgray" : "white",
-                            fontWeight: selectedItem === item ? "bold" : "normal"
-                          }
-                        })}
-                      >
-                        {item.value}
-                      </div>
-                    ))}
-              </div>
+              <StateConsumer>
+                {({ flex }) => (
+                  <SearchMenu
+                    classes={classes}
+                    flex={flex}
+                    isOpen={isOpen}
+                    getMenuProps={getMenuProps}
+                    getItemProps={getItemProps}
+                    inputValue={inputValue}
+                  />
+                )}
+              </StateConsumer>
             </div>
           </div>
         )}
