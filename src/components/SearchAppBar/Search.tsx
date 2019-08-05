@@ -3,8 +3,8 @@ import Downshift from "downshift";
 import classNames from "classnames";
 import { WithStyles } from "@material-ui/styles";
 import SearchIcon from "@material-ui/icons/Search";
-import { InputBase } from "@material-ui/core";
-import {} from "@material-ui/core/Popper";
+import { InputBase, Paper } from "@material-ui/core";
+import Popper from "@material-ui/core/Popper";
 import styles from "./styles";
 import SearchMenu from "./SearchMenu";
 import { StateConsumer } from "../State";
@@ -100,6 +100,14 @@ class Search extends React.Component<Props, State> {
               />
               <StateConsumer>
                 {({ flex }) => (
+                  // <Popper
+                  //   style={{ zIndex: 1101 }}
+                  //   open={isOpen}
+                  //   anchorEl={document.body}
+                  //   popperOptions={{
+                  //     awdiawd: 231
+                  //   }}
+                  // >
                   <SearchMenu
                     classes={classes}
                     flex={flex}
@@ -107,7 +115,11 @@ class Search extends React.Component<Props, State> {
                     getMenuProps={getMenuProps}
                     getItemProps={getItemProps}
                     inputValue={inputValue}
+                    popperNode={document.body}
+                    highlightedIndex={highlightedIndex}
+                    selectedItem={selectedItem}
                   />
+                  // </Popper>
                 )}
               </StateConsumer>
             </div>

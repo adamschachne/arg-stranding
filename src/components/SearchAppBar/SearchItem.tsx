@@ -1,13 +1,16 @@
 import React from "react";
+import { FlexItem } from "../State";
 
 interface Props {
   itemProps: any;
-  label: string;
+  selected: boolean;
+  highlighted: boolean;
+  result: FlexItem;
 }
 
-const SearchItem: React.FC<Props> = ({ itemProps, label }) => {
+const SearchItem: React.FC<Props> = ({ itemProps, result }) => {
   // console.log(itemProps);
-  return <div {...itemProps}>{label}</div>;
+  return <div {...itemProps}>{result.filename}</div>;
 };
 
 export default SearchItem;

@@ -16,6 +16,9 @@ const styles = (theme) =>
     allPointerEvents: {
       pointerEvents: "all"
     },
+    noPointerEvents: {
+      pointerEvents: "none"
+    },
     grow: {
       flexGrow: 1
       // transition: theme.transitions.create("flex-grow", {
@@ -94,16 +97,24 @@ const styles = (theme) =>
       left: 0,
       right: 0
     },
-    backfade: {
+    menuRoot: {
+      zIndex: 1201
+    },
+    back: {
       position: "absolute",
-      top: 35,
+      top: theme.spacing(6),
       bottom: 0,
       left: 0,
       right: 0,
       width: "100vw",
-      height: "calc(100vh - 35px)",
-      background: "rgba(0,0,0,.5)",
-      display: "inline-block"
+      height: `calc(100vh - ${theme.spacing(6)}px)`,
+      display: "inline-block",
+      transition: theme.transitions.create("background", {
+        duration: "300ms"
+      })
+    },
+    fade: {
+      background: "rgba(0,0,0,.5)"
     }
   });
 
