@@ -1,7 +1,7 @@
 import { createStyles } from "@material-ui/core";
 import { fade } from "@material-ui/core/styles/colorManipulator";
 
-/** @1ram {import("@material-ui/core").Theme} theme */
+/** @param {import("@material-ui/core").Theme} theme */
 const styles = (theme) =>
   createStyles({
     transparentBar: {
@@ -67,7 +67,8 @@ const styles = (theme) =>
     },
     appBar: {
       width: "100%",
-      overflow: "hidden"
+      overflow: "hidden",
+      transition: "none"
     },
     spacerDrawerOpen: {
       marginLeft: theme.drawerWidth - theme.spacing(6),
@@ -92,6 +93,17 @@ const styles = (theme) =>
       marginTop: theme.spacing(1),
       left: 0,
       right: 0
+    },
+    backfade: {
+      position: "absolute",
+      top: 35,
+      bottom: 0,
+      left: 0,
+      right: 0,
+      width: "100vw",
+      height: "calc(100vh - 35px)",
+      background: "rgba(0,0,0,.5)",
+      display: "inline-block"
     }
   });
 

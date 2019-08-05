@@ -43,7 +43,14 @@ class SearchAppBar extends React.PureComponent {
     super(props);
     // this.hasFocus = false;
     this.inputRef = React.createRef();
-    this.setRouteData();
+
+    // memo route info
+    this.lastRoute = {
+      title: "",
+      transparentToolbar: false,
+      typeToSearch: false
+    };
+    this.lastPath = undefined;
   }
 
   componentDidMount() {
@@ -51,30 +58,36 @@ class SearchAppBar extends React.PureComponent {
     window.addEventListener("blur", this.onWindowBlur);
   }
 
-  componentDidUpdate() {
-    this.setRouteData();
-  }
-
   componentWillUnmount() {
     window.removeEventListener("keydown", this.onWindowKeydown);
     window.removeEventListener("blur", this.onWindowBlur);
   }
 
-  setRouteData = () => {
+  getRouteData = () => {
     const {
       location: { pathname }
     } = this.props;
 
     const pathNoSlash = pathname.substring(1);
+
+    // use memoized route instead of searching for new one
+    if (pathNoSlash === this.lastPath) {
+      return this.lastRoute;
+    }
+
     const route = routes.find((rt) => rt.path === pathNoSlash) || {
       title: "",
       transparentToolbar: false,
       typeToSearch: false
     };
 
-    this.title = route ? route.title : "";
-    this.transparentToolbar = route.transparentToolbar;
-    this.typeToSearch = route.typeToSearch;
+    this.lastPath = pathNoSlash;
+    this.lastRoute = {
+      title: route ? route.title : "",
+      transparentToolbar: route.transparentToolbar,
+      typeToSearch: route.typeToSearch
+    };
+    return this.lastRoute;
   };
 
   onWindowBlur = (event) => {
@@ -87,6 +100,7 @@ class SearchAppBar extends React.PureComponent {
   onWindowKeydown = (event) => {
     const { current } = this.inputRef;
     const { activeElement } = document;
+    const { typeToSearch } = this.getRouteData();
 
     if (!current) {
       return;
@@ -98,18 +112,19 @@ class SearchAppBar extends React.PureComponent {
       current.focus();
     }
 
-    if (activeElement !== current && isPrintable(event) && this.typeToSearch) {
+    if (activeElement !== current && isPrintable(event) && typeToSearch) {
       current.focus();
     }
   };
 
   render() {
     const { classes, clickMenu, sidebarOpen } = this.props;
-
+    const { title, transparentToolbar } = this.getRouteData();
+    console.log("top bar render", title);
     return (
       <AppBar
         className={classNames(classes.appBar, {
-          [classes.transparentBar]: this.transparentToolbar
+          [classes.transparentBar]: transparentToolbar
         })}
         position="absolute"
       >
@@ -127,9 +142,9 @@ class SearchAppBar extends React.PureComponent {
             className={sidebarOpen ? classes.spacerDrawerOpen : classes.spacerDrawerClosed}
             style={{ flex: "auto", width: 0 }}
           >
-            {this.transparentToolbar === false && (
+            {transparentToolbar === false && (
               <Typography className={classes.title} noWrap component="h6">
-                {this.title}
+                {title}
               </Typography>
             )}
           </div>

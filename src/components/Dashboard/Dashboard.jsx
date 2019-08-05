@@ -5,9 +5,9 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 // import { TransitionGroup, CSSTransition } from "react-transition-group";
 import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
-import Scrollbars from "react-custom-scrollbars";
+// import Scrollbars from "react-custom-scrollbars";
 import Sidebar from "../Sidebar/Sidebar";
-import SearchAppBar from "../SearchAppBar/SearchAppBar";
+import TopAppBar from "../SearchAppBar/TopAppBar";
 import routes from "./routes";
 
 const resize = () => {
@@ -53,13 +53,17 @@ const styles = (theme) =>
 
 const isSwipeable = (width) => !isWidthUp("sm", width);
 
-class Dashboard extends React.Component {
+class Dashboard extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       open: !isSwipeable(props.width)
     };
   }
+
+  openDrawer = () => {
+    this.setState({ open: true });
+  };
 
   toggleDrawer = (value) => {
     this.setState({ open: value });
@@ -70,13 +74,10 @@ class Dashboard extends React.Component {
     const { open } = this.state;
     const swipeable = isSwipeable(width);
     const sidebarOpen = open && !swipeable;
+    console.log("dashboard render");
     return (
       <div className={classes.root}>
-        <SearchAppBar
-          sidebarOpen={sidebarOpen}
-          transparent={false}
-          clickMenu={() => this.toggleDrawer(true)}
-        />
+        <TopAppBar sidebarOpen={sidebarOpen} transparent={false} clickMenu={this.openDrawer} />
         <Sidebar
           swipeable={swipeable}
           open={open}

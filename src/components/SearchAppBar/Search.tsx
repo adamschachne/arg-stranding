@@ -4,6 +4,7 @@ import classNames from "classnames";
 import { WithStyles } from "@material-ui/styles";
 import SearchIcon from "@material-ui/icons/Search";
 import { InputBase } from "@material-ui/core";
+import {} from "@material-ui/core/Popper";
 import styles from "./styles";
 import SearchMenu from "./SearchMenu";
 import { StateConsumer } from "../State";

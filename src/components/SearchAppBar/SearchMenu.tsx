@@ -3,8 +3,13 @@ import { GetMenuPropsOptions, GetItemPropsOptions } from "downshift";
 import { Paper } from "@material-ui/core";
 import { WithStyles } from "@material-ui/styles";
 import { Index } from "flexsearch";
+import { AutoSizer } from "react-virtualized/dist/es/AutoSizer";
+import { List as VirtualList } from "react-virtualized/dist/es/List";
 import { FlexItem } from "../State";
-import styles from "../Sidebar/styles";
+import styles from "./styles";
+import SearchItem from "./SearchItem";
+
+const ROW_HEIGHT = 48;
 
 interface Props extends WithStyles<typeof styles> {
   flex: Index<FlexItem>;
@@ -52,39 +57,34 @@ class SearchMenu extends React.PureComponent<Props, State> {
     const { getMenuProps, getItemProps, isOpen, classes } = this.props;
     const { results } = this.state;
     return (
-      <div {...getMenuProps({ style: { position: "fixed" } })}>
-        {isOpen && (
-          <Paper className={classes.paper} square>
-            {results.map((suggestion, index) => (
-              // renderSuggestion({
-              //   suggestion,
-              //   index,
-              //   itemProps: getItemProps({ item: suggestion.label }),
-              //   highlightedIndex,
-              //   selectedItem: selectedItem2,
-              // })
-              <div {...getItemProps({ item: suggestion.id })}>{suggestion.command}</div>
-            ))}
-          </Paper>
-        )
-        // items
-        //   .filter((item) => !inputValue || item.value.includes(inputValue))
-        //   .map((item, index) => (
-        //     <div
-        //       {...getItemProps({
-        //         key: item.value,
-        //         index,
-        //         item,
-        //         style: {
-        //           color: "black",
-        //           backgroundColor: highlightedIndex === index ? "lightgray" : "white",
-        //           fontWeight: selectedItem === item ? "bold" : "normal"
-        //         }
-        //       })}
-        //     >
-        //       {item.value}
-        //     </div>
-        }
+      <div
+        {...getMenuProps({
+          style: {
+            height: ROW_HEIGHT * 5,
+            position: "absolute"
+          }
+        })}
+      >
+        {isOpen && results.length > 0 && (
+          <>
+            <Paper style={{ backgroundColor: "white" }} square>
+              {results.map((_, index) => (
+                <SearchItem
+                  key={_.id}
+                  itemProps={getItemProps({
+                    item: results[index],
+                    index,
+                    style: {
+                      color: "black"
+                    }
+                  })}
+                  label={results[index].command}
+                />
+              ))}
+            </Paper>
+            {/* <div role="presentation" className={classes.backfade} /> */}
+          </>
+        )}
       </div>
     );
   }

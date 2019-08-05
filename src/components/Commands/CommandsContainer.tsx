@@ -5,7 +5,7 @@ import { AutoSizer } from "react-virtualized/dist/es/AutoSizer";
 import { List } from "react-virtualized/dist/es/List";
 import { StateConsumer } from "../State";
 import Command from "./Command";
-import SmartList from "./SmartList";
+// import SmartList from "./SmartList";
 // import DemoList from "./DemoList";
 
 const styles = (theme: Theme) =>
