@@ -1,6 +1,6 @@
 import React from "react";
 import { GetMenuPropsOptions, GetItemPropsOptions } from "downshift";
-import { Paper, Portal } from "@material-ui/core";
+import { Paper, Portal, MenuItem } from "@material-ui/core";
 import { WithStyles } from "@material-ui/styles";
 import { Index } from "flexsearch";
 import { AutoSizer } from "react-virtualized/dist/es/AutoSizer";
@@ -18,7 +18,6 @@ interface Props extends WithStyles<typeof styles> {
   getItemProps: (options: GetItemPropsOptions<any>) => any;
   isOpen: boolean;
   inputValue: string | null;
-  popperNode: HTMLElement | null;
   highlightedIndex: number | null;
   selectedItem: any;
 }
@@ -59,7 +58,6 @@ class SearchMenu extends React.PureComponent<Props, State> {
       getItemProps,
       isOpen,
       classes,
-      popperNode,
       highlightedIndex,
       selectedItem
     } = this.props;
@@ -69,7 +67,7 @@ class SearchMenu extends React.PureComponent<Props, State> {
 
     if (isOpen) {
       rootProps = getMenuProps({
-        style: { position: "absolute" },
+        style: { position: "absolute", top: 48, left: 0 },
         className: classes.menuRoot
       });
     }
@@ -82,28 +80,54 @@ class SearchMenu extends React.PureComponent<Props, State> {
               square
               style={{
                 marginTop: 8,
-                width: popperNode ? popperNode.clientWidth : undefined
+                // width: popperNode ? popperNode.clientWidth : undefined
+                width: 200
+                // height: 500
               }}
+              // clicking doesnt blur input
+              onMouseDown={(e) => e.preventDefault()}
             >
-              {results.map((result, index) => {
-                const selected = selectedItem === result.id;
-                const highlighted = highlightedIndex === index;
-                return (
-                  <SearchItem
-                    key={result.id}
-                    itemProps={getItemProps({
-                      item: result.id,
-                      index,
-                      style: {
-                        color: "black"
-                      }
-                    })}
-                    selected={selected}
-                    highlighted={highlighted}
-                    result={results[index]}
-                  />
-                );
-              })}
+              <AutoSizer disableHeight>
+                {({ width }) => {
+                  return (
+                    <VirtualList
+                      width={width}
+                      height={results.length < 5 ? ROW_HEIGHT * results.length : ROW_HEIGHT * 5}
+                      rowHeight={ROW_HEIGHT}
+                      rowCount={results.length}
+                      scrollToIndex={highlightedIndex || 0}
+                      rowRenderer={({ key, index, style }) => {
+                        const result = results[index];
+                        const selected = highlightedIndex === index;
+                        return (
+                          // <SearchItem
+                          //   key={key}
+                          //   itemProps={getItemProps({
+                          //     item: result.id,
+                          //     index,
+                          //     style
+                          //   })}
+                          //   selected={selected}
+                          //   highlighted={highlighted}
+                          //   result={result}
+                          // />
+                          <MenuItem
+                            key={key}
+                            {...getItemProps({
+                              item: result.id,
+                              index,
+                              selected,
+                              style
+                            })}
+                          >
+                            {result.filename}
+                          </MenuItem>
+                        );
+                      }}
+                    />
+                  );
+                }}
+              </AutoSizer>
             </Paper>
           </div>
           <div

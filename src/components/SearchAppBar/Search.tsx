@@ -3,8 +3,7 @@ import Downshift from "downshift";
 import classNames from "classnames";
 import { WithStyles } from "@material-ui/styles";
 import SearchIcon from "@material-ui/icons/Search";
-import { InputBase, Paper } from "@material-ui/core";
-import Popper from "@material-ui/core/Popper";
+import { InputBase } from "@material-ui/core";
 import styles from "./styles";
 import SearchMenu from "./SearchMenu";
 import { StateConsumer } from "../State";
@@ -14,21 +13,20 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 interface State {
-  focused: Boolean;
+  open: Boolean;
 }
 
 class Search extends React.Component<Props, State> {
   state = {
-    focused: false
+    open: false
   };
 
   render() {
     const { inputRef, classes } = this.props;
-    const { focused } = this.state;
-
+    const { open } = this.state;
     return (
       <Downshift
-        isOpen={focused}
+        isOpen={open}
         onChange={(selection) => {
           console.log(`You selected ${selection ? selection.value : ""}`);
           const { current } = inputRef;
@@ -74,13 +72,13 @@ class Search extends React.Component<Props, State> {
               <InputBase
                 classes={{
                   root: classes.inputRoot,
-                  input: classNames(classes.inputInput, focused && classes.inputInputFocused)
+                  input: classNames(classes.inputInput, isOpen && classes.inputInputFocused)
                 }}
                 {...getInputProps({
                   placeholder: "Search…",
                   onFocus: ({ target }: React.FocusEvent<HTMLInputElement>) => {
                     // this.hasFocus = true;
-                    this.setState({ focused: true });
+                    this.setState({ open: true });
                     target.select();
                   },
                   onBlur: () => {
@@ -89,7 +87,7 @@ class Search extends React.Component<Props, State> {
                     } = this.props;
 
                     if (current === null || current !== document.activeElement) {
-                      this.setState({ focused: false });
+                      this.setState({ open: false });
                     }
                   },
                   inputRef,
@@ -100,14 +98,6 @@ class Search extends React.Component<Props, State> {
               />
               <StateConsumer>
                 {({ flex }) => (
-                  // <Popper
-                  //   style={{ zIndex: 1101 }}
-                  //   open={isOpen}
-                  //   anchorEl={document.body}
-                  //   popperOptions={{
-                  //     awdiawd: 231
-                  //   }}
-                  // >
                   <SearchMenu
                     classes={classes}
                     flex={flex}
@@ -115,11 +105,9 @@ class Search extends React.Component<Props, State> {
                     getMenuProps={getMenuProps}
                     getItemProps={getItemProps}
                     inputValue={inputValue}
-                    popperNode={document.body}
                     highlightedIndex={highlightedIndex}
                     selectedItem={selectedItem}
                   />
-                  // </Popper>
                 )}
               </StateConsumer>
             </div>
