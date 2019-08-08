@@ -39,10 +39,7 @@ class Search extends React.Component<Props, State> {
             }
           }
         }}
-        itemToString={(item: FlexItem) => {
-          console.log(item);
-          return item.command;
-        }}
+        itemToString={(item: FlexItem) => (item ? item.command : "")}
         stateReducer={(state, changes) => {
           // Do not clear search input content on blur
           switch (changes.type) {
