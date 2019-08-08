@@ -98,7 +98,8 @@ class SearchMenu extends React.PureComponent<Props, State> {
                       scrollToIndex={highlightedIndex || 0}
                       rowRenderer={({ key, index, style }) => {
                         const result = results[index];
-                        const selected = highlightedIndex === index;
+                        const highlighted = highlightedIndex === index;
+                        const isSelected = selectedItem === result.id;
                         return (
                           // <SearchItem
                           //   key={key}
@@ -114,10 +115,13 @@ class SearchMenu extends React.PureComponent<Props, State> {
                           <MenuItem
                             key={key}
                             {...getItemProps({
-                              item: result.id,
+                              item: result,
                               index,
-                              selected,
-                              style
+                              selected: highlighted,
+                              style: {
+                                ...style,
+                                fontWeight: isSelected ? 500 : undefined
+                              }
                             })}
                           >
                             {result.filename}
