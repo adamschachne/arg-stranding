@@ -8,6 +8,8 @@ interface Props {
   result: FlexItem;
 }
 
+// not using this yet
+
 const SearchItem: React.FC<Props> = ({ itemProps, result }) => {
   // console.log(itemProps);
   return <div {...itemProps}>{result.filename}</div>;

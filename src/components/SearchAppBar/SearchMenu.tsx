@@ -8,7 +8,7 @@ import { List as VirtualList } from "react-virtualized/dist/es/List";
 import classNames from "classnames";
 import { FlexItem } from "../State";
 import styles from "./styles";
-import SearchItem from "./SearchItem";
+// import SearchItem from "./SearchItem";
 
 const ROW_HEIGHT = 48;
 
@@ -20,6 +20,7 @@ interface Props extends WithStyles<typeof styles> {
   inputValue: string | null;
   highlightedIndex: number | null;
   selectedItem: any;
+  sidebarOpen: boolean;
 }
 
 interface State {
@@ -59,33 +60,23 @@ class SearchMenu extends React.PureComponent<Props, State> {
       isOpen,
       classes,
       highlightedIndex,
-      selectedItem
+      selectedItem,
+      sidebarOpen
     } = this.props;
     const { results } = this.state;
 
-    let rootProps = {};
-
-    if (isOpen) {
-      rootProps = getMenuProps({
-        style: { position: "absolute", top: 48, left: 0 },
-        className: classes.menuRoot
-      });
-    }
-
     return (
       <Portal>
-        <>
-          <div {...rootProps}>
+        <div className={classes.menuRoot}>
+          {isOpen && (
             <Paper
               square
-              style={{
-                marginTop: 8,
-                // width: popperNode ? popperNode.clientWidth : undefined
-                width: 200
-                // height: 500
-              }}
-              // clicking doesnt blur input
-              onMouseDown={(e) => e.preventDefault()}
+              component="div"
+              {...getMenuProps({
+                className: classNames(classes.menuPaper, sidebarOpen && classes.menuPaperShifted),
+                // clicking doesnt blur input
+                onMouseDown: (e) => e.preventDefault()
+              })}
             >
               <AutoSizer disableHeight>
                 {({ width }) => {
@@ -101,17 +92,6 @@ class SearchMenu extends React.PureComponent<Props, State> {
                         const highlighted = highlightedIndex === index;
                         const isSelected = selectedItem === result.id;
                         return (
-                          // <SearchItem
-                          //   key={key}
-                          //   itemProps={getItemProps({
-                          //     item: result.id,
-                          //     index,
-                          //     style
-                          //   })}
-                          //   selected={selected}
-                          //   highlighted={highlighted}
-                          //   result={result}
-                          // />
                           <MenuItem
                             key={key}
                             {...getItemProps({
@@ -133,12 +113,12 @@ class SearchMenu extends React.PureComponent<Props, State> {
                 }}
               </AutoSizer>
             </Paper>
-          </div>
+          )}
           <div
             role="presentation"
             className={classNames(classes.back, isOpen ? classes.fade : classes.noPointerEvents)}
           />
-        </>
+        </div>
       </Portal>
     );
   }

@@ -98,11 +98,14 @@ const styles = (theme) =>
       right: 0
     },
     menuRoot: {
-      zIndex: 1201
+      zIndex: 1199,
+      position: "absolute",
+      top: theme.spacing(6),
+      left: 0
     },
     back: {
       position: "absolute",
-      top: theme.spacing(6),
+      top: 0,
       bottom: 0,
       left: 0,
       right: 0,
@@ -114,7 +117,17 @@ const styles = (theme) =>
       })
     },
     fade: {
-      background: "rgba(0,0,0,.5)"
+      background: "rgba(0, 0, 0, 0.5)"
+    },
+    menuPaper: {
+      zIndex: 1,
+      top: theme.spacing(2),
+      width: `calc(100vw - ${theme.spacing(4)}px)`,
+      left: theme.spacing(2)
+    },
+    menuPaperShifted: {
+      width: `calc(100vw - ${theme.drawerWidth + theme.spacing(4)}px)`,
+      left: theme.drawerWidth + theme.spacing(2)
     }
   });
 

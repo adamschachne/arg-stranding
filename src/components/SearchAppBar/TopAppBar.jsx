@@ -148,7 +148,7 @@ class SearchAppBar extends React.PureComponent {
               </Typography>
             )}
           </div>
-          <Search inputRef={this.inputRef} classes={classes} />
+          <Search sidebarOpen={sidebarOpen} inputRef={this.inputRef} classes={classes} />
         </Toolbar>
       </AppBar>
     );

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import FlexSearch, { Index } from "flexsearch";
+import FlexSearch from "flexsearch";
 
 export interface Item {
   actualSize: string;
@@ -26,20 +26,18 @@ export interface FlexItem extends Omit<Item, "command"> {
 const initialState = {
   items: [] as Array<Item>,
   // identity: null as Identity | null,
-  updated: ""
+  updated: "",
+  flex: FlexSearch.create<FlexItem>({
+    doc: {
+      id: "flexId", // the property containing this object's id
+      field: ["command", "description"] // the properties to index this object by
+    }
+  })
 };
 
-const initialContext = Object.assign(
-  {
-    // setIdentity: (identity: Identity) => {}
-    flex: {} as Index<FlexItem>
-  },
-  initialState
-);
 type State = typeof initialState;
-type Context = typeof initialContext;
 
-const { Provider, Consumer } = React.createContext<Context>(initialContext);
+const { Provider, Consumer } = React.createContext<State>(initialState);
 
 export class StateProvider extends Component {
   readonly state: State = initialState;
@@ -63,31 +61,25 @@ export class StateProvider extends Component {
   //     }
   //   }
   // });
-  flex = FlexSearch.create<FlexItem>({
-    doc: {
-      id: "flexId", // the property containing this object's id
-      field: ["command", "description"] // the properties to index this object by
-    }
-  });
-
   componentDidMount = async () => {
     try {
-      // TODO provide a system for updating
+      const { flex } = this.state;
+      // TODO provide a system for fetching new data
       const dataResponse = await fetch("data");
       const data: { items: Array<Item>; updated: string } = await dataResponse.json();
       data.items.forEach((item, index) => {
-        this.flex.add({
+        flex.add({
           ...item,
           flexId: index,
           command: item.command.join(" "), // combine all commands into one string so any can be searched
           description: "this is a description" // adding in the description
         });
       });
-      console.log(this.flex);
+      console.log(flex);
+      // eslint-disable-next-line react/no-unused-state
       this.setState({ items: data.items, updated: data.updated });
     } catch (err) {
       console.error(err);
-      this.setState({ loading: false });
     }
   };
 
@@ -95,12 +87,7 @@ export class StateProvider extends Component {
 
   render() {
     const { children } = this.props;
-    const value: Context = {
-      ...this.state,
-      flex: this.flex
-      // setIdentity: this.setIdentity
-    };
-    return <Provider value={value}>{children}</Provider>;
+    return <Provider value={this.state}>{children}</Provider>;
   }
 }
 

@@ -3,13 +3,14 @@ import Downshift from "downshift";
 import classNames from "classnames";
 import { WithStyles } from "@material-ui/styles";
 import SearchIcon from "@material-ui/icons/Search";
-import { InputBase, TextField } from "@material-ui/core";
+import { InputBase } from "@material-ui/core";
 import styles from "./styles";
 import SearchMenu from "./SearchMenu";
 import { StateConsumer, FlexItem } from "../State";
 
 interface Props extends WithStyles<typeof styles> {
   inputRef: RefObject<HTMLInputElement>;
+  sidebarOpen: boolean;
 }
 
 interface State {
@@ -22,7 +23,7 @@ class Search extends React.Component<Props, State> {
   };
 
   render() {
-    const { inputRef, classes } = this.props;
+    const { inputRef, classes, sidebarOpen } = this.props;
     const { open } = this.state;
     return (
       <Downshift
@@ -105,6 +106,7 @@ class Search extends React.Component<Props, State> {
                       inputValue={inputValue}
                       highlightedIndex={highlightedIndex}
                       selectedItem={selectedItem}
+                      sidebarOpen={sidebarOpen}
                     />
                   )}
                 </StateConsumer>
