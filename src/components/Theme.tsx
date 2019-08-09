@@ -1,11 +1,11 @@
 import { hot } from "react-hot-loader/root";
 import React, { ElementType } from "react";
-import PropTypes from "prop-types";
 import blueGrey from "@material-ui/core/colors/blueGrey";
 import grey from "@material-ui/core/colors/grey";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core/styles";
+import { ThemeOptions } from "@material-ui/core/styles/createMuiTheme";
 import { SettingsConsumer } from "./Settings/SettingsContext";
 
 declare module "@material-ui/core/styles/createMuiTheme" {
@@ -23,8 +23,7 @@ interface Props {
   children: ElementType<any>;
 }
 
-/** @type {import("@material-ui/core/styles/createMuiTheme").ThemeOptions} */
-const themeDefaults = {
+const themeDefaults: ThemeOptions = {
   typography: {
     fontFamily: "'Source Sans Pro', sans-serif;",
     fontWeightRegular: 400,

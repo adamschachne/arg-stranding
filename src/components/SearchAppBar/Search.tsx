@@ -28,17 +28,24 @@ class Search extends React.Component<Props, State> {
     return (
       <Downshift
         isOpen={open}
-        onChange={(selection: FlexItem) => {
-          console.log(`You selected ${selection ? selection.command : ""}`);
+        onChange={(selection: FlexItem | null) => {
           const { current } = inputRef;
 
-          if (current !== null) {
-            if (!selection) {
-              current.blur();
-            } else {
-              current.select();
-            }
+          // do something with selection
+          if (selection !== null) {
+            console.log(selection);
           }
+
+          if (current === null) return;
+
+          current.blur();
+
+          // current.blur();
+          // if (!selection) {
+          //   current.blur();
+          // } else {
+          //   current.select();
+          // }
         }}
         itemToString={(item: FlexItem) => (item ? item.command : "")}
         stateReducer={(state, changes) => {
@@ -63,7 +70,8 @@ class Search extends React.Component<Props, State> {
           isOpen,
           inputValue,
           highlightedIndex,
-          selectedItem
+          selectedItem,
+          clearSelection
         }) => {
           return (
             <div className={classNames(classes.allPointerEvents, classes.search)}>
@@ -88,18 +96,21 @@ class Search extends React.Component<Props, State> {
                       const {
                         inputRef: { current }
                       } = this.props;
+
+                      // only clear if the blur was not caused by alt-tab
                       if (current === null || current !== document.activeElement) {
-                        console.log(current, document.activeElement, "blur");
+                        clearSelection();
                         this.setState({ open: false });
                       }
                     }
                   })}
                 />
                 <StateConsumer>
-                  {({ flex }) => (
+                  {({ flex, updated }) => (
                     <SearchMenu
                       classes={classes}
                       flex={flex}
+                      updated={updated}
                       isOpen={isOpen}
                       getMenuProps={getMenuProps}
                       getItemProps={getItemProps}

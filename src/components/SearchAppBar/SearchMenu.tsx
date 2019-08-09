@@ -14,6 +14,7 @@ const ROW_HEIGHT = 48;
 
 interface Props extends WithStyles<typeof styles> {
   flex: Index<FlexItem>;
+  updated: string;
   getMenuProps: (options?: GetMenuPropsOptions) => any;
   getItemProps: (options: GetItemPropsOptions<any>) => any;
   isOpen: boolean;
@@ -33,18 +34,18 @@ class SearchMenu extends React.PureComponent<Props, State> {
   };
 
   componentDidUpdate(prevProps: Props) {
-    const { inputValue, flex } = this.props;
-    const { inputValue: prevInputValue } = prevProps;
+    const { inputValue, flex, updated } = this.props;
+    const { inputValue: prevInputValue, updated: prevUpdated } = prevProps;
 
     // perform search when inputValue changes
-    if (inputValue !== prevInputValue) {
+    if (inputValue !== prevInputValue || updated !== prevUpdated) {
       flex.search(
         {
           query: inputValue || ""
         },
         (results) => {
           const { inputValue: value } = this.props;
-          console.log(results);
+          // console.log(results);
           if (value === inputValue) {
             this.setState({ results });
           }
@@ -125,33 +126,3 @@ class SearchMenu extends React.PureComponent<Props, State> {
 }
 
 export default SearchMenu;
-
-// <div
-//   {...getMenuProps({
-//     style: {
-//       height: ROW_HEIGHT * 5,
-//       position: "absolute"
-//     }
-//   })}
-// >
-//   {isOpen && results.length > 0 && (
-//     <>
-//       <Paper style={{ backgroundColor: "white" }} square>
-//         {results.map((_, index) => (
-//           <SearchItem
-//             key={_.id}
-//             itemProps={getItemProps({
-//               item: results[index],
-//               index,
-//               style: {
-//                 color: "black"
-//               }
-//             })}
-//             label={results[index].command}
-//           />
-//         ))}
-//       </Paper>
-//       {/* <div role="presentation" className={classes.backfade} /> */}
-//     </>
-//   )}
-// </div>
