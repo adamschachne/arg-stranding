@@ -38,6 +38,7 @@ class Search extends React.Component<Props, State> {
 
           if (current === null) return;
 
+          // blur which closes and clears the menu
           current.blur();
 
           // current.blur();

@@ -3,12 +3,12 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import { withStyles, createStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
 import PropTypes from "prop-types";
-// import { TransitionGroup, CSSTransition } from "react-transition-group";
 import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
-// import Scrollbars from "react-custom-scrollbars";
 import Sidebar from "../Sidebar/Sidebar";
-import TopAppBar from "../SearchAppBar/TopAppBar";
+import TopAppBar from "../TopBar/TopAppBar";
 import routes from "./routes";
+// import Scrollbars from "react-custom-scrollbars";
+// import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 const resize = () => {
   // We execute the same script as before
@@ -74,7 +74,6 @@ class Dashboard extends React.PureComponent {
     const { open } = this.state;
     const swipeable = isSwipeable(width);
     const sidebarOpen = open && !swipeable;
-    console.log("dashboard render");
     return (
       <div className={classes.root}>
         <TopAppBar sidebarOpen={sidebarOpen} transparent={false} clickMenu={this.openDrawer} />
@@ -94,16 +93,16 @@ class Dashboard extends React.PureComponent {
             {routes.map(({ path, Component, usesScrollbar = true }) => (
               <Route
                 key={path}
-                exact
-                path={`/${path}`}
-                render={() =>
-                  usesScrollbar ? (
+                path={`/${path}/*`}
+                render={() => {
+                  console.log(Component.displayName);
+                  return usesScrollbar ? (
                     // <Scrollbars></Scrollbars>
                     <Component sidebarOpen={sidebarOpen} />
                   ) : (
                     <Component sidebarOpen={sidebarOpen} />
-                  )
-                }
+                  );
+                }}
               />
             ))}
             <Route render={() => <Redirect to="/" />} />
