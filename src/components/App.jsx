@@ -18,7 +18,7 @@ class App extends Component {
 
   async componentDidMount() {
     try {
-      const profileResponse = await fetch("profile", {
+      const profileResponse = await fetch("/profile", {
         credentials: "same-origin",
         redirect: "follow"
       });
@@ -33,7 +33,7 @@ class App extends Component {
   clickGuest = () => {
     this.setState({ loading: true }, async () => {
       try {
-        const guestResponse = await fetch("guest", {
+        const guestResponse = await fetch("/guest", {
           method: "POST",
           credentials: "same-origin"
         });
