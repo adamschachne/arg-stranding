@@ -65,7 +65,7 @@ export class StateProvider extends Component {
     try {
       const { flex } = this.state;
       // TODO provide a system for fetching new data
-      const dataResponse = await fetch("data");
+      const dataResponse = await fetch("/data");
       const data: { items: Array<Item>; updated: string } = await dataResponse.json();
       data.items.forEach((item, index) => {
         flex.add({

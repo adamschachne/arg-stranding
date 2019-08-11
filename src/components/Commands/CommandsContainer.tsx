@@ -2,7 +2,8 @@ import React from "react";
 import { createStyles, WithStyles, withStyles } from "@material-ui/styles";
 import { Theme } from "@material-ui/core";
 import { AutoSizer } from "react-virtualized/dist/es/AutoSizer";
-import { List } from "react-virtualized/dist/es/List";
+import { List as VirtualList } from "react-virtualized/dist/es/List";
+import { Route, Switch } from "react-router-dom";
 import { StateConsumer } from "../State";
 import Command from "./Command";
 // import SmartList from "./SmartList";
@@ -36,7 +37,7 @@ interface Props extends WithStyles<typeof styles> {}
 class CommandsContainer extends React.Component<Props> {
   state = {};
 
-  list: List | null = null;
+  list: VirtualList | null = null;
 
   componentDidMount() {
     if (this.list !== null && this.list.Grid !== null) {
@@ -58,23 +59,16 @@ class CommandsContainer extends React.Component<Props> {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
+        <Switch>
+          <Route exact path="awd" component={() => <div>123</div>} />
+        </Switch>
+
         <StateConsumer>
           {({ items }) => (
             <AutoSizer>
               {({ height, width }) => {
                 return (
-                  // <SmartList
-                  //   width={width}
-                  //   height={height}
-                  //   rowHeight={200}
-                  //   rowCount={items.length}
-                  //   rowRenderer={({ key, index, style }: any) => (
-                  //     <div style={style} key={key}>
-                  //       <Command item={items[index]} />
-                  //     </div>
-                  //   )}
-                  // />
-                  <List
+                  <VirtualList
                     rowHeight={200}
                     rowCount={items.length}
                     rowRenderer={({ key, index, style }) => (
@@ -91,11 +85,6 @@ class CommandsContainer extends React.Component<Props> {
                 );
               }}
             </AutoSizer>
-            // items.map((item, index) => (
-            //   <div key={item.id} className={index > 0 ? classes.spaceBefore : ""}>
-            //     <Command item={item} />
-            //   </div>
-            // ))
           )}
         </StateConsumer>
       </div>

@@ -55,12 +55,10 @@ class SearchAppBar extends React.PureComponent {
 
   componentDidMount() {
     window.addEventListener("keydown", this.onWindowKeydown);
-    window.addEventListener("blur", this.onWindowBlur);
   }
 
   componentWillUnmount() {
     window.removeEventListener("keydown", this.onWindowKeydown);
-    window.removeEventListener("blur", this.onWindowBlur);
   }
 
   getRouteData = () => {
@@ -68,32 +66,29 @@ class SearchAppBar extends React.PureComponent {
       location: { pathname }
     } = this.props;
 
-    const pathNoSlash = pathname.substring(1);
-
     // use memoized route instead of searching for new one
-    if (pathNoSlash === this.lastPath) {
+    if (pathname === this.lastPath) {
       return this.lastRoute;
     }
 
-    const route = routes.find((rt) => rt.path === pathNoSlash) || {
+    const route = routes.find((rt) => {
+      if (rt.exact === true) {
+        return rt.path === pathname;
+      }
+      return pathname.split("/")[1] === rt.path.split("/")[1];
+    }) || {
       title: "",
       transparentToolbar: false,
       typeToSearch: false
     };
 
-    this.lastPath = pathNoSlash;
+    this.lastPath = pathname;
     this.lastRoute = {
       title: route ? route.title : "",
       transparentToolbar: route.transparentToolbar,
       typeToSearch: route.typeToSearch
     };
     return this.lastRoute;
-  };
-
-  onWindowBlur = (event) => {
-    // console.log("window blur");
-    // event.preventDefault();
-    // console.log(document.activeElement);
   };
 
   // eslint-disable-next-line complexity

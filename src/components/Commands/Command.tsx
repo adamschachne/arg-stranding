@@ -8,6 +8,11 @@ const styles = (theme: Theme) =>
     root: {
       width: "100%",
       height: "100%"
+    },
+    image: {
+      width: "100%",
+      height: "100%",
+      objectFit: "contain"
     }
   });
 
@@ -15,16 +20,12 @@ interface CommandProps extends WithStyles<typeof styles> {
   item: Item;
 }
 
-const Command: React.SFC<CommandProps> = ({ item, classes: { root } }) => {
+const Command: React.SFC<CommandProps> = ({ item, classes }) => {
   return (
-    <Paper className={root}>
+    <Paper className={classes.root}>
       <Grid container spacing={2}>
         <Grid item xs={4}>
-          <img
-            alt={item.filename}
-            src={item.url}
-            style={{ width: "200px", height: "200px", objectFit: "contain" }}
-          />
+          <img alt={item.filename} src={item.url} className={classes.image} />
         </Grid>
         <Grid item xs={8}>
           {item.command.map((cmd) => (

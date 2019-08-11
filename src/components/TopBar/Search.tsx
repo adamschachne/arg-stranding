@@ -4,11 +4,12 @@ import classNames from "classnames";
 import { WithStyles } from "@material-ui/styles";
 import SearchIcon from "@material-ui/icons/Search";
 import { InputBase } from "@material-ui/core";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 import styles from "./styles";
 import SearchMenu from "./SearchMenu";
 import { StateConsumer, FlexItem } from "../State";
 
-interface Props extends WithStyles<typeof styles> {
+interface Props extends WithStyles<typeof styles>, RouteComponentProps {
   inputRef: RefObject<HTMLInputElement>;
   sidebarOpen: boolean;
 }
@@ -23,30 +24,30 @@ class Search extends React.Component<Props, State> {
   };
 
   render() {
-    const { inputRef, classes, sidebarOpen } = this.props;
+    const {
+      inputRef,
+      classes,
+      sidebarOpen,
+      history,
+      location: { pathname }
+    } = this.props;
     const { open } = this.state;
     return (
       <Downshift
         isOpen={open}
         onChange={(selection: FlexItem | null) => {
           const { current } = inputRef;
-
-          // do something with selection
           if (selection !== null) {
-            console.log(selection);
+            // do something with selection
+            if (pathname.startsWith("/graph")) {
+              history.push(`/graph/${selection.id}`);
+            } else {
+              history.push(`/commands/${selection.id}`);
+            }
           }
-
           if (current === null) return;
-
           // blur which closes and clears the menu
           current.blur();
-
-          // current.blur();
-          // if (!selection) {
-          //   current.blur();
-          // } else {
-          //   current.select();
-          // }
         }}
         itemToString={(item: FlexItem) => (item ? item.command : "")}
         stateReducer={(state, changes) => {
@@ -91,7 +92,9 @@ class Search extends React.Component<Props, State> {
                     onFocus: ({ target }: React.FocusEvent<HTMLInputElement>) => {
                       // this.hasFocus = true;
                       this.setState({ open: true });
-                      target.select();
+
+                      // commented line highlights the input text
+                      // target.select();
                     },
                     onBlur: () => {
                       const {
@@ -131,4 +134,4 @@ class Search extends React.Component<Props, State> {
   }
 }
 
-export default Search;
+export default withRouter(Search);

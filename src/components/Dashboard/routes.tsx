@@ -6,6 +6,7 @@ import { StateConsumer } from "../State";
 
 interface Route {
   path: string;
+  exact: boolean;
   title: string;
   button: string;
   Component: React.ElementType;
@@ -26,7 +27,8 @@ const routes: Array<Route> = [
   //   Component: () => <div style={{ padding: 8 }} />
   // },
   {
-    path: "",
+    path: "/",
+    exact: true,
     title: "Number to Words",
     button: "Numbers",
     Component: NumberToWord,
@@ -35,7 +37,8 @@ const routes: Array<Route> = [
     usesScrollbar: false
   },
   {
-    path: "graph",
+    path: "/graph",
+    exact: false,
     title: "Graph",
     button: "Graph",
     Component: ({ sidebarOpen }: DashboardRouteProps) => (
@@ -50,7 +53,8 @@ const routes: Array<Route> = [
     typeToSearch: true
   },
   {
-    path: "commands",
+    path: "/commands",
+    exact: false,
     title: "Commands",
     button: "Commands",
     Component: CommandsContainer,
@@ -58,6 +62,16 @@ const routes: Array<Route> = [
     transparentToolbar: false,
     typeToSearch: true
   }
+  // {
+  //   path: "/ngrams",
+  //   exact: true,
+  //   title: "ngrams",
+  //   button: "ngrams",
+  //   Component: () => null,
+  //   usesScrollbar: false, // virtual list for this one
+  //   transparentToolbar: false,
+  //   typeToSearch: false
+  // }
 ];
 
 export default routes;

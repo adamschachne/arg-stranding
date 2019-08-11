@@ -18,7 +18,6 @@ import UserDetails from "./UserDetails";
 import routes from "../Dashboard/routes";
 
 const Sidebar = ({ open, classes, toggleDrawer, swipeable, identity, location: { pathname } }) => {
-  const pathnameNoSlash = pathname.substring(1);
   return (
     <SwipeableDrawer
       anchor="left"
@@ -60,7 +59,7 @@ const Sidebar = ({ open, classes, toggleDrawer, swipeable, identity, location: {
                 button
                 component={Link}
                 to={path}
-                selected={path === pathnameNoSlash}
+                selected={path === pathname}
               >
                 <Typography variant="button">{button}</Typography>
               </ListItem>

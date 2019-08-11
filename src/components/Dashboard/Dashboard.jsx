@@ -76,7 +76,7 @@ class Dashboard extends React.PureComponent {
     const sidebarOpen = open && !swipeable;
     return (
       <div className={classes.root}>
-        <TopAppBar sidebarOpen={sidebarOpen} transparent={false} clickMenu={this.openDrawer} />
+        <TopAppBar sidebarOpen={sidebarOpen} clickMenu={this.openDrawer} />
         <Sidebar
           swipeable={swipeable}
           open={open}
@@ -90,12 +90,12 @@ class Dashboard extends React.PureComponent {
           })}
         >
           <Switch>
-            {routes.map(({ path, Component, usesScrollbar = true }) => (
+            {routes.map(({ path, exact, Component, usesScrollbar = true }) => (
               <Route
                 key={path}
-                path={`/${path}/*`}
+                exact={exact}
+                path={path}
                 render={() => {
-                  console.log(Component.displayName);
                   return usesScrollbar ? (
                     // <Scrollbars></Scrollbars>
                     <Component sidebarOpen={sidebarOpen} />
