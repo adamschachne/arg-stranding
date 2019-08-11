@@ -2,28 +2,22 @@ import React, { Component } from "react";
 
 const initialState = {
   isOpen: false,
-  themeType: "dark" as "dark" | "light"
+  themeType: "dark" as "dark" | "light",
+  openSettings: () => {},
+  closeSettings: () => {},
+  switchThemeType: () => {}
 };
 
-const initialContext = Object.assign(
-  {
-    openSettings: () => {},
-    closeSettings: () => {},
-    switchThemeType: () => {}
-  },
-  initialState
-);
-
 type State = typeof initialState;
-type Context = typeof initialContext;
-const { Provider, Consumer } = React.createContext<Context>(initialContext);
+const { Provider, Consumer } = React.createContext<State>(initialState);
+
+/* eslint-disable react/no-unused-state */
 
 export class SettingsProvider extends Component {
-  readonly state: State = initialState;
-
-  openSettings = () => this.setState({ isOpen: true });
-
-  closeSettings = () => this.setState({ isOpen: false });
+  readonly state: State = Object.assign({}, initialState, {
+    openSettings: () => this.setState({ isOpen: true }),
+    closeSettings: () => this.setState({ isOpen: false })
+  });
 
   switchThemeType = () =>
     this.setState(({ themeType: oldType }: State) => {
@@ -32,13 +26,7 @@ export class SettingsProvider extends Component {
 
   render() {
     const { children } = this.props;
-    const value: Context = {
-      ...this.state,
-      openSettings: this.openSettings,
-      closeSettings: this.closeSettings,
-      switchThemeType: this.switchThemeType
-    };
-    return <Provider value={value}>{children}</Provider>;
+    return <Provider value={this.state}>{children}</Provider>;
   }
 }
 

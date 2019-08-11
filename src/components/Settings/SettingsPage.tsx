@@ -52,12 +52,6 @@ class Settings extends PureComponent<SettingsProps> {
                   >
                     <FormControlLabel value="dark" control={<Radio />} label="Dark" />
                     <FormControlLabel value="light" control={<Radio />} label="Light" />
-                    {/* <FormControlLabel
-                    value="disabled"
-                    disabled
-                    control={<Radio />}
-                    label="(Disabled option)"
-                  /> */}
                   </RadioGroup>
                 </FormControl>
               </div>
