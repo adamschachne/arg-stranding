@@ -5,7 +5,7 @@ import { AppBar, withStyles, IconButton, Toolbar, Typography } from "@material-u
 import { withRouter } from "react-router-dom";
 import MenuIcon from "@material-ui/icons/Menu";
 import styles from "./styles";
-import routes from "../Dashboard/routes";
+import routes from "../Routes/routes";
 import Search from "./Search";
 
 function isFKey(event) {

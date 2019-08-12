@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
 import Sidebar from "../Sidebar/Sidebar";
 import TopAppBar from "../TopBar/TopAppBar";
-import routes from "./routes";
+import routes from "../Routes/routes";
 // import Scrollbars from "react-custom-scrollbars";
 // import { TransitionGroup, CSSTransition } from "react-transition-group";
 

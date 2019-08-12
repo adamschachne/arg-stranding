@@ -15,7 +15,7 @@ import { Link, withRouter } from "react-router-dom";
 import Scrollbars from "react-custom-scrollbars";
 import styles from "./styles";
 import UserDetails from "./UserDetails";
-import routes from "../Dashboard/routes";
+import routes from "../Routes/routes";
 
 const Sidebar = ({ open, classes, toggleDrawer, swipeable, identity, location: { pathname } }) => {
   return (
