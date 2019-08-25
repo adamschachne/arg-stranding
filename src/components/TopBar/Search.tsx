@@ -19,9 +19,16 @@ interface State {
 }
 
 class Search extends React.Component<Props, State> {
-  state = {
-    open: false
-  };
+  blurInput() {
+    // since this is only called from downshift setState,
+    // defer it to end of the event loop
+    setTimeout(() => {
+      const { inputRef } = this.props;
+      if (inputRef.current) {
+        inputRef.current.blur();
+      }
+    }, 0);
+  }
 
   render() {
     const {
@@ -31,12 +38,10 @@ class Search extends React.Component<Props, State> {
       history,
       location: { pathname }
     } = this.props;
-    const { open } = this.state;
+    // const { open } = this.state;
     return (
       <Downshift
-        isOpen={open}
         onChange={(selection: FlexItem | null) => {
-          const { current } = inputRef;
           if (selection !== null) {
             // do something with selection
             if (pathname.startsWith("/graph")) {
@@ -45,21 +50,22 @@ class Search extends React.Component<Props, State> {
               history.push(`/commands/${selection.id}`);
             }
           }
-          if (current === null) return;
+          // if (current === null) return;
           // blur which closes and clears the menu
-          current.blur();
+          // current.blur();
         }}
         itemToString={(item: FlexItem) => (item ? item.command : "")}
         stateReducer={(state, changes) => {
+          console.log(changes.type, state);
           // Do not clear search input content on blur
           switch (changes.type) {
-            case Downshift.stateChangeTypes.blurInput:
-              return state;
             case Downshift.stateChangeTypes.keyDownEscape:
-              if (inputRef.current !== null) {
-                inputRef.current.blur();
-              }
-              return { ...state, ...changes, selectedItem: state.selectedItem };
+              // this.blurInput();
+              return { ...state, ...changes, isOpen: true };
+            case Downshift.stateChangeTypes.clickItem:
+            case Downshift.stateChangeTypes.keyDownEnter:
+              this.blurInput();
+              return { ...state, ...changes };
             default:
               return { ...state, ...changes };
           }
@@ -73,7 +79,8 @@ class Search extends React.Component<Props, State> {
           inputValue,
           highlightedIndex,
           selectedItem,
-          clearSelection
+          clearSelection,
+          setState
         }) => {
           return (
             <div className={classNames(classes.allPointerEvents, classes.search)}>
@@ -91,20 +98,19 @@ class Search extends React.Component<Props, State> {
                     placeholder: "Search…",
                     onFocus: ({ target }: React.FocusEvent<HTMLInputElement>) => {
                       // this.hasFocus = true;
-                      this.setState({ open: true });
-
+                      // this.setState({ open: true });
+                      setState({ isOpen: true });
                       // commented line highlights the input text
-                      // target.select();
+                      target.select();
                     },
                     onBlur: () => {
                       const {
                         inputRef: { current }
                       } = this.props;
-
                       // only clear if the blur was not caused by alt-tab
                       if (current === null || current !== document.activeElement) {
                         clearSelection();
-                        this.setState({ open: false });
+                        // this.setState({ open: false });
                       }
                     }
                   })}
