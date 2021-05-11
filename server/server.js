@@ -1,5 +1,5 @@
 const mongo = require("mongodb");
-const GoogleSpreadsheet = require("google-spreadsheet");
+const { GoogleSpreadsheet } = require("google-spreadsheet");
 const configureApp = require("./configureApp");
 const fetchSheetData = require("./fetchSheetData");
 const updateData = require("./updateData");
@@ -36,12 +36,7 @@ const _global = {
   app: null
 };
 
-function authenticateGoogleSheet(cb) {
-  console.log("authenticating google sheet...");
-  _global.doc.useServiceAccountAuth(creds, cb);
-}
-
-MongoClient.connect(mongo_url, { useNewUrlParser: true }, (err, client) => {
+MongoClient.connect(mongo_url, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
   if (err) {
     console.error("Failed to connect to mongodb.\n", err);
     return;
@@ -60,7 +55,12 @@ MongoClient.connect(mongo_url, { useNewUrlParser: true }, (err, client) => {
     });
     _global.app = configureApp(_global, fetchSheetData);
 
-    authenticateGoogleSheet(async function () {
+    (async function () {
+      console.log("authenticating google sheet...");
+      await _global.doc.useServiceAccountAuth({
+        client_email: process.env.CLIENT_EMAIL,
+        private_key: JSON.parse(process.env.PRIVATE_KEY)[0]
+      });
       const rows = await fetchSheetData(_global);
       // const existing = Object.values(_global.data);
 
@@ -69,7 +69,7 @@ MongoClient.connect(mongo_url, { useNewUrlParser: true }, (err, client) => {
       _global.app.listen(PORT, function () {
         console.error(`Server listening on port ${PORT}`);
       });
-    });
+    })();
   });
 });
 

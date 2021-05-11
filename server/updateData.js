@@ -15,12 +15,12 @@ module.exports = async function updateData(_global, rows) {
     if (!existingImage) {
       added.push(row);
     } else if (!(isEqual(existingImage.fannames, row.fannames) &&
-        isEqual(existingImage.leadsto, row.leadsto) &&
-        isEqual(existingImage.bruteforce, row.bruteforce) &&
-        isEqual(existingImage.command, row.command))) {
-        changed.push(row);
-        Object.assign(_global.data[row.id], row);
-      }
+      isEqual(existingImage.leadsto, row.leadsto) &&
+      isEqual(existingImage.bruteforce, row.bruteforce) &&
+      isEqual(existingImage.command, row.command))) {
+      changed.push(row);
+      Object.assign(_global.data[row.id], row);
+    }
     rowsMap[row.id] = row;
   });
 
