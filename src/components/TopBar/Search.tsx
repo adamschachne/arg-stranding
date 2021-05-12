@@ -50,18 +50,10 @@ class Search extends React.Component<Props, State> {
               history.push(`/commands/${selection.id}`);
             }
           }
-          // if (current === null) return;
-          // blur which closes and clears the menu
-          // current.blur();
         }}
-        itemToString={(item: FlexItem) => (item ? item.command : "")}
+        itemToString={(item: any) => (item ? item.command : "")}
         stateReducer={(state, changes) => {
-          console.log(changes.type, state);
-          // Do not clear search input content on blur
           switch (changes.type) {
-            case Downshift.stateChangeTypes.keyDownEscape:
-              // this.blurInput();
-              return { ...state, ...changes, isOpen: true };
             case Downshift.stateChangeTypes.clickItem:
             case Downshift.stateChangeTypes.keyDownEnter:
               this.blurInput();

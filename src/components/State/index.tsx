@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import FlexSearch from "flexsearch";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 
 export interface Item {
   actualSize: string;
@@ -30,17 +31,24 @@ const initialState = {
   flex: FlexSearch.create<FlexItem>({
     doc: {
       id: "flexId", // the property containing this object's id
-      field: ["command", "description"] // the properties to index this object by
+      field: ["command", "description", "filename"] // the properties to index this object by
     }
   })
 };
 
 type State = typeof initialState;
 
+interface Props extends RouteComponentProps {
+  children: React.ElementType;
+}
+
 const { Provider, Consumer } = React.createContext<State>(initialState);
 
-export class StateProvider extends Component {
-  readonly state: State = initialState;
+class StateProvider extends Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = initialState;
+  }
 
   // flex = FlexSearch.create({
   //   async: false,
@@ -61,6 +69,34 @@ export class StateProvider extends Component {
   //     }
   //   }
   // });
+
+  // eslint-disable-next-line complexity
+  shouldComponentUpdate(nextProps: Props, nextState: State) {
+    const { updated } = this.state;
+    if (updated !== nextState.updated) {
+      return true;
+    }
+
+    /* eslint-disable no-continue */
+    for (const key of Object.keys(this.props)) {
+      if (key === "match") continue; // don't care about match
+      // @ts-ignore
+      const { [key]: prop } = this.props;
+      // @ts-ignore
+      if (prop !== nextProps[key]) {
+        // handle location specifically
+        if (key === "location") {
+          if (prop.pathname === nextProps[key].pathname) {
+            continue;
+          }
+        }
+        return true;
+      }
+    }
+    /* eslint-enable no-continue */
+    return false;
+  }
+
   componentDidMount = async () => {
     try {
       const { flex } = this.state;
@@ -71,7 +107,7 @@ export class StateProvider extends Component {
         flex.add({
           ...item,
           flexId: index,
-          command: item.command.join(" "), // combine all commands into one string so any can be searched
+          command: item.command.join(" "), // combine command into one string so any can be searched
           description: "this is a description" // adding in the description
         });
       });
@@ -91,4 +127,6 @@ export class StateProvider extends Component {
   }
 }
 
+const ProviderWithRouter = withRouter(StateProvider);
+export { ProviderWithRouter as StateProvider };
 export const StateConsumer = Consumer;

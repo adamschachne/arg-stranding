@@ -13,11 +13,15 @@ const { Provider, Consumer } = React.createContext<State>(initialState);
 
 /* eslint-disable react/no-unused-state */
 
-export class SettingsProvider extends Component {
-  readonly state: State = Object.assign({}, initialState, {
-    openSettings: () => this.setState({ isOpen: true }),
-    closeSettings: () => this.setState({ isOpen: false })
-  });
+export class SettingsProvider extends Component<{}, State> {
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      ...initialState,
+      openSettings: () => this.setState({ isOpen: true }),
+      closeSettings: () => this.setState({ isOpen: false })
+    };
+  }
 
   switchThemeType = () =>
     this.setState(({ themeType: oldType }: State) => {

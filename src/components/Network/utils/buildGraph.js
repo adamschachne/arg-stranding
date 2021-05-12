@@ -1,4 +1,4 @@
-export default (items, hidden) => {
+export default function buildGraph(items, hidden = false) {
   console.log("building graph");
   const commandToID = {};
   const nodes = [];
@@ -51,10 +51,10 @@ export default (items, hidden) => {
     };
   });
 
-  const graph = {
-    nodes,
-    edges
-  };
+  // const graph = {
+  //   nodes,
+  //   edges
+  // };
 
-  return { graph, commandToID, bruteForcedMap };
-};
+  return { nodes, edges, commandToID, bruteForcedMap };
+}

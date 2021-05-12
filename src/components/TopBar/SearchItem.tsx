@@ -12,7 +12,8 @@ interface Props {
 
 const SearchItem: React.FC<Props> = ({ itemProps, result }) => {
   // console.log(itemProps);
-  return <div {...itemProps}>{result.filename}</div>;
+  // eslint-disable-next-line react/jsx-props-no-spreading
+  return <div {...itemProps}>{result.command}</div>;
 };
 
 export default SearchItem;

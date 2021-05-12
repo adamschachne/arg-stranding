@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
+// @ts-ignore
 import Scrollbars from "react-custom-scrollbars";
 import { List, ListProps } from "react-virtualized/dist/es/List";
 
@@ -24,13 +24,15 @@ class SmartList extends Component<Props> {
 
     return (
       <Scrollbars
+        // @ts-ignore
         renderThumbVertical={({ style, ...props }) => (
-          <div {...props} style={{ ...style, backgroundColor: "blue" }} />
+          <div style={{ ...style, backgroundColor: "blue" }} />
         )}
         style={{ width, height }}
         onScroll={this.handleScroll}
       >
         <List
+          // eslint-disable-next-line react/jsx-props-no-spreading
           {...this.props}
           ref={(instance) => {
             this.list = instance;

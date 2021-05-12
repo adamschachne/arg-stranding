@@ -31,7 +31,7 @@ export default class DemoList extends React.Component {
               style={{ height, width }}
             >
               <List
-                {...this.props}
+                // {...this.props}
                 width={width}
                 height={height}
                 style={{ overflowX: "visible", overflowY: "visible" }}

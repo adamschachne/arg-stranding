@@ -29,9 +29,12 @@ interface State {
 }
 
 class SearchMenu extends React.PureComponent<Props, State> {
-  state: State = {
-    results: []
-  };
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      results: []
+    };
+  }
 
   componentDidUpdate(prevProps: Props) {
     const { inputValue, flex, updated } = this.props;
@@ -45,8 +48,8 @@ class SearchMenu extends React.PureComponent<Props, State> {
         },
         (results) => {
           const { inputValue: value } = this.props;
-          // console.log(results);
           if (value === inputValue) {
+            // results only get set if the inputValue is the same as what was searched for
             this.setState({ results });
           }
         }
@@ -73,6 +76,7 @@ class SearchMenu extends React.PureComponent<Props, State> {
             <Paper
               square
               component="div"
+              // eslint-disable-next-line react/jsx-props-no-spreading
               {...getMenuProps({
                 className: classNames(classes.menuPaper, sidebarOpen && classes.menuPaperShifted),
                 // clicking doesnt blur input
@@ -95,6 +99,7 @@ class SearchMenu extends React.PureComponent<Props, State> {
                         return (
                           <MenuItem
                             key={key}
+                            // eslint-disable-next-line react/jsx-props-no-spreading
                             {...getItemProps({
                               item: result,
                               index,

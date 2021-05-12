@@ -13,17 +13,19 @@ declare module "@material-ui/core/styles/createMuiTheme" {
     drawerWidth: number;
   }
   // allow configuration using `createMuiTheme`
-  interface ThemeOptions {
-    drawerWidth: number;
-  }
+}
+
+interface ThemeOptionsExtended extends ThemeOptions {
+  drawerWidth: number;
 }
 
 interface Props {
+  // eslint-disable-next-line react/no-unused-prop-types
   themeType: "dark" | "light";
   children: ElementType<any>;
 }
 
-const themeDefaults: ThemeOptions = {
+const themeDefaults: ThemeOptionsExtended = {
   typography: {
     fontFamily: "'Source Sans Pro', sans-serif;",
     fontWeightRegular: 400,
@@ -54,11 +56,10 @@ const themeDefaults: ThemeOptions = {
 class Theme extends React.PureComponent<Props> {
   render() {
     const { themeType, children } = this.props;
-    const theme = createMuiTheme(
-      Object.assign({}, themeDefaults, {
-        palette: { ...themeDefaults.palette, type: themeType }
-      })
-    );
+    const theme = createMuiTheme({
+      ...themeDefaults,
+      palette: { ...themeDefaults.palette, type: themeType }
+    });
     console.log("theme render", theme);
     return (
       <ThemeProvider theme={theme}>

@@ -35,9 +35,12 @@ interface Props extends WithStyles<typeof styles> {}
 
 // container for all commands
 class CommandsContainer extends React.Component<Props> {
-  state = {};
-
   list: VirtualList | null = null;
+
+  constructor(props: Props) {
+    super(props);
+    this.state = {};
+  }
 
   componentDidMount() {
     if (this.list !== null && this.list.Grid !== null) {
@@ -59,10 +62,6 @@ class CommandsContainer extends React.Component<Props> {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
-        <Switch>
-          <Route exact path="awd" component={() => <div>123</div>} />
-        </Switch>
-
         <StateConsumer>
           {({ items }) => (
             <AutoSizer>
@@ -71,6 +70,7 @@ class CommandsContainer extends React.Component<Props> {
                   <VirtualList
                     rowHeight={200}
                     rowCount={items.length}
+                    scrollToIndex={100}
                     rowRenderer={({ key, index, style }) => (
                       <div style={style} key={key}>
                         <Command item={items[index]} />

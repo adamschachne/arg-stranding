@@ -52,11 +52,7 @@ const styles = (theme) => ({
 });
 
 function numberToWord(number, withAnd) {
-  return writtenNumber(number, { noAnd: !withAnd })
-    .split(" ")
-    .join("")
-    .split("-")
-    .join("");
+  return writtenNumber(number, { noAnd: !withAnd }).split(" ").join("").split("-").join("");
 }
 
 class NumberToWord extends Component {
@@ -158,10 +154,10 @@ class NumberToWord extends Component {
                         open={tooltip === type}
                         placement="top"
                         title={
-                          <React.Fragment>
+                          <>
                             Copied!
                             <span className={classes.arrowArrow} ref={this.handleArrowRef} />
-                          </React.Fragment>
+                          </>
                         }
                         classes={{ popper: classes.arrowPopper }}
                         PopperProps={{
