@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import isEqual from "lodash/isEqual";
 import differenceWith from "lodash/differenceWith";
-import uuidv4 from "uuid/v4";
+import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
 
 class Graph extends Component {
@@ -14,23 +14,16 @@ class Graph extends Component {
 
   componentDidMount() {
     const { identifier } = this.state;
-    const { graph, options, events, getNetwork, vis } = this.props;
+    const { nodes, edges, options, events, getNetwork, vis } = this.props;
 
     this.edges = new vis.DataSet();
     this.nodes = new vis.DataSet();
-    this.edges.add(graph.edges);
-    this.nodes.add(graph.nodes);
+    this.edges.add(edges);
+    this.nodes.add(nodes);
 
     const container = document.getElementById(identifier);
 
-    this.Network = new vis.Network(
-      container,
-      Object.assign({}, graph, {
-        edges: this.edges,
-        nodes: this.nodes
-      }),
-      options
-    );
+    this.Network = new vis.Network(container, { edges: this.edges, nodes: this.nodes }, options);
 
     for (const eventName of Object.keys(events)) {
       this.Network.on(eventName, events[eventName]);
@@ -45,17 +38,81 @@ class Graph extends Component {
   }
 
   // eslint-disable-next-line complexity
-  shouldComponentUpdate(nextProps) {
-    const {
-      options,
-      events,
-      graph: { nodes, edges }
-    } = this.props;
+  // shouldComponentUpdate(nextProps) {
+  //   const {
+  //     options,
+  //     events,
+  //     // graph: { nodes, edges }
+  //     nodes,
+  //     edges
+  //   } = this.props;
+  //   const {
+  //     options: nextOptions,
+  //     events: nextEvents,
+  //     // graph: { nodes: nextNodes, edges: nextEdges }
+  //     nodes: nextNodes,
+  //     edges: nextEdges
+  //   } = nextProps;
+
+  //   /* eslint-disable */
+  //   const nodesChange = !isEqual(nodes, nextNodes);
+  //   let nodesRemoved = [];
+  //   let nodesAdded = [];
+  //   let nodesChanged = [];
+
+  //   const edgesChange = !isEqual(edges, nextEdges);
+  //   const optionsChange = !isEqual(options, nextOptions);
+  //   const eventsChange = !isEqual(events, nextEvents);
+  //   /* eslint-enable */
+
+  //   if (nodesChange) {
+  //     const idIsEqual = (n1, n2) => n1.id === n2.id;
+  //     nodesRemoved = differenceWith(nodes, nextNodes, idIsEqual);
+  //     nodesAdded = differenceWith(nextNodes, nodes, idIsEqual);
+  //     nodesChanged = differenceWith(differenceWith(nextNodes, nodes, isEqual), nodesAdded);
+  //     this.patchNodes({ nodesRemoved, nodesAdded, nodesChanged });
+  //   }
+
+  //   if (edgesChange) {
+  //     const edgesRemoved = differenceWith(edges, nextEdges, isEqual);
+  //     const edgesAdded = differenceWith(nextEdges, edges, isEqual);
+  //     const edgesChanged = differenceWith(differenceWith(nextEdges, edges, isEqual), edgesAdded);
+  //     this.patchEdges({ edgesRemoved, edgesAdded, edgesChanged });
+  //   }
+
+  //   if (optionsChange) {
+  //     console.log("options changed");
+  //     this.Network.setOptions(nextProps.options);
+  //   }
+
+  //   if (eventsChange) {
+  //     Object.keys(events).forEach((eventName) => {
+  //       this.Network.off(eventName, events[eventName]);
+  //     });
+
+  //     Object.keys(nextEvents).forEach((eventName) => {
+  //       this.Network.on(eventName, nextEvents[eventName]);
+  //     });
+  //   }
+
+  //   // only stabilize if nodes were added or removed
+  //   if (nodesChange && (nodesAdded.length > 0 || nodesRemoved.length > 0)) {
+  //     this.Network.stabilize();
+  //   }
+
+  //   return false;
+  // }
+
+  // eslint-disable-next-line complexity
+  componentDidUpdate(prevProps, prevState) {
+    const { options, events, nodes, edges } = prevProps;
     const {
       options: nextOptions,
       events: nextEvents,
-      graph: { nodes: nextNodes, edges: nextEdges }
-    } = nextProps;
+      nodes: nextNodes,
+      edges: nextEdges
+    } = this.props;
+
     const nodesChange = !isEqual(nodes, nextNodes);
     let nodesRemoved = [];
     let nodesAdded = [];
@@ -64,6 +121,7 @@ class Graph extends Component {
     const edgesChange = !isEqual(edges, nextEdges);
     const optionsChange = !isEqual(options, nextOptions);
     const eventsChange = !isEqual(events, nextEvents);
+    /* eslint-enable */
 
     if (nodesChange) {
       const idIsEqual = (n1, n2) => n1.id === n2.id;
@@ -82,7 +140,7 @@ class Graph extends Component {
 
     if (optionsChange) {
       console.log("options changed");
-      this.Network.setOptions(nextProps.options);
+      this.Network.setOptions(nextOptions);
     }
 
     if (eventsChange) {
@@ -99,8 +157,6 @@ class Graph extends Component {
     if (nodesChange && (nodesAdded.length > 0 || nodesRemoved.length > 0)) {
       this.Network.stabilize();
     }
-
-    return false;
   }
 
   patchEdges({ edgesRemoved, edgesAdded, edgesChanged }) {
@@ -127,10 +183,10 @@ class Graph extends Component {
 }
 
 Graph.defaultProps = {
-  graph: {
-    nodes: [],
-    edges: []
-  },
+  // graph: {
+  nodes: [],
+  edges: [],
+  // },
   events: {},
   style: { width: "100%", height: "100%" },
   getNetwork: null
@@ -146,10 +202,10 @@ Graph.propTypes = {
     height: PropTypes.string
   }).isRequired,
   events: PropTypes.objectOf(PropTypes.func),
-  graph: PropTypes.shape({
-    nodes: PropTypes.array,
-    edges: PropTypes.array
-  }),
+  // graph: PropTypes.shape({
+  nodes: PropTypes.array,
+  edges: PropTypes.array,
+  // }),
   style: PropTypes.shape({
     width: PropTypes.string,
     height: PropTypes.string

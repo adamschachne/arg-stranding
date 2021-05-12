@@ -36,10 +36,10 @@ class NetworkContainer extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      graph: {
-        nodes: [],
-        edges: []
-      },
+      // graph: {
+      nodes: [],
+      edges: [],
+      // },
       options: initialOptions,
       commandToID: {},
       loading: true,
@@ -87,11 +87,11 @@ class NetworkContainer extends PureComponent {
             nodes: [firstNode]
           } = doubleClick;
           const {
-            graph: {
-              nodes: {
-                [firstNode]: { label }
-              }
+            // graph: {
+            nodes: {
+              [firstNode]: { label }
             }
+            // }
           } = this.state;
           const command = label.split("\n")[0];
           console.log("copied: ", command);
@@ -199,7 +199,7 @@ class NetworkContainer extends PureComponent {
       if (this.mounted === false) return;
 
       this.setState({
-        ...buildGraph(items),
+        ...buildGraph(items, true),
         loading: true
       });
       localForage.setItem("updated", updated);
@@ -221,7 +221,10 @@ class NetworkContainer extends PureComponent {
 
         console.log("USING EXISTING POSITIONS: ", positions);
         this.setState({
-          ...buildGraph(items.map((item, ID) => Object.assign({}, item, positions[ID]))),
+          ...buildGraph(
+            items.map((item, ID) => ({ ...item, ...positions[ID] })),
+            false
+          ),
           loading: true
         });
       }
@@ -280,12 +283,12 @@ class NetworkContainer extends PureComponent {
   };
 
   unhideNodes = () => {
-    const { graph, options } = this.state;
+    const { nodes, edges, options } = this.state;
     this.setState({
-      graph: {
-        nodes: graph.nodes.map((node) => ({ ...node, hidden: false })),
-        edges: graph.edges
-      },
+      // graph: {
+      nodes: nodes.map((node) => ({ ...node, hidden: false })),
+      edges,
+      // },
       options: {
         ...options,
         physics: {
@@ -298,22 +301,23 @@ class NetworkContainer extends PureComponent {
   };
 
   toggleBruteForce = () => {
-    const { graph, showBruteForce, bruteForcedMap } = this.state;
+    const { nodes, edges, showBruteForce, bruteForcedMap } = this.state;
     this.setState({
       showBruteForce: !showBruteForce,
-      graph: {
-        nodes: graph.nodes.map(({ x, y, hidden, ...node }) => ({
-          // take out x // take out y // take out hidden // spread remaining properties
-          ...node,
-          hidden: bruteForcedMap[node.id] && showBruteForce
-        })),
-        edges: graph.edges
-      }
+      // graph: {
+      nodes: nodes.map(({ x, y, hidden, ...node }) => ({
+        // take out x // take out y // take out hidden // spread remaining properties
+        ...node,
+        hidden: bruteForcedMap[node.id] && showBruteForce
+      })),
+      edges
+      // }
     });
   };
 
   render() {
-    const { loading, commandToID, graph, options, showBruteForce, bruteForcedMap } = this.state;
+    const { loading, commandToID, nodes, edges, options, showBruteForce, bruteForcedMap } =
+      this.state;
     return (
       <div
         style={{
@@ -352,12 +356,14 @@ class NetworkContainer extends PureComponent {
           <Graph
             vis={vis}
             getNetwork={this.createNetwork}
-            graph={graph}
-            options={{
-              ...options
-              // width: `${width}px`,
-              // height: `${height}px`,
-            }}
+            nodes={nodes}
+            edges={edges}
+            // options={{
+            //   ...options
+            //   // width: `${width}px`,
+            //   // height: `${height}px`,
+            // }}
+            options={options}
             events={this.events}
           />
         )}
