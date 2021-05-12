@@ -36,10 +36,8 @@ class NetworkContainer extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      // graph: {
       nodes: [],
       edges: [],
-      // },
       options: initialOptions,
       commandToID: {},
       loading: true,
@@ -87,11 +85,9 @@ class NetworkContainer extends PureComponent {
             nodes: [firstNode]
           } = doubleClick;
           const {
-            // graph: {
             nodes: {
               [firstNode]: { label }
             }
-            // }
           } = this.state;
           const command = label.split("\n")[0];
           console.log("copied: ", command);
@@ -209,7 +205,7 @@ class NetworkContainer extends PureComponent {
     // console.log("last update: ", new Date(lastUpdated).getTime())
     if (lastUpdated === null || lastUpdated !== updated) {
       // data has changed, build graph with new data
-      console.log("no data. buildiung new data");
+      console.log("no data. building new data");
       buildNewData();
     } else {
       // get data from localforage and use those positions
@@ -285,10 +281,8 @@ class NetworkContainer extends PureComponent {
   unhideNodes = () => {
     const { nodes, edges, options } = this.state;
     this.setState({
-      // graph: {
       nodes: nodes.map((node) => ({ ...node, hidden: false })),
       edges,
-      // },
       options: {
         ...options,
         physics: {
@@ -304,14 +298,11 @@ class NetworkContainer extends PureComponent {
     const { nodes, edges, showBruteForce, bruteForcedMap } = this.state;
     this.setState({
       showBruteForce: !showBruteForce,
-      // graph: {
       nodes: nodes.map(({ x, y, hidden, ...node }) => ({
-        // take out x // take out y // take out hidden // spread remaining properties
         ...node,
         hidden: bruteForcedMap[node.id] && showBruteForce
       })),
       edges
-      // }
     });
   };
 
@@ -358,11 +349,6 @@ class NetworkContainer extends PureComponent {
             getNetwork={this.createNetwork}
             nodes={nodes}
             edges={edges}
-            // options={{
-            //   ...options
-            //   // width: `${width}px`,
-            //   // height: `${height}px`,
-            // }}
             options={options}
             events={this.events}
           />

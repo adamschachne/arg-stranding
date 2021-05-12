@@ -51,10 +51,5 @@ export default function buildGraph(items, hidden = false) {
     };
   });
 
-  // const graph = {
-  //   nodes,
-  //   edges
-  // };
-
   return { nodes, edges, commandToID, bruteForcedMap };
 }

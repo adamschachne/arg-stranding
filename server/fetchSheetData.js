@@ -1,6 +1,5 @@
 const async = require('async');
 const { google } = require('googleapis');
-const { GoogleSpreadsheet, GoogleSpreadsheetWorksheet } = require("google-spreadsheet");
 
 const drive = google.drive({
   version: "v3",
@@ -13,7 +12,7 @@ const drive = google.drive({
   })
 });
 
-/** @param {{ doc: GoogleSpreadsheet, sheet: GoogleSpreadsheetWorksheet }} _global */
+/** @param {{ doc: import("google-spreadsheet").GoogleSpreadsheet, sheet: import("google-spreadsheet").GoogleSpreadsheetWorksheet }} _global */
 module.exports = function fetchSheetData(_global) {
   return new Promise((resolve, reject) => {
     async.series([
@@ -31,21 +30,8 @@ module.exports = function fetchSheetData(_global) {
               _global.sheet = _global.doc.sheetsByIndex[0]; // first sheet
               step();
             }
-          })
-
-        })
-        // _global.doc.getInfo(function (err, info) {
-        //   // console.log('Loaded doc: ' + info.title + ' by ' + info.author.email + " last updated: " + info.updated);
-        //   if (_global.lastUpdated == info.updated) {
-        //     // step with error
-        //     step('already up to date');
-        //   } else {
-        //     _global.lastUpdated = info.updated;
-        //     _global.sheet = info.worksheets[0];
-        //     step();
-        //   }
-        //   // console.log('sheet 1: ' + sheet.title + ' ' + sheet.rowCount + 'x' + sheet.colCount);          
-        // });
+          });
+        });
       },
       /* step 1 */
       step => {
