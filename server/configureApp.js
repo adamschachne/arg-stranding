@@ -3,8 +3,9 @@ const httpsRedirect = require('express-https-redirect');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const path = require('path');
+const qs = require('qs');
+const axios = require('axios').default;
 const paths = require('../config/paths');
-const axios = require('axios').default.create();
 const updateData = require('./updateData');
 
 const CLIENT_ID = process.env.CLIENT_ID;
@@ -159,7 +160,7 @@ module.exports = function configureApp(_global, fetchSheetData) {
   });
 
   app.get('/auth', function (req, res) {
-    return res.redirect(`https://discordapp.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URL}&response_type=code&scope=${SCOPES}`);
+    return res.redirect(`https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URL}&response_type=code&scope=${SCOPES}`);
   });
 
   // Answer API requests.
@@ -173,12 +174,14 @@ module.exports = function configureApp(_global, fetchSheetData) {
     try {
       const token = await axios({
         method: 'post',
-        url: `https://discordapp.com/api/v6/oauth2/token?grant_type=authorization_code&code=${code}&redirect_uri=${REDIRECT_URL}&scopes=${SCOPES}`,
+        url: `https://discord.com/api/v10/oauth2/token?redirect_uri=${REDIRECT_URL}`,
         headers: { 'content-type': 'application/x-www-form-urlencoded' },
-        auth: {
-          username: CLIENT_ID,
-          password: CLIENT_SECRET
-        }
+        data: qs.stringify({
+          client_id: CLIENT_ID,
+          client_secret: CLIENT_SECRET,
+          grant_type: "authorization_code",
+          code: code
+        })
       });
 
       /* https://discordapp.com/developers/docs/resources/user#user-object */

@@ -8,15 +8,13 @@ import { SettingsProvider } from "./components/Settings/SettingsContext";
 // import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <SettingsProvider>
-        <Theme>
-          <App />
-        </Theme>
-      </SettingsProvider>
-    </BrowserRouter>
-  </React.StrictMode>,
+  <BrowserRouter>
+    <SettingsProvider>
+      <Theme>
+        <App />
+      </Theme>
+    </SettingsProvider>
+  </BrowserRouter>,
   document.getElementById("root")
 );
 
