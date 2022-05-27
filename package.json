@@ -36,7 +36,7 @@
     "@types/vis": "^4.21.18",
     "@typescript-eslint/eslint-plugin": "1.13.0",
     "@typescript-eslint/parser": "1.13.0",
-    "async": "^2.6.2",
+    "async": "^2.6.4",
     "axios": "^0.21.1",
     "babel-eslint": "10.0.2",
     "babel-jest": "^24.8.0",
