@@ -36,7 +36,7 @@ module.exports = function fetchSheetData(_global) {
       /* step 1 */
       step => {
         console.log("fetching rows")
-        _global.sheet.getRows({ offset: 1}).then(rows => {
+        _global.sheet.getRows({ offset: 0 }).then(rows => {
           console.log('Read ' + rows.length + ' rows');
           // // the row is an object with keys set by the column headers
           step(null,
