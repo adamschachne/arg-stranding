@@ -8,21 +8,22 @@ export default function buildGraph(items, hidden = false) {
 
   // iterate through each image once to generate mappings
   items.forEach((item, index) => {
-    // map the command name to the ID (index)
+    // map the command name to the item id
     item.command.forEach((cmd) => {
       commandToID[cmd] = index;
     });
 
     // populate brute forced nodes map
-    bruteForcedMap[index] = item.bruteforce;
+    bruteForcedMap[item.id] = item.bruteforce;
   });
 
   // iterate again to generate nodes and edges
-  items.forEach((item, ID) => {
+  items.forEach((item, index) => {
     const nonImageCommand = !item.lastModified;
     // nodes
     nodes.push({
-      id: ID,
+      id: index,
+      searchId: item.id,
       label: item.command.length === 1 ? item.command[0] : item.command.join("\n"),
       shape: nonImageCommand ? "image" : "circularImage",
       image: item.url,
@@ -33,11 +34,11 @@ export default function buildGraph(items, hidden = false) {
     });
 
     // outgoing edges for this node
-    item.leadsto.forEach((toNode) => {
-      const connectedID = commandToID[toNode];
-      if (connectedID) {
-        hasIncomingEdge[connectedID] = true;
-        edges.push({ from: ID, to: connectedID });
+    item.leadsto.forEach((toNodeCommand) => {
+      const toID = commandToID[toNodeCommand];
+      if (toID) {
+        hasIncomingEdge[toID] = true;
+        edges.push({ from: index, to: toID });
       }
     });
   });

@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import localForage from "localforage";
 import copy from "copy-to-clipboard";
 import { withTheme } from "@material-ui/styles";
+import { withRouter } from "react-router-dom";
 import Graph from "./Graph";
 import { options as initialOptions } from "./utils/config";
 import buildGraph from "./utils/buildGraph";
@@ -14,10 +15,6 @@ import Loader from "../Loader/Loader";
 
 /** @type {import("vis")} */
 let vis;
-
-localForage.dropInstance({
-  name: "localforage"
-});
 
 localForage.config({
   name: "death stranding"
@@ -32,6 +29,9 @@ function zoomOutMobile() {
   }
 }
 
+function lastPathComponent(pathname) {
+  return pathname.substring(pathname.lastIndexOf("/") + 1);
+}
 class NetworkContainer extends PureComponent {
   constructor(props) {
     super(props);
@@ -40,8 +40,8 @@ class NetworkContainer extends PureComponent {
       edges: [],
       options: initialOptions,
       commandToID: {},
+      /** @type {boolean} */
       loading: true,
-      focusNode: null,
       bruteForcedMap: {},
       showBruteForce: true
     };
@@ -58,6 +58,7 @@ class NetworkContainer extends PureComponent {
       x: props.sidebarOpen ? props.theme.drawerWidth / 2 : 0,
       y: 0
     };
+
     this.events = {
       dragStart: (evt) => {
         console.log("dragstart");
@@ -69,14 +70,12 @@ class NetworkContainer extends PureComponent {
         this.interactNetwork();
       },
       dragEnd: () => {
-        // console.log("done dragging");
         this.dragging = false;
       },
       stabilized: () => {
         this.savePositions();
       },
       click: (evt) => {
-        console.log("click");
         this.interactNetwork(evt);
       },
       doubleClick: (doubleClick) => {
@@ -122,15 +121,25 @@ class NetworkContainer extends PureComponent {
   // eslint-disable-next-line complexity
   componentDidUpdate(prevProps, prevState) {
     // check if items changed
-    const { items, updated } = this.props;
-    const { items: prevItems, updated: prevUpdated } = prevProps;
+    const {
+      items,
+      updated,
+      location: { pathname }
+    } = this.props;
+    const {
+      items: prevItems,
+      updated: prevUpdated,
+      location: { pathname: prevPathName }
+    } = prevProps;
     console.log("NETWORK UPDATE");
     if (items !== prevItems || updated !== prevUpdated) {
       this.updateGraph(items, updated);
     }
 
     if (this.network === null) return;
-    const { focusNode } = this.state;
+    const focusNode = this.getFocusNode(pathname);
+    const prevFocusNode = this.getFocusNode(prevPathName);
+
     const {
       sidebarOpen,
       theme: { drawerWidth }
@@ -156,7 +165,9 @@ class NetworkContainer extends PureComponent {
           y: this.offset.y - prevOffset.y
         }
       });
-    } else if (focusNode !== null && prevState.focusNode !== focusNode) {
+    }
+    // sidebar didn't change but the focus node did
+    else if (focusNode !== null && prevFocusNode !== focusNode) {
       // user selected a new node
       this.network.selectNodes([focusNode]);
       this.isAnimating = true;
@@ -176,6 +187,22 @@ class NetworkContainer extends PureComponent {
       this.network = null;
     }
   }
+
+  /** @returns {number | null} the node index or null if none */
+  getFocusNode = (pathname) => {
+    const { nodes } = this.state;
+    const component = lastPathComponent(pathname);
+    if (component === "") {
+      return null;
+    }
+
+    const node = nodes.find((n) => n.searchId === component) ?? null;
+    if (node != null) {
+      return node.id;
+    }
+
+    return null;
+  };
 
   stopAnimations = () => {
     if (!this.network) return;
@@ -218,7 +245,7 @@ class NetworkContainer extends PureComponent {
         console.log("USING EXISTING POSITIONS: ", positions);
         this.setState({
           ...buildGraph(
-            items.map((item, ID) => ({ ...item, ...positions[ID] })),
+            items.map((item, index) => ({ ...item, ...positions[index] })),
             false
           ),
           loading: true
@@ -256,9 +283,13 @@ class NetworkContainer extends PureComponent {
 
   // eslint-disable-next-line complexity
   interactNetwork = (event) => {
-    const nodes = event ? event.nodes : null;
-    const { focus } = this.state;
+    const clicked = event ? event.nodes : null;
+    const { nodes } = this.state;
     const { activeElement } = document;
+    const {
+      history,
+      location: { pathname }
+    } = this.props;
     if (activeElement && activeElement.blur) {
       activeElement.blur();
     }
@@ -268,14 +299,13 @@ class NetworkContainer extends PureComponent {
     zoomOutMobile();
 
     console.log("NETWORK CLICKED");
-    if (nodes && nodes.length === 1) {
-      if (focus !== nodes[0]) {
-        this.setState({ focusNode: nodes[0] });
-      }
-    } else {
-      this.setState({ focusNode: null });
+
+    /** @type string */
+    const clickedNode = clicked && clicked.length === 1 ? nodes[clicked[0]].searchId : "";
+
+    if (lastPathComponent(pathname) !== clickedNode) {
+      history.push(`/graph/${clickedNode}`);
     }
-    // this.searchRef.current.blur();
   };
 
   unhideNodes = () => {
@@ -371,7 +401,13 @@ NetworkContainer.propTypes = {
   theme: PropTypes.shape({
     drawerWidth: PropTypes.number
   }).isRequired,
-  sidebarOpen: PropTypes.bool.isRequired
+  sidebarOpen: PropTypes.bool.isRequired,
+  location: PropTypes.shape({
+    pathname: PropTypes.string
+  }).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func
+  }).isRequired
 };
 
-export default withTheme(NetworkContainer);
+export default withTheme(withRouter(NetworkContainer));
