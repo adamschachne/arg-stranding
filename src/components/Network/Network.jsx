@@ -152,6 +152,7 @@ class NetworkContainer extends PureComponent {
         y: 0
       };
     }
+
     const animation = { duration: offsetChanged ? 300 : 1000, easingFunction: "easeOutCubic" };
 
     // user opened the sidebar
@@ -169,14 +170,7 @@ class NetworkContainer extends PureComponent {
     // sidebar didn't change but the focus node did
     else if (focusNode !== null && prevFocusNode !== focusNode) {
       // user selected a new node
-      this.network.selectNodes([focusNode]);
-      this.isAnimating = true;
-      // moveTo and focus seem to do the same things
-      this.network.moveTo({
-        position: this.network.getPositions(focusNode)[focusNode],
-        animation,
-        offset: this.offset
-      });
+      this.selectAndMoveToNode(focusNode, animation);
     }
   }
 
@@ -187,6 +181,17 @@ class NetworkContainer extends PureComponent {
       this.network = null;
     }
   }
+
+  selectAndMoveToNode = (focusNode, animation) => {
+    this.network.selectNodes([focusNode]);
+    this.isAnimating = true;
+    // moveTo and focus seem to do the same things
+    this.network.moveTo({
+      position: this.network.getPositions(focusNode)[focusNode],
+      animation,
+      offset: this.offset
+    });
+  };
 
   /** @returns {number | null} the node index or null if none */
   getFocusNode = (pathname) => {
@@ -266,18 +271,28 @@ class NetworkContainer extends PureComponent {
 
   /** @param {import("vis").Network} network */
   createNetwork = (network) => {
+    const {
+      location: { pathname }
+    } = this.props;
     this.network = network;
     console.log(network);
     this.network.once("stabilizationIterationsDone", () => {
-      this.network.moveTo({
-        animation: false,
-        position: { x: 0, y: 0 },
-        scale: 0.3, // about the right scale to begin to see labels
-        offset: this.offset
-      });
-      console.log("iterations done; total time:", performance.now());
       this.savePositions();
       this.unhideNodes();
+      console.log("iterations done; total time:", performance.now());
+
+      const focusNode = this.getFocusNode(pathname);
+      if (focusNode) {
+        const animation = { duration: 1000, easingFunction: "easeOutCubic" };
+        this.selectAndMoveToNode(focusNode, animation);
+      } else {
+        this.network.moveTo({
+          animation: false,
+          position: { x: 0, y: 0 },
+          scale: 0.3, // about the right scale to begin to see labels
+          offset: this.offset
+        });
+      }
     });
   };
 
