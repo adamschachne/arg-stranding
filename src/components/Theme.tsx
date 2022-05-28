@@ -6,6 +6,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeOptions } from "@material-ui/core/styles/createMuiTheme";
+import { PaletteType } from "@material-ui/core";
 import { SettingsConsumer } from "./Settings/SettingsContext";
 
 declare module "@material-ui/core/styles/createMuiTheme" {
@@ -21,7 +22,7 @@ interface ThemeOptionsExtended extends ThemeOptions {
 
 interface Props {
   // eslint-disable-next-line react/no-unused-prop-types
-  themeType: "dark" | "light";
+  themeType: PaletteType;
   children: ElementType<any>;
 }
 
@@ -72,7 +73,11 @@ class Theme extends React.PureComponent<Props> {
   }
 }
 
-const ThemeContainer = ({ children }: Props) => (
+type ThemeContainerProps = {
+  children: ElementType<any> & React.ReactNode;
+};
+
+const ThemeContainer = ({ children }: ThemeContainerProps) => (
   /* extract theme related options from settings */
   <SettingsConsumer>
     {({ themeType }) => <Theme themeType={themeType}>{children}</Theme>}

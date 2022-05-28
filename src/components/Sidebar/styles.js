@@ -11,7 +11,8 @@ const styles = (theme) => {
     },
     drawerPaper: {
       width: theme.drawerWidth,
-      border: "none"
+      border: "none",
+      color: "white"
     },
     drawerHeader: {
       display: "flex",

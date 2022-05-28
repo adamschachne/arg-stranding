@@ -1,32 +1,37 @@
+import { PaletteType } from "@material-ui/core";
 import React, { Component } from "react";
 
-const initialState = {
+interface State {
+  isOpen: boolean;
+  themeType: PaletteType;
+  openSettings: () => void;
+  closeSettings: () => void;
+  changeTheme: () => void;
+}
+
+const initialState: State = {
   isOpen: false,
-  themeType: "dark" as "dark" | "light",
+  themeType: "dark" as PaletteType,
   openSettings: () => {},
   closeSettings: () => {},
-  switchThemeType: () => {}
+  changeTheme: () => {}
 };
 
-type State = typeof initialState;
 const { Provider, Consumer } = React.createContext<State>(initialState);
-
 /* eslint-disable react/no-unused-state */
-
 export class SettingsProvider extends Component<{}, State> {
   constructor(props: any) {
     super(props);
     this.state = {
       ...initialState,
       openSettings: () => this.setState({ isOpen: true }),
-      closeSettings: () => this.setState({ isOpen: false })
+      closeSettings: () => this.setState({ isOpen: false }),
+      changeTheme: () =>
+        this.setState((currentState) => ({
+          themeType: currentState.themeType === "dark" ? "light" : "dark"
+        }))
     };
   }
-
-  switchThemeType = () =>
-    this.setState(({ themeType: oldType }: State) => {
-      return { themeType: oldType === "dark" ? "light" : "dark" };
-    });
 
   render() {
     const { children } = this.props;

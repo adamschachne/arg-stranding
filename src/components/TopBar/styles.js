@@ -4,6 +4,11 @@ import { fade } from "@material-ui/core/styles/colorManipulator";
 /** @param {import("@material-ui/core").Theme} theme */
 const styles = (theme) =>
   createStyles({
+    appBar: {
+      width: "100%",
+      overflow: "hidden",
+      transition: "none"
+    },
     transparentBar: {
       background: "transparent",
       boxShadow: "none",
@@ -67,11 +72,6 @@ const styles = (theme) =>
       [theme.breakpoints.up("sm")]: {
         width: 200
       }
-    },
-    appBar: {
-      width: "100%",
-      overflow: "hidden",
-      transition: "none"
     },
     spacerDrawerOpen: {
       marginLeft: theme.drawerWidth - theme.spacing(6),

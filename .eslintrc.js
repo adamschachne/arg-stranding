@@ -32,6 +32,7 @@ module.exports = {
     "comma-dangle": 0,
     indent: [2, 2, { SwitchCase: 1 }],
     "arrow-body-style": 0,
+    "prefer-arrow-callback": 0,
     "no-console": 0,
     "react/jsx-filename-extension": [1, { extensions: [".jsx", ".tsx"] }],
     "react/jsx-wrap-multilines": ["error", { declaration: false, assignment: false }],

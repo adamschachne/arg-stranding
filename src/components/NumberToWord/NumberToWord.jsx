@@ -19,9 +19,6 @@ const styles = (theme) => ({
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2)
   },
-  black: {
-    color: theme.palette.common.black
-  },
   arrowPopper: {
     "&[x-placement*='top'] $arrowArrow": {
       bottom: 0,
@@ -34,6 +31,9 @@ const styles = (theme) => ({
         borderColor: `${theme.palette.grey[700]} transparent transparent transparent`
       }
     }
+  },
+  inputLabel: {
+    color: theme.palette.text.primary
   },
   arrowArrow: {
     position: "absolute",
@@ -120,7 +120,9 @@ class NumberToWord extends Component {
             type="number"
             margin="normal"
             InputLabelProps={{
-              shrink: true
+              shrink: true,
+              focused: false,
+              className: classes.inputLabel
             }}
             InputProps={{
               // className: classes.black,
@@ -144,6 +146,11 @@ class NumberToWord extends Component {
               value={this[type]}
               margin="normal"
               fullWidth
+              InputLabelProps={{
+                shrink: true,
+                focused: false,
+                className: classes.inputLabel
+              }}
               InputProps={{
                 // className: classes.black,
                 readOnly: true,
@@ -190,7 +197,8 @@ NumberToWord.propTypes = {
     root: PropTypes.string,
     icon: PropTypes.string,
     arrowPopper: PropTypes.string,
-    arrowArrow: PropTypes.string
+    arrowArrow: PropTypes.string,
+    inputLabel: PropTypes.string
   }).isRequired
 };
 

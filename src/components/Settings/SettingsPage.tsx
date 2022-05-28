@@ -38,18 +38,16 @@ class Settings extends PureComponent<SettingsProps> {
 
     return (
       <SettingsConsumer>
-        {({ themeType, closeSettings, isOpen, switchThemeType }) => (
+        {({ themeType, closeSettings, isOpen, changeTheme }) => (
           <Modal open={isOpen} onClose={closeSettings}>
             <div className={classes.paper}>
               <Typography variant="h6">Settings</Typography>
               <div className={classes.root}>
                 <FormControl component="fieldset" className={classes.formControl}>
-                  <FormLabel component="legend">Theme</FormLabel>
-                  <RadioGroup
-                    value={themeType}
-                    className={classes.group}
-                    onChange={switchThemeType}
-                  >
+                  <FormLabel focused={false} color="primary" component="legend">
+                    Theme
+                  </FormLabel>
+                  <RadioGroup value={themeType} className={classes.group} onChange={changeTheme}>
                     <FormControlLabel value="dark" control={<Radio />} label="Dark" />
                     <FormControlLabel value="light" control={<Radio />} label="Light" />
                   </RadioGroup>
