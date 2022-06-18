@@ -3,9 +3,10 @@ import { createStyles, WithStyles, withStyles } from "@material-ui/styles";
 import { Theme } from "@material-ui/core";
 import { AutoSizer } from "react-virtualized/dist/es/AutoSizer";
 import { List as VirtualList } from "react-virtualized/dist/es/List";
-import { Route, Switch } from "react-router-dom";
-import { StateConsumer } from "../State";
+import { matchPath, RouteComponentProps, withRouter } from "react-router-dom";
+import { Item, StateConsumer } from "../State";
 import Command from "./Command";
+
 // import SmartList from "./SmartList";
 // import DemoList from "./DemoList";
 
@@ -31,10 +32,10 @@ const styles = (theme: Theme) =>
     }
   });
 
-interface Props extends WithStyles<typeof styles> {}
+interface Props extends WithStyles<typeof styles>, RouteComponentProps {}
 
 // container for all commands
-class CommandsContainer extends React.Component<Props> {
+class CommandsContainer extends React.PureComponent<Props> {
   list: VirtualList | null = null;
 
   constructor(props: Props) {
@@ -47,6 +48,24 @@ class CommandsContainer extends React.Component<Props> {
       console.log(this.list.Grid);
     }
   }
+
+  getFocusedCommandIndex = (items: Item[]): number => {
+    const {
+      location: { pathname }
+    } = this.props;
+
+    const match = matchPath<{ id: string }>(pathname, {
+      path: "/commands/:id"
+    });
+
+    const params = match?.params;
+    if (params) {
+      const { id } = params;
+      return items.findIndex((item) => item.id === id) ?? 0;
+    }
+
+    return 0;
+  };
 
   // scroll:
   handleScroll = (event: any) => {
@@ -70,7 +89,7 @@ class CommandsContainer extends React.Component<Props> {
                   <VirtualList
                     rowHeight={200}
                     rowCount={items.length}
-                    scrollToIndex={100}
+                    scrollToIndex={this.getFocusedCommandIndex(items)}
                     rowRenderer={({ key, index, style }) => (
                       <div style={style} key={key}>
                         <Command item={items[index]} />
@@ -92,4 +111,4 @@ class CommandsContainer extends React.Component<Props> {
   }
 }
 
-export default withStyles(styles)(CommandsContainer);
+export default withStyles(styles)(withRouter(CommandsContainer));
