@@ -159,6 +159,20 @@ module.exports = function configureApp(_global, fetchSheetData) {
     }
   });
 
+  app.delete('/signout', (req, res) => {
+    if (req.session) {
+      req.session.destroy(err => {
+        if (err) {
+          return res.sendStatus(400);
+        } else {
+          return res.sendStatus(200);
+        }
+      });
+    } else {
+      return res.end();
+    }
+  });
+
   app.get('/auth', function (req, res) {
     return res.redirect(`https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URL}&response_type=code&scope=${SCOPES}`);
   });

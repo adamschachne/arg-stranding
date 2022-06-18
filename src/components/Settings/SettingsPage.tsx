@@ -3,7 +3,15 @@ import { withStyles, createStyles, Theme, WithStyles } from "@material-ui/core/s
 import Typography from "@material-ui/core/Typography";
 import Modal from "@material-ui/core/Modal";
 // import Button from "@material-ui/core/Button";
-import { FormControl, FormLabel, RadioGroup, Radio, FormControlLabel } from "@material-ui/core";
+import {
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  Radio,
+  FormControlLabel,
+  Button
+} from "@material-ui/core";
+import classNames from "classnames";
 import { SettingsConsumer } from "./SettingsContext";
 
 const styles = (theme: Theme) =>
@@ -27,14 +35,49 @@ const styles = (theme: Theme) =>
     },
     group: {
       margin: theme.spacing(1, 0)
+    },
+    button: {
+      borderRadius: "0px",
+      textAlign: "center",
+      margin: "10px",
+      minWidth: "100px"
     }
   });
 
 interface SettingsProps extends WithStyles<typeof styles> {}
+interface SettingsState {
+  loading: boolean;
+}
 
-class Settings extends PureComponent<SettingsProps> {
+class Settings extends PureComponent<SettingsProps, SettingsState> {
+  constructor(props: SettingsProps) {
+    super(props);
+    this.state = {
+      loading: false
+    };
+  }
+
+  signout = async () => {
+    try {
+      this.setState({ loading: true });
+      const signout = await fetch("/signout", {
+        credentials: "same-origin",
+        method: "delete"
+      });
+      this.setState({ loading: false });
+      if (signout.status === 200) {
+        window.location.href = "/";
+      } else {
+        console.log("failed to signout");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   render() {
     const { classes } = this.props;
+    const { loading } = this.state;
 
     return (
       <SettingsConsumer>
@@ -53,6 +96,15 @@ class Settings extends PureComponent<SettingsProps> {
                   </RadioGroup>
                 </FormControl>
               </div>
+              <Button
+                variant="outlined"
+                disabled={loading}
+                className={classNames(classes.button)}
+                onClick={this.signout}
+                size="medium"
+              >
+                signout
+              </Button>
             </div>
           </Modal>
         )}
