@@ -123,6 +123,7 @@ Graph.defaultProps = {
   getNetwork: null
 };
 
+/* eslint-disable react/forbid-prop-types */
 Graph.propTypes = {
   vis: PropTypes.shape({
     DataSet: PropTypes.any,

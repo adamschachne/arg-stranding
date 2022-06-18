@@ -39,7 +39,7 @@ class NetworkContainer extends PureComponent {
       nodes: [],
       edges: [],
       options: initialOptions,
-      commandToID: {},
+      // commandToID: {},
       /** @type {boolean} */
       loading: true,
       bruteForcedMap: {},
@@ -352,8 +352,7 @@ class NetworkContainer extends PureComponent {
   };
 
   render() {
-    const { loading, commandToID, nodes, edges, options, showBruteForce, bruteForcedMap } =
-      this.state;
+    const { loading, nodes, edges, options /* showBruteForce, bruteForcedMap */ } = this.state;
     return (
       <div
         style={{

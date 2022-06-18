@@ -20,7 +20,7 @@ class SmartList extends Component<Props> {
   };
 
   render() {
-    const { width, height, renderThumbVertical } = this.props;
+    const { width, height } = this.props;
 
     return (
       <Scrollbars
