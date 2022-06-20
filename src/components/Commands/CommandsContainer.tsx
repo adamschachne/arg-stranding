@@ -87,7 +87,7 @@ class CommandsContainer extends React.PureComponent<Props> {
               {({ height, width }) => {
                 return (
                   <VirtualList
-                    rowHeight={240}
+                    rowHeight={280}
                     rowCount={items.length}
                     scrollToAlignment="center"
                     scrollToIndex={this.getFocusedCommandIndex(items)}

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 // @ts-ignore
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 import { List, ListProps } from "react-virtualized/dist/es/List";
 
 interface Props extends ListProps {

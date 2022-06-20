@@ -1,7 +1,7 @@
 import React from "react";
 import { Hidden, Theme, Typography, WithStyles } from "@material-ui/core";
 import { createStyles, withStyles } from "@material-ui/styles";
-import Scrollbars from "react-custom-scrollbars";
+import { Scrollbars } from "react-custom-scrollbars-2";
 
 const styles = (theme: Theme) =>
   createStyles({

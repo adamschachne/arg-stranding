@@ -1,5 +1,5 @@
 import React from "react";
-import { Scrollbars } from "react-custom-scrollbars";
+import { Scrollbars } from "react-custom-scrollbars-2";
 import { List, AutoSizer } from "react-virtualized";
 
 export default class DemoList extends React.Component {
