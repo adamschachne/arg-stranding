@@ -22,7 +22,7 @@ const styles = (theme: Theme) =>
     },
     scroll: {
       whiteSpace: "nowrap",
-      "& p:not(:last-child),button:not(:last-child)": {
+      "& p:not(:last-child),a:not(:last-child)": {
         marginRight: 5
       }
     }
