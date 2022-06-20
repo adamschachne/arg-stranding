@@ -1,6 +1,5 @@
 const shell = require("shelljs");
 const path = require("path");
-const muri = require("muri");
 const paths = require("../config/paths");
 
 const backups = path.join(paths.appDb, "backups/");
@@ -16,12 +15,9 @@ if (!MONGODB_URI) {
   shell.exit(1);
 }
 
-const { hosts: [{ host, port }], db, auth: { user, pass } } = muri(MONGODB_URI);
 const args = [
-  `-h ${host}:${port}`,
-  `-d ${db}`,
-  `-u ${user}`,
-  `-p ${pass}`,
+  `--uri ${MONGODB_URI}`,
+  `--forceTableScan`,
   `-o ${path.join(backups, Date.now().toString())}`
 ].join(" ");
 
