@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Paper,
   createStyles,
@@ -51,9 +51,21 @@ interface CommandProps extends WithStyles<typeof styles> {
   height: number;
 }
 
+// eslint-disable-next-line complexity
 const Command: React.FunctionComponent<CommandProps> = ({ item, classes, height }) => {
+  const [hover, setHover] = useState(false);
+
   return (
-    <Paper square={false} elevation={5} className={classes.root}>
+    <Paper
+      onMouseOver={() => setHover(true)}
+      onMouseOut={() => setHover(false)}
+      onClick={() =>
+        window.history.replaceState(null, window.document.title, `/commands/${item.id}`)
+      }
+      square={false}
+      elevation={hover ? 20 : 1}
+      className={classes.root}
+    >
       <Grid style={{ height: "100%", width: "100%" }} container>
         <Grid style={{ maxWidth: height }} item xs={4} className={classes.gridItem}>
           <img alt={item.filename} src={item.url} className={classes.image} />

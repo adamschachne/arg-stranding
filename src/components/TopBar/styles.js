@@ -14,6 +14,10 @@ const styles = (theme) =>
       boxShadow: "none",
       pointerEvents: "none"
     },
+    backdrop: {
+      zIndex: theme.zIndex.appBar - 1,
+      color: "#fff"
+    },
     noGutter: {
       paddingLeft: 0,
       paddingRight: 0
@@ -102,22 +106,6 @@ const styles = (theme) =>
       position: "absolute",
       top: theme.spacing(6),
       left: 0
-    },
-    back: {
-      position: "absolute",
-      top: 0,
-      bottom: 0,
-      left: 0,
-      right: 0,
-      width: "100vw",
-      height: `calc(100vh - ${theme.spacing(6)}px)`,
-      display: "inline-block",
-      transition: theme.transitions.create("background", {
-        duration: "300ms"
-      })
-    },
-    fade: {
-      background: "rgba(0, 0, 0, 0.5)"
     },
     menuPaper: {
       zIndex: 1,

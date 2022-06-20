@@ -2,7 +2,7 @@ import React from "react";
 import { createStyles, WithStyles, withStyles } from "@material-ui/styles";
 import { Theme } from "@material-ui/core";
 import { AutoSizer } from "react-virtualized/dist/es/AutoSizer";
-import { List as VirtualList } from "react-virtualized/dist/es/List";
+import { List as VirtualList } from "react-virtualized";
 import { matchPath, RouteComponentProps, withRouter } from "react-router-dom";
 import { Item, StateConsumer } from "../State";
 import Command from "./Command";
@@ -65,16 +65,6 @@ class CommandsContainer extends React.PureComponent<Props> {
     }
 
     return 0;
-  };
-
-  // scroll:
-  handleScroll = (event: any) => {
-    console.log(event);
-    // const { scrollTop, scrollLeft } = target;
-
-    // if (this.list !== null) {
-    //   this.list.scrollToPosition(scrollTop);
-    // }
   };
 
   render() {

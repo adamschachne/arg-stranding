@@ -7,8 +7,6 @@ import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
 import Sidebar from "../Sidebar/Sidebar";
 import TopAppBar from "../TopBar/TopAppBar";
 import routes from "../Routes/routes";
-// import Scrollbars from "react-custom-scrollbars";
-// import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 const resize = () => {
   // We execute the same script as before
@@ -83,7 +81,6 @@ class Dashboard extends React.PureComponent {
           toggleDrawer={this.toggleDrawer}
           identity={identity}
         />
-
         <main
           className={classNames(classes.content, {
             [classes.contentShift]: sidebarOpen

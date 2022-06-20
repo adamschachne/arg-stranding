@@ -1,7 +1,6 @@
 import React from "react";
 import { GetMenuPropsOptions, GetItemPropsOptions } from "downshift";
-import { Paper, Portal, MenuItem } from "@material-ui/core";
-import { WithStyles } from "@material-ui/styles";
+import { Paper, Portal, MenuItem, Backdrop, WithStyles } from "@material-ui/core";
 import { Index } from "flexsearch";
 import { AutoSizer } from "react-virtualized/dist/es/AutoSizer";
 import { List as VirtualList } from "react-virtualized/dist/es/List";
@@ -71,6 +70,7 @@ class SearchMenu extends React.PureComponent<Props, State> {
 
     return (
       <Portal>
+        <Backdrop className={classes.backdrop} open={isOpen} />
         <div className={classes.menuRoot}>
           {isOpen && (
             <Paper
@@ -120,10 +120,6 @@ class SearchMenu extends React.PureComponent<Props, State> {
               </AutoSizer>
             </Paper>
           )}
-          <div
-            role="presentation"
-            className={classNames(classes.back, isOpen ? classes.fade : classes.noPointerEvents)}
-          />
         </div>
       </Portal>
     );

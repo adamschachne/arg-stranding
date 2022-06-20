@@ -12,7 +12,7 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { Link, withRouter } from "react-router-dom";
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 import styles from "./styles";
 import UserDetails from "./UserDetails";
 import routes from "../Routes/routes";
