@@ -406,7 +406,12 @@ NetworkContainer.propTypes = {
   items: PropTypes.arrayOf(
     PropTypes.shape({
       command: PropTypes.arrayOf(PropTypes.string),
-      leadsto: PropTypes.arrayOf(PropTypes.string),
+      leadsto: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.string,
+          command: PropTypes.string
+        })
+      ),
       url: PropTypes.string,
       bruteforce: PropTypes.bool
     })

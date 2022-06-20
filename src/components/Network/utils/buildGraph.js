@@ -34,8 +34,8 @@ export default function buildGraph(items, hidden = false) {
     });
 
     // outgoing edges for this node
-    item.leadsto.forEach((toNodeCommand) => {
-      const toID = commandToID[toNodeCommand];
+    item.leadsto.forEach(({ id: targetId, command }) => {
+      const toID = commandToID[command];
       if (toID) {
         hasIncomingEdge[toID] = true;
         edges.push({ from: index, to: toID });
