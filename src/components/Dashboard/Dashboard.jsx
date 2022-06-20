@@ -105,7 +105,7 @@ class Dashboard extends React.PureComponent {
                 }}
               />
             ))}
-            <Route render={() => <Redirect to="/" />} />
+            <Route render={() => <Redirect to="/commands" />} />
           </Switch>
         </main>
       </div>

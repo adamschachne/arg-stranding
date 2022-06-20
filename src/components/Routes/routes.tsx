@@ -27,14 +27,14 @@ const routes: Array<Route> = [
   //   Component: () => <div style={{ padding: 8 }} />
   // },
   {
-    path: "/",
-    exact: true,
-    title: "Number to Words",
-    button: "Numbers",
-    Component: NumberToWord,
+    path: "/commands",
+    exact: false,
+    title: "Commands",
+    button: "Commands",
+    Component: CommandsContainer,
+    usesScrollbar: false, // virtual list for this one
     transparentToolbar: false,
-    typeToSearch: false,
-    usesScrollbar: false
+    typeToSearch: true
   },
   {
     path: "/graph",
@@ -53,14 +53,14 @@ const routes: Array<Route> = [
     typeToSearch: true
   },
   {
-    path: "/commands",
-    exact: false,
-    title: "Commands",
-    button: "Commands",
-    Component: CommandsContainer,
-    usesScrollbar: false, // virtual list for this one
+    path: "/numbers",
+    exact: true,
+    title: "Number to Words",
+    button: "Numbers",
+    Component: NumberToWord,
     transparentToolbar: false,
-    typeToSearch: true
+    typeToSearch: false,
+    usesScrollbar: false
   }
   // {
   //   path: "/ngrams",

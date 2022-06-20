@@ -12,7 +12,7 @@ export interface Item {
   id: string;
   lastModified: string;
   lastModifiedUnix: number;
-  leadsto: Array<string>;
+  leadsto: Array<{ id: string; command: string }>;
   postimgSize: string;
   type: string;
   url: string;
@@ -102,8 +102,23 @@ class StateProvider extends Component<Props, State> {
       const { flex } = this.state;
       // TODO provide a system for fetching new data
       const dataResponse = await fetch("/data");
-      const data: { items: Array<Item>; updated: string } = await dataResponse.json();
-      data.items.forEach((item, index) => {
+
+      type ItemFromServer = Omit<Item, "leadsto"> & { leadsto: Array<string> };
+
+      const data: { items: ItemFromServer[]; updated: string } = await dataResponse.json();
+
+      const items = data.items.map((item) => {
+        return {
+          ...item,
+          leadsto: item.leadsto.map((lead) => {
+            // the item this leads to is the one of which one of the commands is the lead
+            const targetItem = data.items.find((it) => it.command.find((cmd) => cmd === lead));
+            return { id: targetItem!.id, command: lead };
+          })
+        };
+      });
+
+      items.forEach((item, index) => {
         flex.add({
           ...item,
           flexId: index,
@@ -113,13 +128,11 @@ class StateProvider extends Component<Props, State> {
       });
       console.log(flex);
       // eslint-disable-next-line react/no-unused-state
-      this.setState({ items: data.items, updated: data.updated });
+      this.setState({ items, updated: data.updated });
     } catch (err) {
       console.error(err);
     }
   };
-
-  // setIdentity = (identity: Identity) => this.setState({ identity });
 
   render() {
     const { children } = this.props;

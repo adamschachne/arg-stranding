@@ -26,11 +26,11 @@ module.exports = {
         tsx: "never"
       }
     ],
-    "no-unused-vars": 1,
     quotes: [2, "double", { allowTemplateLiterals: true }],
     complexity: [2, 5],
     "comma-dangle": 0,
-    indent: [2, 2, { SwitchCase: 1 }],
+    indent: "off",
+    "@typescript-eslint/indent": ["error", 2, { SwitchCase: 1 }],
     "arrow-body-style": 0,
     "prefer-arrow-callback": 0,
     "no-console": 0,
