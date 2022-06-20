@@ -1,5 +1,5 @@
 const express = require('express');
-const httpsRedirect = require('express-https-redirect');
+// const httpsRedirect = require('express-https-redirect');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const path = require('path');
@@ -74,7 +74,7 @@ module.exports = function configureApp(_global, fetchSheetData) {
 
   const app = express();
 
-  app.use('/', httpsRedirect());
+  // app.use('/', httpsRedirect());
 
   app.use(session({
     resave: false,
