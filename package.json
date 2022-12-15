@@ -72,7 +72,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-testing-library": "^3.9.2",
     "eslint-webpack-plugin": "^2.5.2",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-https-redirect": "^1.0.0",
     "express-session": "^1.17.1",
     "fastpriorityqueue": "^0.7.1",
