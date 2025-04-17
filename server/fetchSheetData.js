@@ -40,14 +40,14 @@ module.exports = function fetchSheetData(_global) {
           console.log('Read ' + rows.length + ' rows');
           // // the row is an object with keys set by the column headers
           step(null,
-            rows.filter(row => row["URL"] != null && row["Command"] != null).map(row => {
-              const urlParts = row["URL"].split(/postimg.cc\//)[1].split('/');
+            rows.filter(row => row.get("URL") != null && row.get("Command") != null).map(row => {
+              const urlParts = row.get("URL").split(/postimg.cc\//)[1].split('/');
               return {
-                url: row.URL,
-                command: row["Command"].split(',').map(cmd => cmd.trim()),
-                leadsto: row["Leads To"].split(',').filter(lead => lead !== "").map(lead => lead.trim()),
-                fannames: row["Fan Names"].split(',').filter(name => name !== "").map(name => name.trim()),
-                bruteforce: row["Brute-Forced Random Guesses"].toUpperCase().startsWith("Y"),
+                url: row.get("URL"),
+                command: row.get("Command").split(',').map(cmd => cmd.trim()),
+                leadsto: row.get("Leads To").split(',').filter(lead => lead !== "").map(lead => lead.trim()),
+                fannames: row.get("Fan Names").split(',').filter(name => name !== "").map(name => name.trim()),
+                bruteforce: row.get("Brute-Forced Random Guesses").toUpperCase().startsWith("Y"),
                 id: urlParts[0],
                 filename: urlParts[1]
               }
